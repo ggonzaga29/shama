@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  /* mobile viewport fix */
+  min-height: -webkit-fill-available;
+  min-height: 100vh;
+}
+
+html {
+  min-height: -webkit-fill-available;
+}
