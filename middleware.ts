@@ -1,5 +1,5 @@
 import { type NextRequest } from 'next/server'
-import { updateSession } from 'src/common/utils/supabase/middleware'
+import { updateSession } from 'src/common/lib/supabase/middleware'
 
 // TODO: Configure middleware stacking to run multiple middleware functions.
 
