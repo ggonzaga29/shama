@@ -14,15 +14,18 @@ import { Button } from "src/components/Button";
 import { Label } from "src/components/Label";
 import { toast } from "sonner";
 
-import { LoginSchema } from "src/modules/auth/schema";
+import { loginSchema, LoginSchema } from "src/modules/auth/schema";
 import { FC, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface LoginFormProps {
   action: (data: LoginSchema) => Promise<void>; // loginAction
 }
 
 const LoginForm: FC<LoginFormProps> = ({ action }) => {
-  const { register, handleSubmit } = useForm<LoginSchema>();
+  const { register, handleSubmit } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
   const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {

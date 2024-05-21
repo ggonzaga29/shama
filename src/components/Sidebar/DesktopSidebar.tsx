@@ -14,6 +14,11 @@ import {
   Gauge,
   PersonStanding,
 } from "lucide-react";
+import { Card } from "src/components/Card";
+import slugs from "src/common/lib/slugs";
+import { comparePathnames } from "src/common/utils/pathnameUtils";
+import { cva } from "class-variance-authority";
+import { usePathname } from "next/navigation";
 
 type DesktopSidebarPrimitiveProps = {
   children: React.ReactNode;
@@ -25,9 +30,14 @@ const DesktopSidebarPrimitive: FC<DesktopSidebarPrimitiveProps> = ({
   className,
 }) => {
   return (
-    <aside className={cn("basis-[15rem] grow bg-card pt-4 flex flex-col justify-between", className)}>
+    <Card
+      className={cn(
+        "basis-[15rem] grow pt-4 flex flex-col justify-between rounded-none",
+        className
+      )}
+    >
       {children}
-    </aside>
+    </Card>
   );
 };
 
@@ -56,16 +66,36 @@ type DesktopSidebarMenuItemProps = {
   href: string;
 };
 
+const desktopSidebarMenuItemCls = cva(
+  [
+    "transition-colors pl-6 py-4 flex items-center text-sm",
+    "hover:bg-card-foreground/5 hover:border-r-4 border-primary",
+  ],
+  {
+    variants: {
+      active: {
+        true: "bg-card-foreground/5 border-r-4 border-primary",
+        false: "",
+      },
+    },
+  }
+);
+
 const DesktopSidebarMenuItem: FC<DesktopSidebarMenuItemProps> = ({
   children,
   href,
   Icon,
 }) => {
+  const pathname = usePathname();
+  const active = comparePathnames(pathname, href);
+
   return (
-    <div className="transition-colors hover:bg-card-foreground/5 pl-6 py-4 hover:border-r-4 border-primary flex items-center text-sm">
-      {Icon && <Icon className="w-4 h-4  mr-4" />}
-      <Link href={href}>{children}</Link>
-    </div>
+    <Link href={href}>
+      <div className={desktopSidebarMenuItemCls({ active })}>
+        {Icon && <Icon className="w-4 h-4  mr-4" />}
+        {children}
+      </div>
+    </Link>
   );
 };
 
@@ -103,7 +133,7 @@ const DesktopSidebar = () => {
 
         <DesktopSidebarMenu className="mt-8">
           <DesktopSidebarMenuItemGroup label="Main">
-            <DesktopSidebarMenuItem href="/dashboard" Icon={Gauge}>
+            <DesktopSidebarMenuItem href={slugs.DASHBOARD} Icon={Gauge}>
               Dashboard
             </DesktopSidebarMenuItem>
           </DesktopSidebarMenuItemGroup>

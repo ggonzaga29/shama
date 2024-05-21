@@ -1,9 +1,17 @@
-import Image from "next/image";
+"use client";
 
-export default function Logo() {
+import Image from "next/image";
+import { cn } from "src/common/utils/cvaUtils";
+
+interface LogoProps {
+  className?: string;
+}
+
+export default function Logo({ className }: LogoProps) {
   return (
     <Image
-      src="/logo.png"
+      src="/logoDark.png"
+      className={cn(className)}
       alt="Logo"
       width={97}
       height={128}
