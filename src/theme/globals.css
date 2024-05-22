@@ -59,4 +59,16 @@
       "rlig" 1,
       "calt" 1;
   }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  html {
+    height: 100%;
+  }
+  body {
+    min-height: 100%;
+  }
 }

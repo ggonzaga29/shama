@@ -67,15 +67,12 @@ type DesktopSidebarMenuItemProps = {
 };
 
 const desktopSidebarMenuItemCls = cva(
-  [
-    "transition-colors pl-6 py-4 flex items-center text-sm",
-    "hover:bg-card-foreground/5 hover:border-r-4 border-primary",
-  ],
+  ["transition-colors pl-6 py-4 flex items-center text-sm"],
   {
     variants: {
       active: {
-        true: "bg-card-foreground/5 border-r-4 border-primary",
-        false: "",
+        true: "bg-primary border-r-4 border-primary text-primary-foreground ",
+        false: "hover:bg-card-foreground/5 hover:border-r-4 border-primary",
       },
     },
   }
@@ -148,17 +145,20 @@ const DesktopSidebar = () => {
           </DesktopSidebarMenuItemGroup>
 
           <DesktopSidebarMenuItemGroup label="Management">
-            <DesktopSidebarMenuItem href="/settings" Icon={CarFront}>
+            <DesktopSidebarMenuItem href={slugs.CARS} Icon={CarFront}>
               Car Catalogue
             </DesktopSidebarMenuItem>
-            <DesktopSidebarMenuItem href="/settings" Icon={Construction}>
+            <DesktopSidebarMenuItem href={slugs.CAR_MAINTENANCE} Icon={Construction}>
               Car Maintenance
             </DesktopSidebarMenuItem>
-            <DesktopSidebarMenuItem href="/settings" Icon={BookUser}>
+            <DesktopSidebarMenuItem href={slugs.CLIENTS} Icon={BookUser}>
               Clients
             </DesktopSidebarMenuItem>
-            <DesktopSidebarMenuItem href="/settings" Icon={PersonStanding}>
+            <DesktopSidebarMenuItem href={slugs.DRIVERS} Icon={PersonStanding}>
               Drivers
+            </DesktopSidebarMenuItem>
+            <DesktopSidebarMenuItem href={slugs.USERS} Icon={PersonStanding}>
+              Users
             </DesktopSidebarMenuItem>
           </DesktopSidebarMenuItemGroup>
 
