@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cn } from "src/common/utils/cvaUtils";
 import { Inter as FontSans } from "next/font/google";
-import { Toaster } from "src/components/Toaster";
+import { Toaster } from "src/components/ui/Toaster";
 import "src/theme/globals.css";
 
 const fontSans = FontSans({

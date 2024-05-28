@@ -14,25 +14,46 @@ import {
   Gauge,
   PersonStanding,
 } from "lucide-react";
-import { Card } from "src/components/Card";
+import { Card } from "src/components/ui/Card";
 import slugs from "src/common/lib/slugs";
 import { comparePathnames } from "src/common/utils/pathnameUtils";
 import { cva } from "class-variance-authority";
 import { usePathname } from "next/navigation";
+import { useSidebar } from "src/components/Sidebar/context/DesktopSidebarContext";
 
 type DesktopSidebarPrimitiveProps = {
   children: React.ReactNode;
   className?: string;
 };
 
+const desktopSidebarPrimitiveVariants = cva(
+  [
+    "grow pt-4 flex flex-col justify-between rounded-none",
+    "transition-all duration-500 ease-[cubic-bezier(0.65,0.05,0.36,1)]",
+  ],
+  {
+    variants: {
+      open: {
+        true: "w-[15rem]",
+        false: "w-[5rem]",
+      },
+    },
+    defaultVariants: {
+      open: true,
+    },
+  }
+);
+
 const DesktopSidebarPrimitive: FC<DesktopSidebarPrimitiveProps> = ({
   children,
   className,
 }) => {
+  const { isOpen } = useSidebar();
+
   return (
     <Card
       className={cn(
-        "basis-[15rem] grow pt-4 flex flex-col justify-between rounded-none",
+        desktopSidebarPrimitiveVariants({ open: isOpen }),
         className
       )}
     >
@@ -121,9 +142,16 @@ const DesktopSidebarFooter: FC<DesktopSidebarFooterProps> = ({
 };
 
 const DesktopSidebar = () => {
+  const { isMobile } = useSidebar();
+
   return (
-    <DesktopSidebarPrimitive>
-      <div>
+    <DesktopSidebarPrimitive className={isMobile ? "w-0" : ""}>
+      <div
+        className={cn(
+          "transition-opacity duration-150",
+          isMobile ? "delay-0 opacity-0" : "delay-300 opacity-100"
+        )}
+      >
         <div className="flex items-center justify-center">
           <LogoWithText className="max-w-36" />
         </div>
@@ -148,7 +176,10 @@ const DesktopSidebar = () => {
             <DesktopSidebarMenuItem href={slugs.CARS} Icon={CarFront}>
               Car Catalogue
             </DesktopSidebarMenuItem>
-            <DesktopSidebarMenuItem href={slugs.CAR_MAINTENANCE} Icon={Construction}>
+            <DesktopSidebarMenuItem
+              href={slugs.CAR_MAINTENANCE}
+              Icon={Construction}
+            >
               Car Maintenance
             </DesktopSidebarMenuItem>
             <DesktopSidebarMenuItem href={slugs.CLIENTS} Icon={BookUser}>
@@ -172,8 +203,6 @@ const DesktopSidebar = () => {
           </DesktopSidebarMenuItemGroup>
         </DesktopSidebarMenu>
       </div>
-
-      <DesktopSidebarFooter>user</DesktopSidebarFooter>
     </DesktopSidebarPrimitive>
   );
 };

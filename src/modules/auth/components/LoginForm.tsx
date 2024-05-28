@@ -7,16 +7,17 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "src/components/Card";
+} from "src/components/ui/Card";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Input } from "src/components/Input";
-import { Button } from "src/components/Button";
-import { Label } from "src/components/Label";
+import { Input } from "src/components/ui/Input";
+import { Label } from "src/components/ui/Label";
 import { toast } from "sonner";
 
 import { loginSchema, LoginSchema } from "src/modules/auth/schema";
 import { FC, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { EnhancedButton } from "src/components/ui/EnhancedButton";
+import { Circle } from "lucide-react";
 
 interface LoginFormProps {
   action: (data: LoginSchema) => Promise<void>; // loginAction
@@ -71,9 +72,13 @@ const LoginForm: FC<LoginFormProps> = ({ action }) => {
               />
             </div>
 
-            <Button className="w-full mt-2" loading={loading}>
+            <EnhancedButton
+              className="w-full mt-2"
+              variant="gooeyRight"
+              loading={loading}
+            >
               Sign in
-            </Button>
+            </EnhancedButton>
           </form>
         </CardContent>
       </Card>

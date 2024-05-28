@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "src/components/Card";
+} from "src/components/ui/Card";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,7 +15,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "src/components/Breadcrumb";
+} from "src/components/ui/Breadcrumb";
 import { usePathname } from "next/navigation";
 import { getSlugByPathname } from "src/common/lib/slugs";
 import { generateBreadcrumb } from "src/common/utils/pathnameUtils";
@@ -28,10 +28,10 @@ const PageHeader: FC<PageHeaderProps> = () => {
   const breadcrumb = generateBreadcrumb(pathname);
 
   return (
-    <Card className="mb-8 flex-shrink-0">
-      <CardContent className="flex justify-between p-6">
+    <Card className="flex-shrink-0 rounded-none border-l-0">
+      <CardContent className="flex justify-between px-6 py-4">
         <div className="flex gap-4 items-center">
-          <CardTitle className="capitalize">{slugKey}</CardTitle>
+          <CardTitle className="capitalize text-lg">{slugKey}</CardTitle>
           <CardDescription>
             {/* <Breadcrumb>
               <BreadcrumbList>
