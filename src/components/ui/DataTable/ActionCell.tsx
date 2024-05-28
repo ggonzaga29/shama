@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuItem,
-} from "src/components/ui/DropDownMenu";
+} from "src/components/ui/DropdownMenu";
 import { Button } from "src/components/ui/Button";
 import { MoreHorizontal } from "lucide-react";
 import React from "react";
