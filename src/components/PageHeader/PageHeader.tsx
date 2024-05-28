@@ -1,61 +1,79 @@
-"use client";
+import { cva } from "class-variance-authority";
+import { FC, forwardRef } from "react";
+import { cn } from "src/common/utils/cvaUtils";
 
-import { FC } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "src/components/ui/Card";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "src/components/ui/Breadcrumb";
-import { usePathname } from "next/navigation";
-import { getSlugByPathname } from "src/common/lib/slugs";
-import { generateBreadcrumb } from "src/common/utils/pathnameUtils";
+type PageHeaderTitleProps = {
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  children: React.ReactNode;
+} & React.HTMLAttributes<HTMLHeadingElement>;
 
-interface PageHeaderProps {}
+const pageHeaderTitleVariants = cva("flex gap-2 items-center", {
+  variants: {
+    as: {
+      h1: "text-4xl font-bold",
+      h2: "text-3xl font-bold",
+      h3: "text-2xl font-bold",
+      h4: "text-xl font-bold",
+      h5: "text-lg font-bold",
+      h6: "text-base font-bold",
+    },
+  },
+  defaultVariants: {
+    as: "h1",
+  },
+});
 
-const PageHeader: FC<PageHeaderProps> = () => {
-  const pathname = usePathname();
-  const slugKey = getSlugByPathname(pathname)?.toLocaleLowerCase();
-  const breadcrumb = generateBreadcrumb(pathname);
+const PageHeaderTitle = forwardRef<HTMLHeadingElement, PageHeaderTitleProps>(
+  ({ as = "h1", children, Icon, ...props }, ref) => {
+    const Comp = as;
 
+    return (
+      <Comp ref={ref} className={pageHeaderTitleVariants({ as })} {...props}>
+        {Icon && <Icon className="text-primary/60 w-6 h-6" />}
+
+        {children}
+      </Comp>
+    );
+  }
+);
+
+PageHeaderTitle.displayName = "PageHeaderTitle";
+
+const PageHeaderAside = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
   return (
-    <Card className="flex-shrink-0 rounded-none border-l-0">
-      <CardContent className="flex justify-between px-6 py-4">
-        <div className="flex gap-4 items-center">
-          <CardTitle className="capitalize text-lg">{slugKey}</CardTitle>
-          <CardDescription>
-            {/* <Breadcrumb>
-              <BreadcrumbList>
-                {breadcrumb.length > 0 && breadcrumb.map((item, index) => (
-                  <div key={item.path} className="flex items-center gap-2">
-                    <BreadcrumbItem>
-                      <BreadcrumbLink href={item.path} className="capitalize">
-                        {item.name?.toLowerCase()}
-                      </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    {index < breadcrumb.length - 1 && <BreadcrumbSeparator />}
-                  </div>
-                ))}
-              </BreadcrumbList>
-            </Breadcrumb> */}
-          </CardDescription>
-        </div>
+    <aside
+      ref={ref}
+      className={cn("flex items-center gap-4", className)}
+      {...props}
+    />
+  );
+});
 
-        <div>
-          <p>User Profile</p>
-        </div>
-      </CardContent>
-    </Card>
+PageHeaderAside.displayName = "PageHeaderAside";
+
+type PageHeaderProps = {
+  children: React.ReactNode;
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
+
+const PageHeader: FC<PageHeaderProps> & {
+  Title: typeof PageHeaderTitle;
+  Aside: typeof PageHeaderAside;
+} = ({ children, className }) => {
+  return (
+    <section
+      className={cn("mb-12 flex items-center justify-between", className)}
+    >
+      {children}
+    </section>
   );
 };
+
+PageHeader.Title = PageHeaderTitle;
+PageHeader.Aside = PageHeaderAside;
 
 export default PageHeader;

@@ -8,7 +8,7 @@ interface LogoProps {
 export default function Logo({ className }: LogoProps) {
   return (
     <Image
-      src="/logoDark.png"
+      src="/logoLight.png"
       className={cn(className)}
       alt="Logo"
       width={97}

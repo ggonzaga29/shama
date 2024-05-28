@@ -28,7 +28,7 @@ type DesktopSidebarPrimitiveProps = {
 
 const desktopSidebarPrimitiveVariants = cva(
   [
-    "grow pt-4 flex flex-col justify-between rounded-none",
+    "grow pt-4 flex flex-col justify-between rounded-none bg-navigation text-navigation-foreground border-none",
     "transition-all duration-500 ease-[cubic-bezier(0.65,0.05,0.36,1)]",
   ],
   {
@@ -72,8 +72,8 @@ const DesktopSidebarMenuItemGroup: FC<DesktopSidebarMenuItemGroupProps> = ({
   label,
 }) => {
   return (
-    <div className="my-4">
-      <div className="text-muted-foreground text-xs font-semibold uppercase px-6 py-2">
+    <div className="my-4 px-4">
+      <div className="text-navigation-separator-foreground text-xs font-semibold uppercase px-2 py-2">
         {label}
       </div>
       {children}
@@ -88,12 +88,13 @@ type DesktopSidebarMenuItemProps = {
 };
 
 const desktopSidebarMenuItemCls = cva(
-  ["transition-colors pl-6 py-4 flex items-center text-sm"],
+  ["transition-colors px-4 py-4 flex items-center text-sm rounded-lg"],
   {
     variants: {
       active: {
-        true: "bg-primary border-r-4 border-primary text-primary-foreground ",
-        false: "hover:bg-card-foreground/5 hover:border-r-4 border-primary",
+        true: "bg-navigation-button-active text-navigation-button-active-foreground hover:bg-navigation-button-active-hover hover:text-navigation-button-active-foreground",
+        false:
+          "text-navigation-button-foreground hover:bg-navigation-button-hover hover:text-navigation-button-active-foreground",
       },
     },
   }

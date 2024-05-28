@@ -116,6 +116,10 @@ const EnhancedButton = React.forwardRef<
             )}
           </div>
         )}
+
+        {/* Render Icon on other variants */}
+        {Icon && variant !== "expandIcon" && <Icon className="w-4 h-4 mr-2" />}
+
         {props.children}
         {Icon && iconPlacement === "right" && (
           <div className="w-0 translate-x-[100%] pl-0 opacity-0 transition-all duration-200 group-hover:w-5 group-hover:translate-x-0 group-hover:pl-2 group-hover:opacity-100">

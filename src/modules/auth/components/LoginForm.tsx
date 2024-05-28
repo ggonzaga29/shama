@@ -17,14 +17,15 @@ import { loginSchema, LoginSchema } from "src/modules/auth/schema";
 import { FC, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EnhancedButton } from "src/components/ui/EnhancedButton";
-import { Circle } from "lucide-react";
+import { loginAction } from "src/modules/auth/actions";
+import { Info } from "lucide-react";
 
-interface LoginFormProps {
-  action: (data: LoginSchema) => Promise<void>; // loginAction
-}
-
-const LoginForm: FC<LoginFormProps> = ({ action }) => {
-  const { register, handleSubmit } = useForm<LoginSchema>({
+const LoginForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
   const [loading, setLoading] = useState<boolean>(false);
@@ -32,7 +33,7 @@ const LoginForm: FC<LoginFormProps> = ({ action }) => {
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
       setLoading(true);
-      await action(data);
+      await loginAction(data);
     } catch (error: any) {
       toast.error(error);
     }
@@ -49,7 +50,9 @@ const LoginForm: FC<LoginFormProps> = ({ action }) => {
       </div>
       <Card className="w-full mt-10">
         <CardHeader>
-          <CardTitle className="text-2xl">Login to Shama</CardTitle>
+          <CardTitle className="text-2xl text-heading-foreground">
+            Login to Shama
+          </CardTitle>
           <CardDescription>
             Enter your email below to login to your account.
           </CardDescription>
@@ -62,6 +65,14 @@ const LoginForm: FC<LoginFormProps> = ({ action }) => {
                 placeholder="example@example.com"
                 {...register("email", inputProps)}
               />
+              <span className="flex gap-2 text-xs items-center ">
+                {errors.email && (
+                  <>
+                    <Info className="w-3 h-3 text-red-500" />
+                    <span className="text-red-500">{errors.email.message}</span>
+                  </>
+                )}
+              </span>
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>

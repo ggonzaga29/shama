@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Sidebar from "src/components/Sidebar/Sidebar";
 import slugs from "src/common/lib/slugs";
 import { ViewTransitions } from "next-view-transitions";
+import TopNavigation from "src/components/TopNavigation/TopNavigation";
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -23,7 +24,8 @@ export default async function MainLayout({ children }: MainLayoutProps) {
         <Sidebar />
 
         <div className="basis-0 grow-[999] h-full flex flex-col">
-          <PageHeader />
+          {/* <PageHeader /> */}
+          <TopNavigation />
           <div className="flex-grow p-6">{children}</div>
         </div>
       </main>

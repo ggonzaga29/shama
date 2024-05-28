@@ -20,6 +20,7 @@ const config = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        "heading-foreground": "hsl(var(--heading-foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -47,6 +48,21 @@ const config = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        navigation: {
+          DEFAULT: "hsl(var(--navigation))",
+          foreground: "hsl(var(--navigation-foreground))",
+          "button-active": "hsl(var(--navigation-button-active))",
+          "button-active-foreground":
+            "hsl(var(--navigation-button-active-foreground))",
+          "button-hover": "hsl(var(--navigation-button-hover))",
+          "button-active-hover": "hsl(var(--navigation-button-active-hover))",
+          "button-foreground": "hsl(var(--navigation-button-foreground))",
+          "separator-foreground": "hsl(var(--navigation-separator-foreground))",
+        },
+        table: {
+          DEFAULT: "hsl(var(--table))",
+          header: "hsl(var(--table-header))",
         },
       },
       borderRadius: {
