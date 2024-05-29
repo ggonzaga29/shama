@@ -7,7 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from "src/components/ui/Card";
-import LoginForm from "src/modules/auth/components/LoginForm";
+import dynamic from "next/dynamic";
+
+const LoginForm = dynamic(
+  () => import("src/modules/auth/components/LoginForm")
+);
 
 export default function AuthPage() {
   return (

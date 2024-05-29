@@ -1,8 +1,13 @@
 import { getAllUsers } from "src/modules/users/actions";
-import UserTable from "src/modules/users/components/UserTable";
 import PageHeader from "src/components/PageHeader/PageHeader";
 import { EnhancedButton as Button } from "src/components/ui/EnhancedButton";
+import dynamic from "next/dynamic";
 import { Plus, UserRound, Download } from "lucide-react";
+import { Suspense } from "react";
+
+const UserTable = dynamic(
+  () => import("src/modules/users/components/UserTable")
+);
 
 export default async function UsersPage() {
   const { users } = await getAllUsers();
@@ -25,7 +30,9 @@ export default async function UsersPage() {
         </PageHeader.Aside>
       </PageHeader>
 
-      <UserTable users={users} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <UserTable users={users} />
+      </Suspense>
     </div>
   );
 }
