@@ -9,42 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      user_details: {
+      profiles: {
         Row: {
-          birth_date: string | null
-          created_at: string
+          address: string | null
+          avatar: string | null
+          bio: string | null
           first_name: string | null
-          id: number
+          id: string
+          is_first_login: boolean | null
           last_name: string | null
-          middle_name: string | null
-          profile_url: string | null
-          user_id: string
+          phone_number: string | null
         }
         Insert: {
-          birth_date?: string | null
-          created_at?: string
+          address?: string | null
+          avatar?: string | null
+          bio?: string | null
           first_name?: string | null
-          id?: number
+          id: string
+          is_first_login?: boolean | null
           last_name?: string | null
-          middle_name?: string | null
-          profile_url?: string | null
-          user_id: string
+          phone_number?: string | null
         }
         Update: {
-          birth_date?: string | null
-          created_at?: string
+          address?: string | null
+          avatar?: string | null
+          bio?: string | null
           first_name?: string | null
-          id?: number
+          id?: string
+          is_first_login?: boolean | null
           last_name?: string | null
-          middle_name?: string | null
-          profile_url?: string | null
-          user_id?: string
+          phone_number?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "fk_user"
-            columns: ["user_id"]
-            isOneToOne: false
+            foreignKeyName: "profiles_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
@@ -55,12 +55,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      assign_superadmin_role: {
-        Args: {
-          user_id: string
-        }
-        Returns: undefined
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never

@@ -1,4 +1,6 @@
 import { getSlugByPathname } from "src/common/lib/slugs";
+import { redirect } from "next/navigation";
+import { isRedirectError } from "next/dist/client/components/redirect";
 
 // Compare two pathnames
 export const comparePathnames = (pathname1: string, pathname2: string) => {
@@ -32,4 +34,22 @@ export const generateBreadcrumb = (pathname: string) => {
   });
 
   return breadcrumb;
+};
+
+/**
+ * Redirects to a new pathname if the current pathname does not match the redirect pathname.
+ */
+export const redirectIfNotCurrent = (
+  pathname: string,
+  redirectPathname: string
+) => {
+  try {
+    if (!comparePathnames(pathname, redirectPathname)) {
+      redirect(redirectPathname);
+    }
+  } catch (error) {
+    if (isRedirectError(error)) {
+      return; // Disregard the error that redirect is throwing
+    }
+  }
 };

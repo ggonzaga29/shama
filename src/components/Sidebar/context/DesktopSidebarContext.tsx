@@ -12,6 +12,8 @@ interface SidebarProviderProps {
   children: React.ReactNode;
 }
 
+const isOpenStoreKey = "shama:sidebar:isOpen";
+
 const SidebarContext = createContext<SidebarContextProps>({
   isMobile: false,
   isOpen: true,
@@ -19,11 +21,15 @@ const SidebarContext = createContext<SidebarContextProps>({
 });
 
 export const SidebarProvider: FC<SidebarProviderProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const isMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem(isOpenStoreKey, JSON.stringify(!isOpen));
+    }
   };
 
   return (

@@ -3,12 +3,10 @@ const nextConfig = {
   basePath: "",
   swcMinify: true,
   async rewrites() {
-    return [
-      {
-        source: "/",
-        destination: "/dashboard"
-      }
-    ]
+    return [{
+      source: "/",
+      destination: "/dashboard"
+    }];
   }
 };
 

@@ -36,11 +36,11 @@ export function DataTable<TData, TValue>({
   const cellContext = cell.getContext();
 
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
+    <div className="rounded-lg">
+      <Table className="rounded-lg border">
+        <TableHeader className="rounded-lg">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="rounded-lg">
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody className="rounded-lg">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

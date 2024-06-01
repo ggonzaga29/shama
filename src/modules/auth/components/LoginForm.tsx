@@ -8,6 +8,7 @@ import { loginSchema, LoginSchema } from "src/modules/auth/schema";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EnhancedButton } from "src/components/ui/EnhancedButton";
+import { useSearchParams } from "next/navigation";
 import { loginAction } from "src/modules/auth/actions";
 import { Info } from "lucide-react";
 
@@ -20,6 +21,11 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
   const [loading, setLoading] = useState<boolean>(false);
+  const searchParams = useSearchParams();
+
+  if (searchParams.get("message")) {
+    toast.success(searchParams.get("message"));
+  }
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {

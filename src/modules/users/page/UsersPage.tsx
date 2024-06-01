@@ -10,7 +10,7 @@ const UserTable = dynamic(
 );
 
 export default async function UsersPage() {
-  const { users } = await getAllUsers();
+  const users = await getAllUsers();
 
   return (
     <div>
@@ -30,9 +30,11 @@ export default async function UsersPage() {
         </PageHeader.Aside>
       </PageHeader>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <UserTable users={users} />
-      </Suspense>
+      <div className="p-4 bg-white rounded-lg">
+        <Suspense fallback={<div>Loading...</div>}>
+          <UserTable users={users} />
+        </Suspense>
+      </div>
     </div>
   );
 }
