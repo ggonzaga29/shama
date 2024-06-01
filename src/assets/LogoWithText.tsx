@@ -7,7 +7,7 @@ type LogoWithTextProps = {
 export default function LogoWithText({ className }: LogoWithTextProps) {
   return (
     <Image
-      src="/logoDarkWithText.png"
+      src="assets/images/logoDarkWithText.png"
       alt="Logo"
       width={256}
       height={110}
