@@ -9,7 +9,7 @@ interface LogoProps {
 export default function Logo({ className, theme = "light" }: LogoProps) {
   return (
     <Image
-      src="/logoDark.png"
+      src="assets/images/logoDark.png"
       alt="Logo"
       width={97}
       height={128}

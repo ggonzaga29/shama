@@ -7,6 +7,10 @@ const nextConfig = {
       source: "/",
       destination: "/dashboard"
     }];
+  },
+  images: {
+    loader: 'custom',
+    loaderFile: './src/common/lib/supabase/imageLoader.ts'
   }
 };
 
