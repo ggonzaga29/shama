@@ -17,14 +17,14 @@ export function createClient() {
           try {
             cookieStore.set({ name, value, ...options });
           } catch (error) {
-            throw new Error("Failed to set cookie");
+            console.error("Failed to set cookie");
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: "", ...options });
           } catch (error) {
-            throw new Error("Failed to remove cookie");
+            console.error("Failed to remove cookie");
           }
         },
       },
@@ -49,16 +49,12 @@ export function createAdminClient() {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options });
-          } catch (error) {
-            throw new Error("Failed to set cookie");
-          }
+          } catch (error) {}
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: "", ...options });
-          } catch (error) {
-            throw new Error("Failed to remove cookie");
-          }
+          } catch (error) {}
         },
       },
     }

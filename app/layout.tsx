@@ -35,12 +35,12 @@ export const metadata: Metadata = {
     icon: [
       {
         media: "(prefers-color-scheme: light)",
-        url: "/logoLight.png",
+        url: "assets/images/logoLight.png",
         type: "image/png",
       },
       {
         media: "(prefers-color-scheme: dark)",
-        url: "/logoDark.png",
+        url: "assets/images/logoDark.png",
         type: "image/png",
       },
     ],
@@ -59,7 +59,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
-        <ToastLauncher />
+        {/* <ToastLauncher /> */}
       </body>
     </html>
   );

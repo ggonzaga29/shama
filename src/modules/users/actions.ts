@@ -39,7 +39,7 @@ export async function getUser(uid: string) {
  */
 export async function getCurrentUser() {
   try {
-    const supabase = createClient();
+    const supabase = createAdminClient();
     const {
       data: { user },
       error,
