@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from 'src/common/lib/supabase/server';
 import { LoginSchema, loginSchema } from 'src/modules/auth/schema';
+import { getCurrentUser } from 'src/modules/users/actions';
 
 export async function loginAction(data: LoginSchema) {
   const parsedData = loginSchema.safeParse(data);
@@ -48,4 +49,23 @@ export async function logout() {
 
   revalidatePath('/');
   redirect('/');
+}
+
+/**
+ * For Session Provider to get the current user and session
+ */
+export async function getInitialSessionAndUser() {
+  const supabase = createClient();
+  const {
+    data: { session },
+    error,
+  } = await supabase.auth.getSession();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  const user = await getCurrentUser();
+
+  return { session, user };
 }

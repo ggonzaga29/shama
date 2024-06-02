@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
-import { SessionProvider } from 'src/modules/auth/context/SessionContext';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -58,11 +57,9 @@ export default function RootLayout({
       <body
         className={cn('bg-background font-sans antialiased', fontSans.variable)}
       >
-        <SessionProvider>
-          {children}
-          <Toaster />
-          {/* <ToastLauncher /> */}
-        </SessionProvider>
+        {children}
+        <Toaster />
+        {/* <ToastLauncher /> */}
       </body>
     </html>
   );
