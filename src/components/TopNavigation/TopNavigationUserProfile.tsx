@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Link } from "next-view-transitions";
-import { FC } from "react";
-import { UserWithProfile } from "src/common/types";
-import { AvatarImage, Avatar, AvatarFallback } from "src/components/ui/Avatar";
+import { Link } from 'next-view-transitions';
+import { FC } from 'react';
+import { UserWithProfile } from 'src/common/types';
+import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/Avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "src/components/ui/DropdownMenu";
+} from 'src/components/ui/DropdownMenu';
 
 interface TopNavigationUserProfileProps {
   user: UserWithProfile | null;
@@ -28,9 +28,9 @@ const TopNavigationUserProfile: FC<TopNavigationUserProfileProps> = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="flex space-x-3 items-center hover:bg-navigation-button-hover py-2 px-4 rounded-md transition-colors">
-          <Avatar className="w-8 h-8">
-            <AvatarImage src={user.profile?.avatar ?? ""} />
+        <div className="flex items-center space-x-3 rounded-md px-4 py-2 transition-colors hover:bg-navigation-button-hover">
+          <Avatar className="size-8">
+            <AvatarImage src={user.profile?.avatar ?? ''} />
             <AvatarFallback className="text-foreground">
               {initials}
             </AvatarFallback>

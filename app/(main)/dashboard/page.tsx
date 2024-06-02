@@ -1,12 +1,9 @@
-import { Metadata, ResolvingMetadata } from "next";
-import { redirect } from "next/navigation";
-
-import { createClient } from "src/common/lib/supabase/server";
-import { Button } from "src/components/ui/Button";
+import { createClient } from 'src/common/lib/supabase/server';
+import { Button } from 'src/components/ui/Button';
 
 export const metadata = {
-  title: "Dashboard | Shama Travel & Tours",
-}
+  title: 'Dashboard | Shama Travel & Tours',
+};
 
 export default async function PrivatePage() {
   const supabase = createClient();

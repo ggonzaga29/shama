@@ -1,4 +1,4 @@
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from '@tanstack/react-table';
 
 export function getKeysFromArrayOfObjects<T extends object>(
   array: T[]
@@ -13,10 +13,10 @@ export function generateReactTableColumns<T extends object>(
 
   return keys.map((key) => {
     const lowerKey = key
-      .replace(/[_-]/g, " ")
-      .split(" ")
+      .replace(/[_-]/g, ' ')
+      .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+      .join(' ');
 
     return {
       accessorKey: key,

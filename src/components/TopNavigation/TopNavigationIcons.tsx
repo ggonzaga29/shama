@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { FC } from "react";
-import { Fullscreen, Bug, Bell } from "lucide-react";
+import { Bell, Bug, Fullscreen } from 'lucide-react';
+import React, { FC } from 'react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "src/components/ui/Tooltip";
+} from 'src/components/ui/Tooltip';
 
 type IconProps = {
   children: React.ReactNode;
@@ -19,7 +19,7 @@ const Icon: FC<IconProps> = ({ children, label, onClick }) => (
     <Tooltip>
       <TooltipTrigger>
         <div
-          className="flex items-center justify-center h-full p-2 transition-colors hover:bg-navigation-button-hover rounded-md"
+          className="flex h-full items-center justify-center rounded-md p-2 transition-colors hover:bg-navigation-button-hover"
           onClick={onClick}
         >
           {children}
@@ -42,15 +42,15 @@ const TopNavigationIcons = () => {
   };
 
   return (
-    <div className="h-full flex items-center gap-4">
+    <div className="flex h-full items-center gap-4">
       <Icon label="Toggle Fullscreen" onClick={handleEnableFullscreen}>
-        <Fullscreen className="h-5 w-5" />
+        <Fullscreen className="size-5" />
       </Icon>
       <Icon label="Notifications">
-        <Bell className="h-5 w-5" />
+        <Bell className="size-5" />
       </Icon>
       <Icon label="Report a bug">
-        <Bug className="h-5 w-5" />
+        <Bug className="size-5" />
       </Icon>
     </div>
   );

@@ -1,13 +1,12 @@
-"use client";
+'use client';
 
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
-} from "@tanstack/react-table";
-import { cn } from "src/common/utils/cvaUtils";
-
+} from '@tanstack/react-table';
+import { cn } from 'src/common/utils/cvaUtils';
 import {
   Table,
   TableBody,
@@ -15,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "src/components/ui/Table";
+} from 'src/components/ui/Table';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,9 +30,6 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  const cell = table.getRowModel().rows[0].getVisibleCells()[0];
-  const cellContext = cell.getContext();
 
   return (
     <div className="rounded-lg">
@@ -61,15 +57,15 @@ export function DataTable<TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}
+                data-state={row.getIsSelected() && 'selected'}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}
                     className={cn(
-                      cell.column.id === "actions"
-                        ? "flex justify-center p-0"
-                        : ""
+                      cell.column.id === 'actions'
+                        ? 'flex justify-center p-0'
+                        : ''
                     )}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

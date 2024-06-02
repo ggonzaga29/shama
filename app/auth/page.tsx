@@ -1,3 +1,3 @@
-import AuthPage from "src/modules/auth/page/AuthPage";
+import AuthPage from 'src/modules/auth/page/AuthPage';
 
 export default AuthPage;

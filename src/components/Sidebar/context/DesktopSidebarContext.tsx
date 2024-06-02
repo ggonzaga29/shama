@@ -1,6 +1,6 @@
-"use client";
-import React, { createContext, useState, useContext, FC } from "react";
-import { useMediaQuery } from "react-responsive";
+'use client';
+import React, { createContext, FC, useContext, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 interface SidebarContextProps {
   isMobile: boolean;
@@ -12,7 +12,7 @@ interface SidebarProviderProps {
   children: React.ReactNode;
 }
 
-const isOpenStoreKey = "shama:sidebar:isOpen";
+const isOpenStoreKey = 'shama:sidebar:isOpen';
 
 const SidebarContext = createContext<SidebarContextProps>({
   isMobile: false,
@@ -22,12 +22,12 @@ const SidebarContext = createContext<SidebarContextProps>({
 
 export const SidebarProvider: FC<SidebarProviderProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  const isMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       localStorage.setItem(isOpenStoreKey, JSON.stringify(!isOpen));
     }
   };

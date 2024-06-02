@@ -1,9 +1,9 @@
-import { logout } from "src/modules/auth/actions";
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
+import { logout } from 'src/modules/auth/actions';
 
 export default function SignoutPage() {
   logout();
-  redirect("/auth");
+  redirect('/auth');
 
-  return <></>
+  return <></>;
 }

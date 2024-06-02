@@ -1,17 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "",
+  basePath: '',
   swcMinify: true,
   async rewrites() {
-    return [{
-      source: "/",
-      destination: "/dashboard"
-    }];
+    return [
+      {
+        source: '/',
+        destination: '/dashboard',
+      },
+    ];
   },
   images: {
     loader: 'custom',
-    loaderFile: './src/common/lib/supabase/imageLoader.ts'
-  }
+    loaderFile: './src/common/lib/supabase/imageLoader.ts',
+  },
 };
 
 export default nextConfig;

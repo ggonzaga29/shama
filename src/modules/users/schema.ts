@@ -1,6 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-const userDetails = z.object({
+export const userDetails = z.object({
   id: z.string(),
   user_id: z.string(),
-})
+});

@@ -1,9 +1,9 @@
-"use server";
+'use server';
 
 import {
   createAdminClient,
   createClient,
-} from "src/common/lib/supabase/server";
+} from 'src/common/lib/supabase/server';
 
 // TODO: Implement Pagination since the listUsers method only returns 100 users
 export async function getAllUsers() {
@@ -54,9 +54,10 @@ export async function getCurrentUser() {
     }
 
     const { data: profileData, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id).maybeSingle();
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .maybeSingle();
 
     if (profileError) {
       throw new Error(profileError.message);
@@ -91,9 +92,10 @@ export async function getUserWithProfile(uid: string) {
     // TODO: find a better way to get the profile, maybe a fucking join?
 
     const { data: profileData, error: profileError } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", uid).maybeSingle();
+      .from('profiles')
+      .select('*')
+      .eq('id', uid)
+      .maybeSingle();
 
     if (profileError) {
       throw new Error(profileError.message);
