@@ -1,12 +1,12 @@
-import { getAllUsers } from "src/modules/users/actions";
-import PageHeader from "src/components/PageHeader/PageHeader";
-import { EnhancedButton as Button } from "src/components/ui/EnhancedButton";
-import dynamic from "next/dynamic";
-import { Plus, UserRound, Download } from "lucide-react";
-import { Suspense } from "react";
+import { Download, Plus, UserRound } from 'lucide-react';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import PageHeader from 'src/components/PageHeader/PageHeader';
+import { EnhancedButton as Button } from 'src/components/ui/EnhancedButton';
+import { getAllUsers } from 'src/modules/users/actions';
 
 const UserTable = dynamic(
-  () => import("src/modules/users/components/UserTable")
+  () => import('src/modules/users/components/UserTable')
 );
 
 export default async function UsersPage() {
@@ -30,7 +30,7 @@ export default async function UsersPage() {
         </PageHeader.Aside>
       </PageHeader>
 
-      <div className="p-4 bg-white rounded-lg">
+      <div className="rounded-lg bg-white p-4">
         <Suspense fallback={<div>Loading...</div>}>
           <UserTable users={users} />
         </Suspense>

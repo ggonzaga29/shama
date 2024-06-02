@@ -11,7 +11,7 @@ const slugs: Slugs = {
   CLIENTS: '/management/clients',
   CARS: '/management/cars',
   CAR_MAINTENANCE: '/management/cars/maintenance',
-}
+};
 
 export const getSlugByPathname = (pathname: string) => {
   const keys = Object.keys(slugs);
@@ -22,6 +22,6 @@ export const getSlugByPathname = (pathname: string) => {
     }
   }
   return null;
-}
+};
 
 export default slugs;

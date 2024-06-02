@@ -1,9 +1,7 @@
-"use client";
+'use client';
 
-import { Link } from "next-view-transitions";
-import { FC } from "react";
-import LogoWithText from "src/assets/LogoWithText";
-import { cn } from "src/common/utils/cvaUtils";
+import { cva } from 'class-variance-authority';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   BarChart4,
   BarChartHorizontalBig,
@@ -13,20 +11,22 @@ import {
   Database,
   Gauge,
   PersonStanding,
-} from "lucide-react";
-import slugs from "src/common/lib/slugs";
-import { comparePathnames } from "src/common/utils/pathnameUtils";
-import { cva } from "class-variance-authority";
-import { usePathname } from "next/navigation";
-import { useSidebar } from "src/components/Sidebar/context/DesktopSidebarContext";
-import { AnimatePresence, motion } from "framer-motion";
+} from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { Link } from 'next-view-transitions';
+import { FC } from 'react';
+import Logo from 'src/assets/Logo';
+import LogoWithText from 'src/assets/LogoWithText';
+import slugs from 'src/common/lib/slugs';
+import { cn } from 'src/common/utils/cvaUtils';
+import { comparePathnames } from 'src/common/utils/pathnameUtils';
+import { useSidebar } from 'src/components/Sidebar/context/DesktopSidebarContext';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "src/components/ui/Tooltip";
-import Logo from "src/assets/Logo";
+} from 'src/components/ui/Tooltip';
 
 type DesktopSidebarPrimitiveProps = {
   children: React.ReactNode;
@@ -35,14 +35,14 @@ type DesktopSidebarPrimitiveProps = {
 
 const desktopSidebarPrimitiveVariants = cva(
   [
-    "grow pt-4 flex flex-col justify-between rounded-none bg-navigation text-navigation-foreground border-none",
-    "transition-all duration-300 ease-[cubic-bezier(0.65,0.05,0.36,1)]",
+    'flex grow flex-col justify-between rounded-none border-none bg-navigation pt-4 text-navigation-foreground',
+    'ease-[cubic-bezier(0.65,0.05,0.36,1)] transition-all duration-300',
   ],
   {
     variants: {
       open: {
-        true: "w-[15rem]",
-        false: "w-[5rem]",
+        true: 'w-60',
+        false: 'w-20',
       },
     },
     defaultVariants: {
@@ -60,7 +60,7 @@ const DesktopSidebarPrimitive: FC<DesktopSidebarPrimitiveProps> = ({
   return (
     <motion.div
       className={cn(
-        "relative select-none",
+        'relative select-none',
         desktopSidebarPrimitiveVariants({ open: isOpen }),
         className
       )}
@@ -90,12 +90,12 @@ const DesktopSidebarMenuItemGroup: FC<DesktopSidebarMenuItemGroupProps> = ({
   const { isOpen } = useSidebar();
 
   return (
-    <div className={cn("", isOpen ? "px-4 my-4 " : "")}>
+    <div className={cn('', isOpen ? 'my-4 px-4' : '')}>
       {isOpen ? (
         <div
           className={cn(
-            "text-navigation-separator-foreground text-xs font-semibold uppercase px-2 py-2",
-            !isOpen ? "flex justify-center" : ""
+            'px-2 py-2 text-xs font-semibold uppercase text-navigation-separator-foreground',
+            !isOpen ? 'flex justify-center' : ''
           )}
         >
           {label}
@@ -113,13 +113,13 @@ type DesktopSidebarMenuItemProps = {
 };
 
 const desktopSidebarMenuItemCls = cva(
-  ["transition-colors px-4 py-5 flex items-center text-sm rounded-lg relative"],
+  ['relative flex items-center rounded-lg px-4 py-5 text-sm transition-colors'],
   {
     variants: {
       active: {
-        true: "bg-navigation-button-active text-navigation-button-active-foreground hover:bg-navigation-button-active-hover hover:text-navigation-button-active-foreground",
+        true: 'bg-navigation-button-active text-navigation-button-active-foreground hover:bg-navigation-button-active-hover hover:text-navigation-button-active-foreground',
         false:
-          "text-navigation-button-foreground hover:bg-navigation-button-hover hover:text-navigation-button-active-foreground",
+          'text-navigation-button-foreground hover:bg-navigation-button-hover hover:text-navigation-button-active-foreground',
       },
     },
   }
@@ -143,15 +143,15 @@ const DesktopSidebarMenuItem: FC<DesktopSidebarMenuItemProps> = ({
               href={href}
               className={cn(
                 desktopSidebarMenuItemCls({ active }),
-                isOpen ? "justify-start" : "justify-center rounded-none"
+                isOpen ? 'justify-start' : 'justify-center rounded-none'
               )}
             >
               {Icon && (
                 <Icon
                   className={cn(
-                    "w-4 h-4 mr-2",
-                    active ? "text-navigation-button-active-foreground" : "",
-                    !isOpen ? "w-5 h-5" : "w-4 h-4"
+                    'mr-2 h-4 w-4',
+                    active ? 'text-navigation-button-active-foreground' : '',
+                    !isOpen ? 'h-5 w-5' : 'h-4 w-4'
                   )}
                 />
               )}
@@ -162,7 +162,7 @@ const DesktopSidebarMenuItem: FC<DesktopSidebarMenuItemProps> = ({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    style={{ position: "absolute" }}
+                    style={{ position: 'absolute' }}
                     className="pl-6"
                   >
                     {children}
@@ -174,7 +174,7 @@ const DesktopSidebarMenuItem: FC<DesktopSidebarMenuItemProps> = ({
         </TooltipTrigger>
         <TooltipContent
           side="right"
-          className={isOpen ? "opacity-0" : "opacity-100"}
+          className={isOpen ? 'opacity-0' : 'opacity-100'}
         >
           {children}
         </TooltipContent>
@@ -192,30 +192,18 @@ const DesktopSidebarMenu: FC<DesktopSidebarMenuProps> = ({
   className,
   children,
 }) => {
-  return <nav className={cn("", className)}>{children}</nav>;
-};
-
-type DesktopSidebarFooterProps = {
-  children: React.ReactNode;
-  className?: string;
-};
-
-const DesktopSidebarFooter: FC<DesktopSidebarFooterProps> = ({
-  children,
-  className,
-}) => {
-  return <footer className={cn("mt-auto", className)}>{children}</footer>;
+  return <nav className={cn('', className)}>{children}</nav>;
 };
 
 const DesktopSidebar = () => {
   const { isMobile, isOpen } = useSidebar();
 
   return (
-    <DesktopSidebarPrimitive className={isMobile ? "hidden" : "flex"}>
+    <DesktopSidebarPrimitive className={isMobile ? 'hidden' : 'flex'}>
       <div
         className={cn(
-          "transition-opacity duration-150",
-          isMobile ? "delay-0 opacity-0" : "delay-300 opacity-100"
+          'transition-opacity duration-150',
+          isMobile ? 'opacity-0 delay-0' : 'opacity-100 delay-300'
         )}
       >
         <div className="flex items-center justify-center">

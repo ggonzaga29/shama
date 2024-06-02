@@ -1,22 +1,22 @@
-import { Card, CardContent } from "src/components/ui/Card";
-import Hamburger from "src/components/Sidebar/components/Hamburger";
-import { getCurrentUser } from "src/modules/users/actions";
-import TopNavigationUserProfile from "src/components/TopNavigation/TopNavigationUserProfile";
-import TopNavigationSearch from "src/components/TopNavigation/TopNavigationSearch";
-import TopNavigationIcons from "src/components/TopNavigation/TopNavigationIcons";
+import Hamburger from 'src/components/Sidebar/components/Hamburger';
+import TopNavigationIcons from 'src/components/TopNavigation/TopNavigationIcons';
+import TopNavigationSearch from 'src/components/TopNavigation/TopNavigationSearch';
+import TopNavigationUserProfile from 'src/components/TopNavigation/TopNavigationUserProfile';
+import { Card, CardContent } from 'src/components/ui/Card';
+import { getCurrentUser } from 'src/modules/users/actions';
 
 const TopNavigation = async () => {
   const currentUser = await getCurrentUser();
 
   return (
-    <Card className="flex-shrink-0 rounded-none border-none bg-navigation text-navigation-foreground select-none">
-      <CardContent className="flex justify-between pl-2 pr-6 py-2">
+    <Card className="shrink-0 select-none rounded-none border-none bg-navigation text-navigation-foreground">
+      <CardContent className="flex justify-between py-2 pl-2 pr-6">
         <div className="flex items-center gap-4">
           <Hamburger />
           <TopNavigationSearch />
         </div>
 
-        <div className="flex space-x-4 items-center">
+        <div className="flex items-center space-x-4">
           <TopNavigationIcons />
           <TopNavigationUserProfile user={currentUser} />
         </div>

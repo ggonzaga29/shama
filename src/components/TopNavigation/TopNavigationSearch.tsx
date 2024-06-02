@@ -1,11 +1,11 @@
-import { Input } from "src/components/ui/Input";
+import { Input } from 'src/components/ui/Input';
 
 const TopNavigationSearch = () => {
   return (
     <div>
       <Input
         placeholder="What are you looking for?"
-        className="w-64 bg-navigation-button-hover text-navigation-foreground transition-colors placeholder-foreground/50 outline-none border-none !focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus-visible:bg-navigation-button-active hidden lg:block"
+        className="!focus-visible:ring-0 hidden w-64 border-none bg-navigation-button-hover text-navigation-foreground outline-none ring-0 transition-colors placeholder:text-foreground/50 focus-visible:bg-navigation-button-active focus-visible:ring-offset-0 lg:block"
       />
     </div>
   );

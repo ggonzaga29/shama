@@ -1,31 +1,30 @@
-import { Avatar, AvatarFallback, AvatarImage } from "src/components/ui/Avatar";
-import { Card } from "src/components/ui/Card";
-import { ChevronRight } from "lucide-react";
-import { Checkbox } from "src/components/ui/Checkbox";
+import { ChevronRight } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/Avatar';
+import { Card } from 'src/components/ui/Card';
 
 const UserCard = () => {
   return (
-    <div className="group w-full flex items-center gap-4 py-4 px-4 transition-colors hover:bg-primary rounded-lg border-b">
+    <div className="group flex w-full items-center gap-4 rounded-lg border-b p-4 transition-colors hover:bg-primary">
       {/* Checkbox
       <div>
         <Checkbox className="mr-2" />
       </div> */}
 
       {/* User Info */}
-      <div className="flex items-center gap-4 grow">
+      <div className="flex grow items-center gap-4">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <span className="font-medium text-sm">John Doe</span>
+          <span className="text-sm font-medium">John Doe</span>
           <span className="text-xs text-foreground/60">gian@gmail.com</span>
         </div>
       </div>
 
       {/* Icon */}
       <div>
-        <ChevronRight className="w-6 h-6 transition-transform group-hover:translate-x-1" />
+        <ChevronRight className="size-6 transition-transform group-hover:translate-x-1" />
       </div>
     </div>
   );
@@ -33,8 +32,8 @@ const UserCard = () => {
 
 const UserList = () => {
   return (
-    <Card className="basis-[30rem] grow p-6">
-      <div className="flex items-center pb-4 px-4 gap-6 border-b">
+    <Card className="grow basis-[30rem] p-6">
+      <div className="flex items-center gap-6 border-b px-4 pb-4">
         {/* <Checkbox className="mr-2" /> */}
 
         <div className="text-sm font-medium">Users</div>

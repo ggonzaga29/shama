@@ -1,28 +1,28 @@
-import React from "react";
-import Logo from "src/assets/Logo";
+import dynamic from 'next/dynamic';
+import React from 'react';
+import Logo from 'src/assets/Logo';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "src/components/ui/Card";
-import dynamic from "next/dynamic";
+} from 'src/components/ui/Card';
 
 const LoginForm = dynamic(
-  () => import("src/modules/auth/components/LoginForm")
+  () => import('src/modules/auth/components/LoginForm')
 );
 
 export default function AuthPage() {
   return (
-    <section className="grid justify-center h-screen">
-      <div className="w-full max-w-sm mt-10">
-        <div className="w-full flex items-center justify-center">
+    <section className="grid h-screen justify-center">
+      <div className="mt-10 w-full max-w-sm">
+        <div className="flex w-full items-center justify-center">
           <Logo />
         </div>
-        <Card className="w-full mt-10">
+        <Card className="mt-10 w-full">
           <CardHeader>
-            <CardTitle className="text-2xl text-heading-foregrousnd">
+            <CardTitle className="text-heading-foregrousnd text-2xl">
               Login to Shama
             </CardTitle>
             <CardDescription>

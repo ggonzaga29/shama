@@ -1,16 +1,15 @@
-"use client";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { Input } from "src/components/ui/Input";
-import { Label } from "src/components/ui/Label";
-import { toast } from "sonner";
-
-import { loginSchema, LoginSchema } from "src/modules/auth/schema";
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { EnhancedButton } from "src/components/ui/EnhancedButton";
-import { useSearchParams } from "next/navigation";
-import { loginAction } from "src/modules/auth/actions";
-import { Info } from "lucide-react";
+'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Info } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import { EnhancedButton } from 'src/components/ui/EnhancedButton';
+import { Input } from 'src/components/ui/Input';
+import { Label } from 'src/components/ui/Label';
+import { loginAction } from 'src/modules/auth/actions';
+import { LoginSchema, loginSchema } from 'src/modules/auth/schema';
 
 const LoginForm = () => {
   const {
@@ -23,8 +22,8 @@ const LoginForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const searchParams = useSearchParams();
 
-  if (searchParams.get("message")) {
-    toast.success(searchParams.get("message"));
+  if (searchParams.get('message')) {
+    toast.success(searchParams.get('message'));
   }
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
@@ -46,12 +45,12 @@ const LoginForm = () => {
         <Label htmlFor="email">Email</Label>
         <Input
           placeholder="example@example.com"
-          {...register("email", inputProps)}
+          {...register('email', inputProps)}
         />
-        <span className="flex gap-2 text-xs items-center ">
+        <span className="flex items-center gap-2 text-xs">
           {errors.email && (
             <>
-              <Info className="w-3 h-3 text-destructive" />
+              <Info className="size-3 text-destructive" />
               <span className="text-destructive">{errors.email.message}</span>
             </>
           )}
@@ -62,12 +61,12 @@ const LoginForm = () => {
         <Input
           type="password"
           placeholder="•••••••••"
-          {...register("password", inputProps)}
+          {...register('password', inputProps)}
         />
       </div>
 
       <EnhancedButton
-        className="w-full mt-2"
+        className="mt-2 w-full"
         variant="gooeyRight"
         loading={loading}
       >

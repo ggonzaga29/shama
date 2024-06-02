@@ -1,6 +1,6 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
-import { cookies } from "next/headers";
-import { Database } from "src/common/types/supabase";
+import { type CookieOptions, createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
+import { Database } from 'src/common/types/supabase';
 
 export function createClient() {
   const cookieStore = cookies();
@@ -17,14 +17,14 @@ export function createClient() {
           try {
             cookieStore.set({ name, value, ...options });
           } catch (error) {
-            console.error("Failed to set cookie");
+            console.error('Failed to set cookie');
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
-            cookieStore.set({ name, value: "", ...options });
+            cookieStore.set({ name, value: '', ...options });
           } catch (error) {
-            console.error("Failed to remove cookie");
+            console.error('Failed to remove cookie');
           }
         },
       },
@@ -49,12 +49,16 @@ export function createAdminClient() {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options });
-          } catch (error) {}
+          } catch (error) {
+            /* empty */
+          }
         },
         remove(name: string, options: CookieOptions) {
           try {
-            cookieStore.set({ name, value: "", ...options });
-          } catch (error) {}
+            cookieStore.set({ name, value: '', ...options });
+          } catch (error) {
+            /* empty */
+          }
         },
       },
     }

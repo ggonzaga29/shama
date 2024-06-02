@@ -1,13 +1,13 @@
+import { MoreHorizontal } from 'lucide-react';
+import React from 'react';
+import { Button } from 'src/components/ui/Button';
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuItem,
-} from "src/components/ui/DropdownMenu";
-import { Button } from "src/components/ui/Button";
-import { MoreHorizontal } from "lucide-react";
-import React from "react";
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from 'src/components/ui/DropdownMenu';
 
 type Action = {
   label: string;
@@ -38,10 +38,10 @@ type ActionCellProps = {
 const ActionCell: React.FC<ActionCellProps> = ({ actions }) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <div className="h-full w-full flex items-center justify-center">
-        <Button variant="ghost" className="h-8 w-8 p-0">
+      <div className="flex size-full items-center justify-center">
+        <Button variant="ghost" className="size-8 p-0">
           <span className="sr-only">Open menu</span>
-          <MoreHorizontal className="h-4 w-4" />
+          <MoreHorizontal className="size-4" />
         </Button>
       </div>
     </DropdownMenuTrigger>

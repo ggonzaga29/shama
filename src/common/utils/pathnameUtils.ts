@@ -1,6 +1,6 @@
-import { getSlugByPathname } from "src/common/lib/slugs";
-import { redirect } from "next/navigation";
-import { isRedirectError } from "next/dist/client/components/redirect";
+import { isRedirectError } from 'next/dist/client/components/redirect';
+import { redirect } from 'next/navigation';
+import { getSlugByPathname } from 'src/common/lib/slugs';
 
 // Compare two pathnames
 export const comparePathnames = (pathname1: string, pathname2: string) => {
@@ -21,15 +21,15 @@ export const comparePathnames = (pathname1: string, pathname2: string) => {
  * generateBreadcrumbs("/home/user");
  */
 export const generateBreadcrumb = (pathname: string) => {
-  if (pathname === "/") {
-    return [{ name: getSlugByPathname(pathname), path: "/" }];
+  if (pathname === '/') {
+    return [{ name: getSlugByPathname(pathname), path: '/' }];
   }
 
-  const paths = pathname.split("/");
+  const paths = pathname.split('/');
   const breadcrumb = paths.map((path, index) => {
     return {
-      name: getSlugByPathname(path ? `/${path}` : "/")?.toLowerCase(),
-      path: paths.slice(0, index + 1).join("/"),
+      name: getSlugByPathname(path ? `/${path}` : '/')?.toLowerCase(),
+      path: paths.slice(0, index + 1).join('/'),
     };
   });
 

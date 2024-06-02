@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import { User } from "@supabase/supabase-js";
-import { DataTable } from "src/components/ui/DataTable/DataTable";
-import ActionCell from "src/components/ui/DataTable/ActionCell";
+import { User } from '@supabase/supabase-js';
+import { ColumnDef } from '@tanstack/react-table';
+import ActionCell from 'src/components/ui/DataTable/ActionCell';
+import { DataTable } from 'src/components/ui/DataTable/DataTable';
 
 export interface UserTableProps {
   users: User[];
@@ -11,21 +11,21 @@ export interface UserTableProps {
 
 const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: 'email',
+    header: 'Email',
   },
   {
-    accessorKey: "created_at",
-    header: "Created At",
+    accessorKey: 'created_at',
+    header: 'Created At',
     cell: ({ row }) => {
       const date = new Date(row.original.created_at).toLocaleDateString(
-        "en-US",
+        'en-US',
         {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "numeric",
-          minute: "numeric",
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
         }
       );
 
@@ -33,18 +33,18 @@ const columns: ColumnDef<User>[] = [
     },
   },
   {
-    accessorKey: "updated_at",
-    header: "Updated At",
+    accessorKey: 'updated_at',
+    header: 'Updated At',
     cell: ({ row }) => {
       if (row.original.created_at) {
         const date = new Date(row.original.created_at).toLocaleDateString(
-          "en-US",
+          'en-US',
           {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "numeric",
-            minute: "numeric",
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: 'numeric',
           }
         );
 
@@ -55,16 +55,22 @@ const columns: ColumnDef<User>[] = [
     },
   },
   {
-    id: "actions",
+    id: 'actions',
     cell: ({ row }) => (
       <ActionCell
         actions={[
-          { label: "Edit", onClick: () => {
-            console.log('Edit');
-          } },
-          { label: "Delete", onClick: () => {
-            console.log(row)
-          } },
+          {
+            label: 'Edit',
+            onClick: () => {
+              console.log('Edit');
+            },
+          },
+          {
+            label: 'Delete',
+            onClick: () => {
+              console.log(row);
+            },
+          },
         ]}
       />
     ),
