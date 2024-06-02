@@ -9,7 +9,7 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "supabase-type-gen": "npx supabase gen types typescript --project-id 'tgkzvkmhzlknpgnunivd' --schema public > src/common/types/supabase.ts"
+    "update-types": "npx supabase gen types typescript --project-id \"$PROJECT_REF\" > src/common/types/supabase.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.4.2",
