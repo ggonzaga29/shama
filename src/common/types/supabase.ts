@@ -4,7 +4,7 @@ export type Json =
   | boolean
   | null
   | { [key: string]: Json | undefined }
-  | Json[];
+  | Json[]
 
 export type Database = {
   public: {
@@ -450,13 +450,270 @@ export type Database = {
           },
         ]
       }
+      vehicle_files: {
+        Row: {
+          created_at: string | null
+          file_name: string | null
+          file_url: string
+          id: string
+          updated_at: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          file_name?: string | null
+          file_url: string
+          id?: string
+          updated_at?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string | null
+          file_name?: string | null
+          file_url?: string
+          id?: string
+          updated_at?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_client"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_maintenance: {
+        Row: {
+          created_at: string | null
+          end_datetime: string
+          id: string
+          maintenance_type: string | null
+          notes: string | null
+          start_datetime: string
+          status: Database["public"]["Enums"]["maintenance_status"] | null
+          updated_at: string | null
+          vehicle_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_datetime: string
+          id?: string
+          maintenance_type?: string | null
+          notes?: string | null
+          start_datetime: string
+          status?: Database["public"]["Enums"]["maintenance_status"] | null
+          updated_at?: string | null
+          vehicle_id: string
+        }
+        Update: {
+          created_at?: string | null
+          end_datetime?: string
+          id?: string
+          maintenance_type?: string | null
+          notes?: string | null
+          start_datetime?: string
+          status?: Database["public"]["Enums"]["maintenance_status"] | null
+          updated_at?: string | null
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_vehicle_id"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_variant_images: {
+        Row: {
+          alt: string | null
+          id: string
+          url: string | null
+          variant_metadata_id: string | null
+        }
+        Insert: {
+          alt?: string | null
+          id?: string
+          url?: string | null
+          variant_metadata_id?: string | null
+        }
+        Update: {
+          alt?: string | null
+          id?: string
+          url?: string | null
+          variant_metadata_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_variant_metadata"
+            columns: ["variant_metadata_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_variant_metadata"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_variant_metadata: {
+        Row: {
+          code: string | null
+          displacement: string | null
+          front_rear_brake: string | null
+          fuel_capacity: string | null
+          fuel_type: string | null
+          id: string
+          model: string | null
+          name: string | null
+          power_transmission: string | null
+          seating_capacity: number | null
+          tires: string | null
+          transmission: string | null
+          type: string | null
+          variant_id: number | null
+          vehicle_id: string | null
+          wheels: string | null
+        }
+        Insert: {
+          code?: string | null
+          displacement?: string | null
+          front_rear_brake?: string | null
+          fuel_capacity?: string | null
+          fuel_type?: string | null
+          id?: string
+          model?: string | null
+          name?: string | null
+          power_transmission?: string | null
+          seating_capacity?: number | null
+          tires?: string | null
+          transmission?: string | null
+          type?: string | null
+          variant_id?: number | null
+          vehicle_id?: string | null
+          wheels?: string | null
+        }
+        Update: {
+          code?: string | null
+          displacement?: string | null
+          front_rear_brake?: string | null
+          fuel_capacity?: string | null
+          fuel_type?: string | null
+          id?: string
+          model?: string | null
+          name?: string | null
+          power_transmission?: string | null
+          seating_capacity?: number | null
+          tires?: string | null
+          transmission?: string | null
+          type?: string | null
+          variant_id?: number | null
+          vehicle_id?: string | null
+          wheels?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_vehicle_variant"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicle_variants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vehicle_variants: {
+        Row: {
+          id: string
+          metadata_url: string | null
+          name: string | null
+          url: string | null
+        }
+        Insert: {
+          id?: string
+          metadata_url?: string | null
+          name?: string | null
+          url?: string | null
+        }
+        Update: {
+          id?: string
+          metadata_url?: string | null
+          name?: string | null
+          url?: string | null
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          created_at: string | null
+          displacement: string | null
+          front_rear_brake: string | null
+          fuel_capacity: string | null
+          fuel_type: string | null
+          id: string
+          image_url: string | null
+          license_plate: string | null
+          model: string | null
+          name: string | null
+          power_transmission: string | null
+          seating_capacity: number | null
+          status: Database["public"]["Enums"]["status"] | null
+          tires: string | null
+          transmission: string | null
+          type: string | null
+          updated_at: string | null
+          wheels: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          displacement?: string | null
+          front_rear_brake?: string | null
+          fuel_capacity?: string | null
+          fuel_type?: string | null
+          id?: string
+          image_url?: string | null
+          license_plate?: string | null
+          model?: string | null
+          name?: string | null
+          power_transmission?: string | null
+          seating_capacity?: number | null
+          status?: Database["public"]["Enums"]["status"] | null
+          tires?: string | null
+          transmission?: string | null
+          type?: string | null
+          updated_at?: string | null
+          wheels?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          displacement?: string | null
+          front_rear_brake?: string | null
+          fuel_capacity?: string | null
+          fuel_type?: string | null
+          id?: string
+          image_url?: string | null
+          license_plate?: string | null
+          model?: string | null
+          name?: string | null
+          power_transmission?: string | null
+          seating_capacity?: number | null
+          status?: Database["public"]["Enums"]["status"] | null
+          tires?: string | null
+          transmission?: string | null
+          type?: string | null
+          updated_at?: string | null
+          wheels?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Functions: {
-      [_ in never]: never;
-    };
+      [_ in never]: never
+    }
     Enums: {
       availability_status: "available" | "under maintenance" | "rented"
       booking_status: "booked" | "payment_pending" | "completed"
@@ -469,89 +726,89 @@ export type Database = {
       status: "available" | "under maintenance" | "rented"
     }
     CompositeTypes: {
-      [_ in never]: never;
-    };
-  };
-};
+      [_ in never]: never
+    }
+  }
+}
 
-type PublicSchema = Database[Extract<keyof Database, 'public'>];
+type PublicSchema = Database[Extract<keyof Database, "public">]
 
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-        Database[PublicTableNameOrOptions['schema']]['Views'])
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
-      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
-      Row: infer R;
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] &
-        PublicSchema['Views'])
-    ? (PublicSchema['Tables'] &
-        PublicSchema['Views'])[PublicTableNameOrOptions] extends {
-        Row: infer R;
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
       }
       ? R
       : never
-    : never;
+    : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof PublicSchema['Tables']
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
-      Insert: infer I;
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
-        Insert: infer I;
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
       }
       ? I
       : never
-    : never;
+    : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof PublicSchema['Tables']
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
     : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
-      Update: infer U;
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
-    ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
-        Update: infer U;
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
       }
       ? U
       : never
-    : never;
+    : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof PublicSchema['Enums']
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
     : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
-  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
-    ? PublicSchema['Enums'][PublicEnumNameOrOptions]
-    : never;
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
