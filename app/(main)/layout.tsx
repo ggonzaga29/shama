@@ -25,5 +25,3 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     </ViewTransitions>
   );
 }
-
-// export const dynamic = "force-dynamic";

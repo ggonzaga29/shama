@@ -1,4 +1,4 @@
-import { Download, Plus, UserRound } from 'lucide-react';
+import { Download, Plus } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import PageHeader from 'src/components/PageHeader/PageHeader';
@@ -15,9 +15,7 @@ export default async function UsersPage() {
   return (
     <div>
       <PageHeader>
-        <PageHeader.Title as="h2" Icon={UserRound}>
-          Users
-        </PageHeader.Title>
+        <PageHeader.Title as="h2">Users</PageHeader.Title>
 
         <PageHeader.Aside>
           <Button variant="gooeyRight" Icon={Plus}>

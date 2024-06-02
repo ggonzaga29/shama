@@ -2,7 +2,6 @@
 
 import { Link } from 'next-view-transitions';
 import { FC } from 'react';
-import { UserWithProfile } from 'src/common/types';
 import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/Avatar';
 import {
   DropdownMenu,
@@ -11,33 +10,36 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
+import { Skeleton } from 'src/components/ui/Skeleton';
+import { useSessionContext } from 'src/modules/auth/context/SessionContext';
 
-interface TopNavigationUserProfileProps {
-  user: UserWithProfile | null;
-}
+const TopNavigationUserProfile: FC = () => {
+  const { user } = useSessionContext();
 
-const TopNavigationUserProfile: FC<TopNavigationUserProfileProps> = ({
-  user,
-}) => {
   if (!user) {
-    return null;
+    return (
+      <div className="flex items-center space-x-3 rounded-md px-4 py-2 transition-colors">
+        <Skeleton className="size-8 rounded-full" />
+        <Skeleton className="h-4 w-24" />
+      </div>
+    );
   }
 
-  const initials = `${user.profile?.first_name?.[0]}${user.profile?.last_name?.[0]}`;
+  const initials = `${user?.profile?.first_name?.[0]}${user?.profile?.last_name?.[0]}`;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <div className="flex items-center space-x-3 rounded-md px-4 py-2 transition-colors hover:bg-navigation-button-hover">
           <Avatar className="size-8">
-            <AvatarImage src={user.profile?.avatar ?? ''} />
+            <AvatarImage src={user?.profile?.avatar ?? 'JD'} />
             <AvatarFallback className="text-foreground">
               {initials}
             </AvatarFallback>
           </Avatar>
 
           <div>
-            <div className="text-sm font-medium">{`${user.profile?.first_name} ${user.profile?.last_name}`}</div>
+            <div className="text-sm font-medium">{`${user?.profile?.first_name ?? 'John'} ${user?.profile?.last_name ?? 'Doe'}`}</div>
           </div>
         </div>
       </DropdownMenuTrigger>
@@ -45,7 +47,7 @@ const TopNavigationUserProfile: FC<TopNavigationUserProfileProps> = ({
         <DropdownMenuItem className="text-sm">Profile</DropdownMenuItem>
         <DropdownMenuItem className="text-sm">Settings</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <Link href="/auth/signout">
+        <Link href="/api/auth/signout">
           <DropdownMenuItem className="text-sm">Sign out</DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

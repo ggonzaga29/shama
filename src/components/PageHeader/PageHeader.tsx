@@ -1,6 +1,7 @@
 import { cva } from 'class-variance-authority';
 import { FC, forwardRef } from 'react';
 import { cn } from 'src/common/utils/cvaUtils';
+import PageHeaderBreadcrumbs from 'src/components/PageHeader/PageHeaderBreadcrumbs';
 
 type PageHeaderTitleProps = {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -65,11 +66,10 @@ const PageHeader: FC<PageHeaderProps> & {
   Aside: typeof PageHeaderAside;
 } = ({ children, className }) => {
   return (
-    <section
-      className={cn('mb-12 flex items-center justify-between', className)}
-    >
-      {children}
-    </section>
+    <header className={cn('mb-12 flex flex-col justify-between', className)}>
+      <PageHeaderBreadcrumbs />
+      <div className="mt-4 flex items-center justify-between">{children}</div>
+    </header>
   );
 };
 
