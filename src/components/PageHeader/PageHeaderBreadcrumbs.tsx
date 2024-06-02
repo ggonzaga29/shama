@@ -2,6 +2,7 @@
 
 import { Home } from 'lucide-react';
 import { usePathname } from 'next/navigation';
+import { Link } from 'next-view-transitions';
 import React from 'react';
 import {
   Breadcrumb,
@@ -20,8 +21,10 @@ const PageHeaderBreadcrumbs = () => {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">
-            <Home className="size-4" />
+          <BreadcrumbLink asChild>
+            <Link href="/">
+              <Home className="size-4" />
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {breadcrumbs.map((breadcrumb, index) => {
@@ -35,8 +38,8 @@ const PageHeaderBreadcrumbs = () => {
                 <BreadcrumbPage>{capitalizedBreadcrumb}</BreadcrumbPage>
               ) : (
                 <BreadcrumbItem>
-                  <BreadcrumbLink href={`/${breadcrumb}`}>
-                    {capitalizedBreadcrumb}
+                  <BreadcrumbLink asChild>
+                    <Link href={`/${breadcrumb}`}>{capitalizedBreadcrumb}</Link>
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               )}
