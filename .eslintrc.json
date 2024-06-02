@@ -46,6 +46,7 @@
   },
   "ignorePatterns": [
     "tailwind.config.ts",
-    "next.config.js"
+    "next.config.js",
+    "src/common/types/supabase.ts"
   ]
 }
