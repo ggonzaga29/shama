@@ -1,72 +1,129 @@
 'use client';
-
-import { useQuery } from '@supabase-cache-helpers/postgrest-react-query';
-import { useState } from 'react';
-import useSupabaseBrowser from 'src/common/lib/supabase/useSupabaseClient';
-import { CarVariantMetadata } from 'src/common/types';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { X } from 'lucide-react';
+import { useRef } from 'react';
+import { useFormState } from 'react-dom';
+import { useForm } from 'react-hook-form';
+import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from 'src/components/ui/Select';
-import { getCarVariantList } from 'src/modules/cars/actions';
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from 'src/components/ui/Form';
+import { Input } from 'src/components/ui/Input';
+import { submitCarForm } from 'src/modules/cars/actions';
+import { type CarFormSchema, carFormSchema } from 'src/modules/cars/schema';
+
+const FORM_FIELDS: {
+  name: keyof CarFormSchema;
+  label: string;
+  placeholder: string;
+  description?: string;
+  required: boolean;
+}[] = [
+  {
+    name: 'name',
+    label: 'Name',
+    placeholder: 'e.g. Yaris Cross',
+    description:
+      'The name of the vehicle. This will be used for bookings and invoices.',
+    required: true,
+  },
+  {
+    name: 'license_plate',
+    label: 'License plate',
+    placeholder: 'e.g. XYZ 123',
+    description:
+      'The license plate of the vehicle. This will be used for bookings and invoices.',
+    required: true,
+  },
+  {
+    name: 'default_price',
+    label: 'Default price',
+    placeholder: 'e.g. 100',
+    description:
+      'The default booking price for the vehicle. This can be later changed in the booking form.',
+    required: true,
+  },
+];
 
 const CarForm = () => {
-  const client = useSupabaseBrowser();
-  const { data: variantList } = useQuery(getCarVariantList(client));
-  // Abstract this into another component to avoid refetching the list every time because this will cause a rerender
-  const [selectedVariant, setSelectedVariant] =
-    useState<Partial<CarVariantMetadata> | null>(null);
+  const [state, formAction] = useFormState(submitCarForm, {
+    message: '',
+  });
 
-  const handleChange = (value: string) => {
-    const selected: Partial<CarVariantMetadata> | null =
-      variantList?.find((variant) =>
-        variant.vehicle_variant_metadata.find(
-          (metadata) => metadata.id === value
-        )
-      ) || null;
+  const form = useForm<CarFormSchema>({
+    resolver: zodResolver(carFormSchema),
+  });
 
-    console.log(selected);
-
-    setSelectedVariant(selected);
-  };
+  const formRef = useRef<HTMLFormElement>(null);
 
   return (
-    <div className="w-full rounded-lg bg-white p-6">
-      <Select onValueChange={handleChange}>
-        <SelectTrigger className="w-[320px]">
-          <span className="font-bold">{selectedVariant?.name}</span>
-          <SelectValue placeholder="Select a variant" />
-          <SelectContent>
-            <SelectGroup>
-              {variantList?.map(
-                (variant) =>
-                  variant.vehicle_variant_metadata.length > 0 && (
-                    <>
-                      <SelectLabel key={variant.id}>{variant.name}</SelectLabel>
-                      <div>
-                        {variant.vehicle_variant_metadata.map((metadata) => (
-                          <SelectItem
-                            key={metadata.id}
-                            value={metadata.id}
-                            className="ml-2"
-                          >
-                            {metadata.name}
-                          </SelectItem>
-                        ))}
-                      </div>
-                    </>
-                  )
-              )}
-            </SelectGroup>
-          </SelectContent>
-        </SelectTrigger>
-      </Select>
-    </div>
+    <Form {...form}>
+      {state?.message !== '' && !state.issues && (
+        <div className="text-red-500">{state.message}</div>
+      )}
+      {state?.issues && (
+        <div className="text-red-500">
+          <ul>
+            {state.issues.map((issue) => (
+              <li key={issue} className="flex gap-1">
+                <X fill="red" />
+                {issue}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <form
+        ref={formRef}
+        action={formAction}
+        onSubmit={(event) => {
+          event.preventDefault();
+          form.handleSubmit(() => {
+            console.log('formData', new FormData(formRef.current!));
+            formAction(new FormData(formRef.current!));
+          })(event);
+        }}
+        className="grid grid-cols-2 gap-4"
+      >
+        {FORM_FIELDS.map((formField, index) => (
+          <FormField
+            key={formField.name}
+            control={form.control}
+            name={formField.name}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={formField.name}>
+                  {formField.label}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder={formField.placeholder}
+                    {...field}
+                    autoFocus={index === 0}
+                  />
+                </FormControl>
+                {formField.description && (
+                  <FormDescription>{formField.description}</FormDescription>
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
+
+        <div className="col-span-2">
+          <EnhancedButton type="submit" variant="gooeyRight">
+            Add Car
+          </EnhancedButton>
+        </div>
+      </form>
+    </Form>
   );
 };
 
