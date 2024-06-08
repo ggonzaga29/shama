@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
 import { Skeleton } from 'src/components/ui/Skeleton';
-import { useSessionContext } from 'src/modules/auth/context/SessionContext';
+import { useSessionContext } from 'src/context/SessionContext';
 
 const TopNavigationUserProfile: FC = () => {
   const { user } = useSessionContext();

@@ -4,20 +4,11 @@ import {
   createAdminClient,
   createClient,
 } from 'src/common/lib/supabase/server';
+import { TypedSupabaseClient } from 'src/common/types';
 
 // TODO: Implement Pagination since the listUsers method only returns 100 users
-export async function getAllUsers() {
-  const supabase = createAdminClient();
-  const {
-    data: { users },
-    error,
-  } = await supabase.auth.admin.listUsers();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return users;
+export async function getAllUsers(client: TypedSupabaseClient) {
+  return client.auth.admin.listUsers();
 }
 
 export async function getUser(uid: string) {

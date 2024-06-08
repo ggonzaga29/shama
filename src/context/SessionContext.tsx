@@ -21,7 +21,6 @@ type SessionContext = {
 
 type SessionProviderProps = {
   children: React.ReactNode;
-  initialSession: Session;
   initialUser: UserWithProfile;
 };
 
@@ -31,11 +30,10 @@ const SessionContext = createContext<SessionContext>({
 
 export const SessionProvider: FC<SessionProviderProps> = ({
   children,
-  initialSession,
   initialUser,
 }) => {
   const supabase = createClient();
-  const [session, setSession] = useState<Session | null>(initialSession);
+  const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<UserWithProfile | null>(initialUser);
 
   useEffect(() => {

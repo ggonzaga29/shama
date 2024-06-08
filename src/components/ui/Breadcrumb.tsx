@@ -1,5 +1,6 @@
 import { Slot } from '@radix-ui/react-slot';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
+import Link from 'next/link';
 import * as React from 'react';
 import { cn } from 'src/common/utils/cvaUtils';
 
@@ -42,9 +43,10 @@ const BreadcrumbLink = React.forwardRef<
   HTMLAnchorElement,
   React.ComponentPropsWithoutRef<'a'> & {
     asChild?: boolean;
+    href: string;
   }
 >(({ asChild, className, ...props }, ref) => {
-  const Comp = asChild ? Slot : 'a';
+  const Comp = asChild ? Slot : Link;
 
   return (
     <Comp

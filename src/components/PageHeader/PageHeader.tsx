@@ -56,6 +56,15 @@ const PageHeaderAside = forwardRef<
 
 PageHeaderAside.displayName = 'PageHeaderAside';
 
+const PageHeaderDescription = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return <div ref={ref} className={cn(className)} {...props} />;
+});
+
+PageHeaderDescription.displayName = 'PageHeaderDescription';
+
 type PageHeaderProps = {
   children: React.ReactNode;
   className?: string;
@@ -64,6 +73,7 @@ type PageHeaderProps = {
 const PageHeader: FC<PageHeaderProps> & {
   Title: typeof PageHeaderTitle;
   Aside: typeof PageHeaderAside;
+  Description: typeof PageHeaderDescription;
 } = ({ children, className }) => {
   return (
     <header className={cn('mb-12 flex flex-col justify-between', className)}>
@@ -75,5 +85,6 @@ const PageHeader: FC<PageHeaderProps> & {
 
 PageHeader.Title = PageHeaderTitle;
 PageHeader.Aside = PageHeaderAside;
+PageHeader.Description = PageHeaderDescription;
 
 export default PageHeader;

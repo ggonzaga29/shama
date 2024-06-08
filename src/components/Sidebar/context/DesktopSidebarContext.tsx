@@ -21,7 +21,7 @@ const SidebarContext = createContext<SidebarContextProps>({
 });
 
 export const SidebarProvider: FC<SidebarProviderProps> = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const isMobile = useMediaQuery({ query: '(max-width: 1224px)' });
 
   const toggleSidebar = () => {

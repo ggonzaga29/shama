@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { Inter as FontSans } from 'next/font/google';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
+import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -53,16 +54,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn('bg-background font-sans antialiased', fontSans.variable)}
-      >
-        {children}
-        <Toaster />
-        {/* <ToastLauncher /> */}
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={cn(
+            'bg-background font-sans antialiased',
+            fontSans.variable
+          )}
+        >
+          {children}
+          <Toaster />
+          {/* <ToastLauncher /> */}
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
-
-export const dynamic = 'force-dynamic';

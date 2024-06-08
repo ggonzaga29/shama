@@ -1,7 +1,9 @@
-export default function Page() {
-  return (
-    <div>
-      <h1>Page</h1>
-    </div>
-  );
+import CarsPage from 'src/modules/cars/page/CarsPage';
+
+export async function generateMetadata() {
+  return {
+    title: 'Cars | Shama Travel & Tours',
+  };
 }
+
+export default CarsPage;

@@ -12,8 +12,8 @@ import {
   Gauge,
   PersonStanding,
 } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Link } from 'next-view-transitions';
 import { FC } from 'react';
 import Logo from 'src/assets/Logo';
 import LogoWithText from 'src/assets/LogoWithText';
