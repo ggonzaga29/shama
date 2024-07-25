@@ -1,8 +1,7 @@
-import { checkAuth, sampleMiddleware } from 'src/common/lib/middleware/auth';
 import { stackMiddlewares } from 'src/common/lib/middleware/stackMiddleware';
 import { updateSession } from 'src/common/lib/middleware/supabase';
 
-export default stackMiddlewares([updateSession, checkAuth, sampleMiddleware]);
+export default stackMiddlewares([updateSession]);
 
 export const config = {
   matcher: [

@@ -35,14 +35,14 @@ type DesktopSidebarPrimitiveProps = {
 
 const desktopSidebarPrimitiveVariants = cva(
   [
-    'flex grow flex-col justify-between rounded-none border-none bg-navigation pt-4 text-navigation-foreground',
-    'ease-[cubic-bezier(0.65,0.05,0.36,1)] transition-all duration-300',
+    'flex grow flex-col justify-between rounded-none border-none bg-navigation text-navigation-foreground',
+    'ease-[cubic-bezier(0.65,0.05,0.36,1)] transition-all duration-300 shadow-lg',
   ],
   {
     variants: {
       open: {
-        true: 'w-60',
-        false: 'w-20',
+        true: 'w-60 max-w-60',
+        false: 'w-20 max-w-20',
       },
     },
     defaultVariants: {
@@ -196,7 +196,7 @@ const DesktopSidebarMenu: FC<DesktopSidebarMenuProps> = ({
 };
 
 const DesktopSidebar = () => {
-  const { isMobile, isOpen } = useSidebar();
+  const { isMobile } = useSidebar();
 
   return (
     <DesktopSidebarPrimitive className={isMobile ? 'hidden' : 'flex'}>
@@ -206,15 +206,15 @@ const DesktopSidebar = () => {
           isMobile ? 'opacity-0 delay-0' : 'opacity-100 delay-300'
         )}
       >
-        <div className="flex items-center justify-center">
+        {/* <div className="flex items-center justify-center">
           {isOpen ? (
             <LogoWithText className="max-w-36" />
           ) : (
             <Logo theme="dark" className="max-w-8" />
           )}
-        </div>
+        </div> */}
 
-        <DesktopSidebarMenu className="mt-8">
+        <DesktopSidebarMenu>
           <DesktopSidebarMenuItemGroup label="Main">
             <DesktopSidebarMenuItem href={slugs.DASHBOARD} Icon={Gauge}>
               Dashboard

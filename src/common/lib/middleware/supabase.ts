@@ -56,7 +56,30 @@ export const updateSession: MiddlewareFactory = (next) => {
       }
     );
 
-    await supabase.auth.getUser();
+    const { data: sessionData, error: sessionError } =
+      await supabase.auth.getSession();
+
+    if (sessionError) {
+      if (request.nextUrl.pathname !== '/auth') {
+        console.log('redirecting');
+        return NextResponse.redirect(new URL('/auth', request.nextUrl));
+      }
+    }
+
+    if (
+      sessionData.session?.expires_at &&
+      sessionData.session.expires_at >= Math.floor(Date.now() / 1000)
+    ) {
+      return next(request, _next);
+    }
+
+    const { data, error } = await supabase.auth.getUser();
+
+    if (!data.user || error) {
+      if (request.nextUrl.pathname !== '/auth') {
+        return NextResponse.redirect(new URL('/auth', request.nextUrl));
+      }
+    }
 
     return next(request, _next);
   };

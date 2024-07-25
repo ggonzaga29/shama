@@ -1,37 +1,19 @@
 'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { X } from 'lucide-react';
-import { useRef } from 'react';
-import { useFormState } from 'react-dom';
-import { useForm } from 'react-hook-form';
-import { EnhancedButton } from 'src/components/ui/EnhancedButton';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from 'src/components/ui/Form';
-import { Input } from 'src/components/ui/Input';
+
 import { submitCarForm } from 'src/modules/cars/actions';
 import { type CarFormSchema, carFormSchema } from 'src/modules/cars/schema';
+import FormRenderer, {
+  FormFieldDefinitionArray,
+} from 'src/components/FormRenderer';
+import { useAddCarContext } from 'src/modules/cars/context/AddCarContext';
 
-const FORM_FIELDS: {
-  name: keyof CarFormSchema;
-  label: string;
-  placeholder: string;
-  description?: string;
-  required: boolean;
-}[] = [
+const FORM_FIELDS: FormFieldDefinitionArray<CarFormSchema> = [
   {
     name: 'name',
     label: 'Name',
     placeholder: 'e.g. Yaris Cross',
     description:
       'The name of the vehicle. This will be used for bookings and invoices.',
-    required: true,
   },
   {
     name: 'license_plate',
@@ -39,91 +21,112 @@ const FORM_FIELDS: {
     placeholder: 'e.g. XYZ 123',
     description:
       'The license plate of the vehicle. This will be used for bookings and invoices.',
-    required: true,
   },
   {
     name: 'default_price',
     label: 'Default price',
-    placeholder: 'e.g. 100',
+    type: 'number',
+    placeholder: 'e.g. 1500',
     description:
-      'The default booking price for the vehicle. This can be later changed in the booking form.',
-    required: true,
+      'The default booking price for the vehicle. This can be later changed in the booking form. (Number, Decimal)',
+  },
+  {
+    name: 'transmission',
+    label: 'Transmission',
+    placeholder: 'e.g. AT, MT, CVT',
+    description: 'The transmission type of the vehicle.',
+  },
+  {
+    name: 'fuel_type',
+    label: 'Fuel type',
+    placeholder: 'e.g. Gasoline, Diesel',
+    description: 'The fuel type of the vehicle.',
+  },
+  {
+    name: 'seating_capacity',
+    label: 'Seating capacity',
+    type: 'number',
+    placeholder: 'e.g. 4',
+    description: 'The seating capacity of the vehicle.',
+  },
+  {
+    name: 'model',
+    label: 'Model',
+    placeholder: 'e.g. 1.6L Turbo MT',
+    description: 'The model of the vehicle.',
+  },
+  {
+    name: 'type',
+    label: 'Type',
+    placeholder: 'e.g. Sedan',
+    description: 'The type of the vehicle.',
+  },
+  {
+    name: 'displacement',
+    label: 'Displacement',
+    placeholder: 'e.g. 2500cc, 3.0L',
+    description: 'The displacement of the vehicle.',
+  },
+  {
+    name: 'fuel_capacity',
+    label: 'Fuel capacity',
+    placeholder: 'e.g. 100L',
+    description: 'The fuel capacity of the vehicle.',
+  },
+  {
+    name: 'power_transmission',
+    label: 'Power transmission',
+    placeholder: 'e.g. CVT',
+    description: 'The power transmission of the vehicle.',
+  },
+  {
+    name: 'tires',
+    label: 'Tires',
+    placeholder: 'e.g. P255/45R17',
+    description: 'The tires of the vehicle.',
+  },
+  {
+    name: 'wheels',
+    label: 'Wheels',
+    placeholder: 'e.g. 20", 2.0',
+    description: 'The wheels of the vehicle.',
+  },
+  {
+    name: 'image_url',
+    label: 'Image URL',
+    type: 'text',
+    placeholder: 'e.g. https://example.com/image.jpg',
+    description: 'The URL of the image of the vehicle.',
   },
 ];
 
 const CarForm = () => {
-  const [state, formAction] = useFormState(submitCarForm, {
-    message: '',
-  });
+  const { selectedVehicle, selectedVariant } = useAddCarContext();
 
-  const form = useForm<CarFormSchema>({
-    resolver: zodResolver(carFormSchema),
-  });
-
-  const formRef = useRef<HTMLFormElement>(null);
+  const defaultValues = {
+    name: selectedVehicle?.name ?? '',
+    model: selectedVariant?.name ?? '',
+    transmission: selectedVariant?.transmission ?? '',
+    fuel_type: selectedVariant?.fuel_type ?? '',
+    seating_capacity: selectedVariant?.seating_capacity ?? 0,
+    fuel_capacity: selectedVariant?.fuel_capacity ?? '',
+    power_transmission: selectedVariant?.power_transmission ?? '',
+    tires: selectedVariant?.tires ?? '',
+    wheels: selectedVariant?.wheels ?? '',
+    displacement: selectedVariant?.displacement ?? '',
+    image_url: selectedVariant?.vehicle_variant_images?.[0]?.url ?? '',
+  };
 
   return (
-    <Form {...form}>
-      {state?.message !== '' && !state.issues && (
-        <div className="text-red-500">{state.message}</div>
-      )}
-      {state?.issues && (
-        <div className="text-red-500">
-          <ul>
-            {state.issues.map((issue) => (
-              <li key={issue} className="flex gap-1">
-                <X fill="red" />
-                {issue}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      <form
-        ref={formRef}
-        action={formAction}
-        onSubmit={(event) => {
-          event.preventDefault();
-          form.handleSubmit(() => {
-            console.log('formData', new FormData(formRef.current!));
-            formAction(new FormData(formRef.current!));
-          })(event);
-        }}
-        className="grid grid-cols-2 gap-4"
-      >
-        {FORM_FIELDS.map((formField, index) => (
-          <FormField
-            key={formField.name}
-            control={form.control}
-            name={formField.name}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={formField.name}>
-                  {formField.label}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder={formField.placeholder}
-                    {...field}
-                    autoFocus={index === 0}
-                  />
-                </FormControl>
-                {formField.description && (
-                  <FormDescription>{formField.description}</FormDescription>
-                )}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        ))}
-
-        <div className="col-span-2">
-          <EnhancedButton type="submit" variant="gooeyRight">
-            Add Car
-          </EnhancedButton>
-        </div>
-      </form>
-    </Form>
+    <FormRenderer
+      schema={carFormSchema}
+      fields={FORM_FIELDS}
+      formAction={submitCarForm}
+      columns={2}
+      submitButtonLabel="Add Car"
+      defaultValues={defaultValues}
+      redirectUrl='/cars'
+    />
   );
 };
 

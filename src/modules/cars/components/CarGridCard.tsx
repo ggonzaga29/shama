@@ -13,17 +13,10 @@ import {
 import Image from 'next/image';
 import { FC } from 'react';
 import { Database } from 'src/common/types/supabase';
+import { cn } from 'src/common/utils/cvaUtils';
 import { Badge } from 'src/components/ui/Badge';
 import { Button } from 'src/components/ui/Button';
 import { Card, CardContent } from 'src/components/ui/Card';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from 'src/components/ui/DropdownMenu';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
   Tooltip,
@@ -31,6 +24,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from 'src/components/ui/Tooltip';
+import CarGridCardActions from 'src/modules/cars/components/CarGridCardActions';
 
 type CarGridCardProps = {
   car: Partial<Database['public']['Tables']['vehicles']['Row']>;
@@ -52,39 +46,19 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
                 className="size-full object-cover"
               />
             </div>
-            <span className="text-lg font-bold">{car.name}</span>
+            <span className="text-lg font-bold">
+              {car.name} {car.model}
+            </span>
           </div>
 
           <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost">
-                  <CircleEllipsis className="size-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuLabel>{car.name ?? ''}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Pencil className="mr-2 size-4" />
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Trash className="mr-2 size-4" />
-                  Delete
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Eye className="mr-2 size-4" />
-                  View Extra Details
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <CarGridCardActions car={car} />
           </div>
         </header>
 
-        <div className="my-4 h-48 w-full overflow-hidden">
+        <div className="my-4 h-48 w-full select-none overflow-hidden">
           <Image
-            src={`cars/${car.image_url}`}
+            src={`cars/${car.image_url ?? 'null.png'}`}
             alt={car.name ?? ''}
             width={300}
             height={190}
@@ -96,6 +70,18 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
+            <Badge
+              variant="outline"
+              className={cn(
+                car.status === 'available' ? 'bg-green-500 text-white' : '',
+                car.status === 'under maintenance'
+                  ? 'bg-yellow-500 text-white'
+                  : '',
+                car.status === 'rented' ? 'bg-red-500 text-white' : ''
+              )}
+            >
+              {car.status?.toUpperCase()}
+            </Badge>
             <Badge variant="default">{car.license_plate}</Badge>
             <Badge variant="secondary">
               <Armchair className="mr-2 size-4" />
@@ -129,7 +115,7 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
           </div>
           <div className="flex items-center space-x-1 text-sm font-medium text-muted-foreground">
             <Droplet className="size-4" />
-            <span>{`${car.fuel_capacity} Liters` ?? 'N/A'}</span>
+            <span>{`${car.fuel_capacity ?? '0'} Liters`}</span>
           </div>
         </div>
 
