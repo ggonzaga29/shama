@@ -1,7 +1,3 @@
-export default function ClientsPage() {
-  return (
-    <div>
-      <h1>Clients</h1>
-    </div>
-  );
-}
+import AddClientPage from 'src/modules/clients/page/AddClientPage';
+
+export default AddClientPage;

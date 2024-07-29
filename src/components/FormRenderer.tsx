@@ -9,6 +9,7 @@ import { FieldValues, Path, useForm, DefaultValues } from 'react-hook-form';
 import { toast } from 'sonner';
 import { cn } from 'src/common/utils/cvaUtils';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
+import { gridCols } from 'src/common/utils/cvaUtils';
 import {
   Form,
   FormControl,
@@ -141,42 +142,42 @@ const FormRenderer = <T extends FieldValues>({
             formStateAction(new FormData(formRef.current!));
           })(event);
         }}
-        className={cn(`grid grid-cols-${columns} gap-4`, className)}
       >
-        {fields.map((formField, index) => (
-          <FormField
-            key={formField.name as string}
-            control={form.control}
-            name={formField.name as Path<T>}
-            render={({ field }) => {
-              return (
-                <FormItem
-                  className={
-                    formField.colspan ? `col-span-${formField.colspan}` : ''
-                  }
-                >
-                  <FormLabel htmlFor={formField.name as string}>
-                    {formField.label}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={formField.placeholder}
-                      type={formField.type}
-                      {...field}
-                      autoFocus={index === 0}
-                    />
-                  </FormControl>
-                  {formField.description && (
-                    <FormDescription>{formField.description}</FormDescription>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              );
-            }}
-          />
-        ))}
-
-        <div className={`col-span-${columns}`}>
+        <div className={cn(`grid gap-4`, `grid-cols-${columns}`, className)}>
+          {fields.map((formField, index) => (
+            <FormField
+              key={formField.name as string}
+              control={form.control}
+              name={formField.name as Path<T>}
+              render={({ field }) => {
+                return (
+                  <FormItem
+                    className={
+                      formField.colspan ? `col-span-${formField.colspan}` : ''
+                    }
+                  >
+                    <FormLabel htmlFor={formField.name as string}>
+                      {formField.label}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={formField.placeholder}
+                        type={formField.type}
+                        {...field}
+                        autoFocus={index === 0}
+                      />
+                    </FormControl>
+                    {formField.description && (
+                      <FormDescription>{formField.description}</FormDescription>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
+            />
+          ))}
+        </div>
+        <div className={`mt-6 col-span-${columns}`}>
           <EnhancedButton
             type="submit"
             variant="gooeyRight"
