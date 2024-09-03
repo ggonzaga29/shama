@@ -415,30 +415,33 @@ export type Database = {
           avatar: string | null
           bio: string | null
           first_name: string | null
+          gender: string | null
           id: string
           is_first_login: boolean | null
           last_name: string | null
-          phone_number: string | null
+          phone: string | null
         }
         Insert: {
           address?: string | null
           avatar?: string | null
           bio?: string | null
           first_name?: string | null
+          gender?: string | null
           id: string
           is_first_login?: boolean | null
           last_name?: string | null
-          phone_number?: string | null
+          phone?: string | null
         }
         Update: {
           address?: string | null
           avatar?: string | null
           bio?: string | null
           first_name?: string | null
+          gender?: string | null
           id?: string
           is_first_login?: boolean | null
           last_name?: string | null
-          phone_number?: string | null
+          phone?: string | null
         }
         Relationships: [
           {
