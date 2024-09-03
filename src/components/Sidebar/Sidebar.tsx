@@ -14,7 +14,7 @@ const Sidebar = () => {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0 select-none',
+        'fixed left-0 top-0 z-20 h-screen -translate-x-full select-none transition-[width] duration-300 ease-in-out lg:translate-x-0',
         isOpen === false ? 'w-[90px]' : 'w-72'
       )}
     >
@@ -24,15 +24,11 @@ const Sidebar = () => {
         <div className="relative flex w-full items-center justify-center py-4">
           <div className="absolute">
             <SupabaseImage
-              src={
-                theme === 'dark'
-                  ? 'assets/images/logoDarkWithText.png'
-                  : 'assets/images/logoLightWithText.png'
-              }
+              src="assets/images/logoDarkWithText.png"
               alt="Logo"
               width={100}
               height={37}
-              className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+              className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'} ${theme === 'dark' ? 'invert-0' : 'invert'}`}
             />
           </div>
           <div className="absolute">
