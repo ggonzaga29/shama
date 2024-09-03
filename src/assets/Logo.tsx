@@ -1,15 +1,24 @@
-import Image from 'next/image';
+'use client';
+
+import SupabaseImage from 'src/components/SupabaseImage';
 import { cn } from 'src/common/utils/cvaUtils';
+import { useTheme } from 'next-themes';
 
 interface LogoProps {
   className?: string;
   theme?: 'light' | 'dark';
 }
 
-export default function Logo({ className, theme = 'light' }: LogoProps) {
+export default function Logo({ className, }: LogoProps) {
+  const { resolvedTheme: theme } = useTheme();
+
   return (
-    <Image
-      src="assets/images/logoDark.png"
+    <SupabaseImage
+      src={
+        theme === 'dark'
+          ? 'assets/images/logoLight.png'
+          : 'assets/images/logoDark.png'
+      }
       alt="Logo"
       width={97}
       height={128}

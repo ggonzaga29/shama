@@ -24,3 +24,15 @@ export type UserWithProfile = User & {
 };
 
 export type TypedSupabaseClient = SupabaseClient<Database>;
+
+// Upload types
+export type UploadedFile = {
+  path: string;
+  id: string;
+  fullPath: string;
+};
+
+export type OnUploadResponse =
+  | { success: false; message: string; issues?: string[] }
+  | { success: true; successMessage: string; data: UploadedFile };
+

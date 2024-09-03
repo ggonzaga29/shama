@@ -1,6 +1,5 @@
 'use client';
 
-import { User } from '@supabase/supabase-js';
 import FormRenderer, {
   FormFieldDefinitionArray,
 } from 'src/components/FormRenderer';
@@ -67,12 +66,11 @@ const UserDetailsForm = ({
     },
   ];
 
-  const {
-    first_name,
-    last_name,
-    gender,
-    phone,
-  } = userProfile || {};
+  const { first_name, last_name, gender, phone, address } = userProfile || {};
+
+  // Type guard for gender
+  const validGender =
+    gender === 'Male' || gender === 'Female' ? gender : undefined;
 
   return (
     <Card>
@@ -87,8 +85,13 @@ const UserDetailsForm = ({
           formAction={updateUserDetails}
           columns={2}
           submitButtonLabel="Update"
-          // defaultValues={defaultValues}
-          redirectUrl="/cars"
+          defaultValues={{
+            first_name: first_name ?? undefined,
+            last_name: last_name ?? undefined,
+            gender: validGender,
+            phone: phone ?? undefined,
+            address: address ?? undefined,
+          }}
         />
       </CardContent>
     </Card>

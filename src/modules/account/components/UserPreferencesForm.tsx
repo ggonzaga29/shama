@@ -14,13 +14,7 @@ const UserDetailsForm = () => {
         <CardDescription>Update your user preferences</CardDescription>
       </CardHeader>
       <CardContent>
-        {/* <FileUploader
-          maxFileCount={4}
-          maxSize={4 * 1024 * 1024}
-          // progresses={progresses}
-          // onUpload={onUpload}
-          // disabled={isUploading}
-        /> */}
+        Coming soon...
       </CardContent>
     </Card>
   );

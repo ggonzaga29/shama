@@ -5,6 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from 'src/components/ui/Card';
+import FileUploader from 'src/components/FileUploader/FileUploader';
+import { uploadAvatar } from 'src/modules/account/actions';
 
 const UserAvatarForm = () => {
   return (
@@ -14,13 +16,13 @@ const UserAvatarForm = () => {
         <CardDescription>Upload a profile picture</CardDescription>
       </CardHeader>
       <CardContent>
-        {/* <FileUploader
-          maxFileCount={4}
-          maxSize={4 * 1024 * 1024}
-          // progresses={progresses}
-          // onUpload={onUpload}
-          // disabled={isUploading}
-        /> */}
+        <FileUploader
+          onUpload={uploadAvatar}
+          acceptedFileTypes={{
+            'image/jpeg': [],
+            'image/png': [],
+          }}
+        />
       </CardContent>
     </Card>
   );

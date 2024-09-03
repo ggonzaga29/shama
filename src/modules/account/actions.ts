@@ -1,12 +1,10 @@
 'use server';
 
 import { createClient } from 'src/common/lib/supabase/server';
-import {
-  userDetailsSchema,
-  UserDetailsSchema,
-} from 'src/modules/account/schema';
+import { userDetailsSchema } from 'src/modules/account/schema';
+import { v4 as uuidv4 } from 'uuid';
 import { FormState } from 'src/components/FormRenderer';
-import { revalidatePath } from 'next/cache';
+import { OnUploadResponse, UploadedFile } from 'src/common/types';
 
 export async function updateUserDetails(
   previousState: FormState,
@@ -55,5 +53,34 @@ export async function updateUserDetails(
   return {
     success: true,
     successMessage: 'User details updated successfully',
-  }
+  };
 }
+
+export const uploadAvatar = async (
+  formData: FormData
+): Promise<OnUploadResponse> => {
+  const supabase = createClient();
+  const file = formData.get('file') as File;
+
+  const { data, error } = await supabase.storage
+    .from('avatars')
+    .upload(`avatar_${uuidv4()}.png`, file, {
+      cacheControl: '3600',
+      upsert: false,
+    });
+
+  if (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: 'Failed to upload avatar',
+      issues: [error.message],
+    };
+  }
+
+  return {
+    success: true,
+    successMessage: 'Avatar uploaded successfully',
+    data: data as UploadedFile,
+  };
+};

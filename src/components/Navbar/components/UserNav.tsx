@@ -21,11 +21,16 @@ import {
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
 import { createClient } from 'src/common/lib/supabase/client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo, useMemo } from 'react';
 import { User as UserType } from '@supabase/supabase-js';
+import { Database } from 'src/common/types/supabase';
+import { redirect } from 'next/navigation';
 
-export function UserNav() {
-  const supabase = createClient();
+const UserNav = memo(function UserNav() {
+  const supabase = useMemo(() => createClient(), []);
+  const [profile, setProfile] = useState<
+    Database['public']['Tables']['profiles']['Row'] | null
+  >(null);
   const [user, setUser] = useState<UserType | null>(null);
 
   useEffect(() => {
@@ -37,12 +42,23 @@ export function UserNav() {
       }
 
       if (data.session?.user) {
-        setUser(data.session?.user);
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.session?.user.id)
+          .single();
+
+        if (profileError) {
+          console.error(profileError);
+        }
+
+        setProfile(profileData);
+        setUser(data.session.user);
       }
     };
 
     void getSession();
-  }, []);
+  }, [supabase]);
 
   return (
     <DropdownMenu>
@@ -55,20 +71,27 @@ export function UserNav() {
                 className="relative h-8 w-8 rounded-full"
               >
                 <Avatar className="h-8 w-8">
-                  <AvatarImage src="#" alt="Avatar" />
-                  <AvatarFallback className="bg-transparent">GG</AvatarFallback>
+                  <AvatarImage
+                    src={profile?.avatar ?? ''}
+                    alt={profile?.first_name ?? ''}
+                  />
+                  <AvatarFallback className="bg-transparent">
+                    {profile?.first_name?.charAt(0)}
+                    {profile?.last_name?.charAt(0)}
+                  </AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="bottom">Profile</TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Gian Gonzaga</p>
+            <p className="text-sm font-medium leading-none">
+              {profile?.first_name} {profile?.last_name}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
               {user?.email}
             </p>
@@ -90,11 +113,18 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => {}}>
-          <Logout className="mr-3 h-4 w-4 text-muted-foreground" />
-          Sign out
-        </DropdownMenuItem>
+        <Link href="/auth/signout">
+          <DropdownMenuItem
+            className="hover:cursor-pointer"
+           
+          >
+            <Logout className="mr-3 h-4 w-4 text-muted-foreground" />
+            Sign out
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});
+
+export { UserNav };
