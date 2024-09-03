@@ -1,5 +1,6 @@
 import React from 'react';
-import { SidebarProvider } from 'src/components/Sidebar/context/DesktopSidebarContext';
+import { cn } from 'src/common/utils/cvaUtils';
+import { SidebarProvider } from 'src/components/Sidebar/context/SidebarContext';
 import Sidebar from 'src/components/Sidebar/Sidebar';
 import TopNavigation from 'src/components/TopNavigation/TopNavigation';
 import { ScrollArea } from 'src/components/ui/Scrollarea';
@@ -13,8 +14,6 @@ interface MainLayoutProps {
 export default async function MainLayout({ children }: MainLayoutProps) {
   const user = await getCurrentUser();
 
-  // This isn't a security check
-  // This shouldn't happen btw
   if (!user) {
     return null;
   }
@@ -22,18 +21,23 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   return (
     <SessionProvider initialUser={user}>
       <SidebarProvider>
-        <main className="flex h-full flex-col overflow-hidden">
-          <TopNavigation />
+        <div className="flex h-full flex-col overflow-hidden">
+          {/* <TopNavigation /> */}
 
           <div className="flex h-full grow-[999] basis-0">
             {/* <PageHeader /> */}
             <Sidebar />
 
-            <ScrollArea className="grow overflow-auto">
-              <div className="mb-24 p-6">{children}</div>
-            </ScrollArea>
+            <main
+              id="main-content"
+              className={cn(
+                'min-h-[calc(100vh_-_56px)] bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
+              )}
+            >
+              {children}
+            </main>
           </div>
-        </main>
+        </div>
       </SidebarProvider>
     </SessionProvider>
   );
