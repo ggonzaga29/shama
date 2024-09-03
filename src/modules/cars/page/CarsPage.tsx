@@ -13,7 +13,7 @@ export default async function CarsPage() {
         <PageHeader.Title as="h2">Car Catalogue</PageHeader.Title>
 
         <PageHeader.Aside>
-          <Link href="/cars/form">
+          <Link href="/cars/add">
             <EnhancedButton variant="gooeyRight" Icon={Plus}>
               Add Car
             </EnhancedButton>
