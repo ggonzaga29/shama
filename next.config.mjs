@@ -9,10 +9,14 @@ const nextConfig = {
         destination: '/dashboard',
       },
     ];
-  },
+  }, 
   images: {
-    loader: 'custom',
-    loaderFile: './src/common/lib/supabase/imageLoader.ts',
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 };
 

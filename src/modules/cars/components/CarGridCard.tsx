@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { FC } from 'react';
 import { Database } from 'src/common/types/supabase';
 import { cn } from 'src/common/utils/cvaUtils';
+import SupabaseImage from 'src/components/SupabaseImage';
 import { Badge } from 'src/components/ui/Badge';
 import { Button } from 'src/components/ui/Button';
 import { Card, CardContent } from 'src/components/ui/Card';
@@ -37,7 +38,7 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
         <header className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="h-8">
-              <Image
+              <SupabaseImage
                 src="assets/images/toyotaLogo.png"
                 alt="Toyota"
                 width={0}
@@ -57,13 +58,13 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
         </header>
 
         <div className="my-4 h-48 w-full select-none overflow-hidden">
-          <Image
+          <SupabaseImage
             src={`cars/${car.image_url ?? 'null.png'}`}
             alt={car.name ?? ''}
-            width={300}
-            height={190}
+            width={200}
+            height={90}
             sizes="100vw"
-            className="size-full object-cover"
+            className="size-full object-contain"
             priority={true}
           />
         </div>

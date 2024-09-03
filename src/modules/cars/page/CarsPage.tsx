@@ -1,35 +1,15 @@
-import { Download, Plus } from 'lucide-react';
-import Link from 'next/link';
 import { Suspense } from 'react';
-import PageHeader from 'src/components/PageHeader/PageHeader';
-import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import CarGridSkeleton from 'src/modules/cars/components/CarGridSkeleton';
+import ContentLayout from 'src/components/ContentLayout';
 import CarGrid from 'src/modules/cars/components/CarGrid';
+import { Car } from '@carbon/icons-react';
 
 export default async function CarsPage() {
   return (
-    <>
-      <PageHeader>
-        <PageHeader.Title as="h2">Car Catalogue</PageHeader.Title>
-
-        <PageHeader.Aside>
-          <Link href="/cars/add">
-            <EnhancedButton variant="gooeyRight" Icon={Plus}>
-              Add Car
-            </EnhancedButton>
-          </Link>
-          <EnhancedButton
-            variant="gooeyRight"
-            Icon={Download}
-            iconPlacement="left"
-          >
-            Export Data
-          </EnhancedButton>
-        </PageHeader.Aside>
-      </PageHeader>
+    <ContentLayout title="Vehicle Inventory" Icon={<Car className='w-6 h-6' />}>
       <Suspense fallback={<CarGridSkeleton />}>
         <CarGrid />
       </Suspense>
-    </>
+    </ContentLayout>
   );
 }

@@ -1,39 +1,54 @@
 'use client';
 
-import Link from 'next/link';
-import { PanelsTopLeft } from 'lucide-react';
-
 import { cn } from 'src/common/utils/cvaUtils';
-import { Button } from 'src/components/ui/Button';
 import Menu from 'src/components/Sidebar/Menu';
 import SidebarToggle from 'src/components/Sidebar/components/SidebarToggle';
-import Image from 'next/image';
 import { useSidebar } from 'src/components/Sidebar/context/SidebarContext';
+import SupabaseImage from 'src/components/SupabaseImage';
+import { useTheme } from 'next-themes';
 
 const Sidebar = () => {
   const { isOpen, toggleSidebar } = useSidebar();
+  const { theme } = useTheme();
 
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0',
+        'fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0 select-none',
         isOpen === false ? 'w-[90px]' : 'w-72'
       )}
     >
       <SidebarToggle isOpen={isOpen} toggleSidebar={toggleSidebar} />
-      <div className="relative flex h-full flex-col overflow-y-auto px-3 py-4 shadow-md dark:shadow-zinc-800">
-        <Button
-          className={cn(
-            'mb-1 transition-transform duration-300 ease-in-out',
-            isOpen === false ? 'translate-x-1' : 'translate-x-0'
-          )}
-          variant="link"
-          asChild
-        >
-          <Link href="/dashboard" className="flex items-center gap-2">
-            
-          </Link>
-        </Button>
+
+      <div className="relative flex h-full flex-col px-3 py-4 shadow-md dark:shadow-zinc-800">
+        <div className="relative flex w-full items-center justify-center py-4">
+          <div className="absolute">
+            <SupabaseImage
+              src={
+                theme === 'dark'
+                  ? 'assets/images/logoDarkWithText.png'
+                  : 'assets/images/logoLightWithText.png'
+              }
+              alt="Logo"
+              width={100}
+              height={37}
+              className={`transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+            />
+          </div>
+          <div className="absolute">
+            <SupabaseImage
+              src={
+                theme === 'dark'
+                  ? 'assets/images/logoDark.png'
+                  : 'assets/images/logoLight.png'
+              }
+              alt="Logo"
+              width={20}
+              height={37}
+              className={`transition-opacity duration-300 ${isOpen ? 'opacity-0' : 'opacity-100'}`}
+            />
+          </div>
+        </div>
         <Menu isOpen={isOpen} />
       </div>
     </aside>

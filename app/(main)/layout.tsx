@@ -2,8 +2,8 @@ import React from 'react';
 import { cn } from 'src/common/utils/cvaUtils';
 import { SidebarProvider } from 'src/components/Sidebar/context/SidebarContext';
 import Sidebar from 'src/components/Sidebar/Sidebar';
-import TopNavigation from 'src/components/TopNavigation/TopNavigation';
 import { ScrollArea } from 'src/components/ui/Scrollarea';
+import { Navbar } from 'src/components/Navbar/Navbar';
 import { SessionProvider } from 'src/context/SessionContext';
 import { getCurrentUser } from 'src/modules/users/actions';
 
@@ -28,14 +28,14 @@ export default async function MainLayout({ children }: MainLayoutProps) {
             {/* <PageHeader /> */}
             <Sidebar />
 
-            <main
+            <ScrollArea
               id="main-content"
               className={cn(
-                'min-h-[calc(100vh_-_56px)] bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
+                'min-h-[calc(100vh_-_56px)] bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900 w-full'
               )}
             >
               {children}
-            </main>
+            </ScrollArea>
           </div>
         </div>
       </SidebarProvider>

@@ -1,12 +1,21 @@
 import {
-  Tag,
-  Users,
-  Settings,
-  Bookmark,
-  SquarePen,
-  LayoutGrid,
-  LucideIcon
-} from "lucide-react";
+
+  LucideIcon,
+} from 'lucide-react';
+
+import {
+  CarbonIconType,
+  Dashboard,
+  CustomerService,
+  Catalog,
+  Watsonx,
+  ReportData,
+  InventoryManagement,
+  Identification,
+  VehicleServices,
+  UserRole,
+  Events,
+} from '@carbon/icons-react';
 
 type Submenu = {
   href: string;
@@ -18,84 +27,111 @@ type Menu = {
   href: string;
   label: string;
   active: boolean;
-  icon: LucideIcon
+  icon: LucideIcon | CarbonIconType;
   submenus: Submenu[];
 };
 
 type Group = {
   groupLabel: string;
+  isAdminGroup: boolean;
   menus: Menu[];
 };
 
 export function getMenuList(pathname: string): Group[] {
   return [
     {
-      groupLabel: "",
+      groupLabel: '',
+      isAdminGroup: false,
       menus: [
         {
-          href: "/dashboard",
-          label: "Dashboard",
-          active: pathname.includes("/dashboard"),
-          icon: LayoutGrid,
-          submenus: []
-        }
-      ]
+          href: '/dashboard',
+          label: 'Dashboard',
+          active: pathname.includes('/dashboard'),
+          icon: Dashboard,
+          submenus: [],
+        },
+        {
+          href: '/clients',
+          label: 'Clients',
+          active: pathname.includes('/clients'),
+          icon: CustomerService,
+          submenus: [],
+        },
+        {
+          href: '/contacts',
+          label: 'Contacts',
+          active: pathname.includes('/contacts'),
+          icon: Catalog,
+          submenus: [],
+        },
+      ],
     },
     {
-      groupLabel: "Contents",
+      groupLabel: 'Analytics',
+      isAdminGroup: false,
       menus: [
         {
-          href: "",
-          label: "Posts",
-          active: pathname.includes("/posts"),
-          icon: SquarePen,
-          submenus: [
-            {
-              href: "/posts",
-              label: "All Posts",
-              active: pathname === "/posts"
-            },
-            {
-              href: "/posts/new",
-              label: "New Post",
-              active: pathname === "/posts/new"
-            }
-          ]
+          href: '/reports',
+          label: 'Financial Reports',
+          active: pathname.includes('/posts'),
+          icon: ReportData,
+          submenus: [],
         },
         {
-          href: "/categories",
-          label: "Categories",
-          active: pathname.includes("/categories"),
-          icon: Bookmark,
-          submenus: []
+          href: '/powerbi',
+          label: 'Power BI',
+          active: pathname.includes('/powerbi'),
+          icon: Watsonx,
+          submenus: [],
         },
-        {
-          href: "/tags",
-          label: "Tags",
-          active: pathname.includes("/tags"),
-          icon: Tag,
-          submenus: []
-        }
-      ]
+      ],
     },
     {
-      groupLabel: "Settings",
+      groupLabel: 'Fleet Management',
+      isAdminGroup: false,
       menus: [
         {
-          href: "/users",
-          label: "Users",
-          active: pathname.includes("/users"),
-          icon: Users,
-          submenus: []
+          href: '/cars',
+          label: 'Vehicle Inventory',
+          active: pathname.includes('/cars'),
+          icon: InventoryManagement,
+          submenus: [],
         },
         {
-          href: "/account",
-          label: "Account",
-          active: pathname.includes("/account"),
-          icon: Settings,
-          submenus: []
-        }
-      ]
-    }
+          href: '/account',
+          label: 'Driver Management',
+          active: pathname.includes('/account'),
+          icon: Identification,
+          submenus: [],
+        },
+        {
+          href: '/account',
+          label: 'Maintenance',
+          active: pathname.includes('/account'),
+          icon: VehicleServices,
+          submenus: [],
+        },
+      ],
+    },
+    {
+      groupLabel: 'User Management',
+      isAdminGroup: true,
+      menus: [
+        {
+          href: '/users',
+          label: 'User Management',
+          active: pathname.includes('/users'),
+          icon: Events,
+          submenus: [],
+        },
+        {
+          href: '/roles',
+          label: 'Role Management',
+          active: pathname.includes('/roles'),
+          icon: UserRole,
+          submenus: [],
+        },
+      ],
+    },
   ];
 }

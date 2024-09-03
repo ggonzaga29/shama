@@ -114,4 +114,10 @@
   #main-content.sidebar-active {
     margin-left: 5.625rem;
   }
+
+  @media (max-width: 1024px) {
+    #main-content {
+      margin-left: 0 !important;
+    }
+  }
 }

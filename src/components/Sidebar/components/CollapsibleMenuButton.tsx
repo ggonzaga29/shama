@@ -26,6 +26,7 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator
 } from "src/components/ui/DropdownMenu";
+import { CarbonIconType } from "@carbon/icons-react";
 
 type Submenu = {
   href: string;
@@ -34,7 +35,7 @@ type Submenu = {
 };
 
 interface CollapseMenuButtonProps {
-  icon: LucideIcon;
+  icon: LucideIcon | CarbonIconType;
   label: string;
   active: boolean;
   submenus: Submenu[];
