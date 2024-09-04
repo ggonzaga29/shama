@@ -10,6 +10,7 @@ export async function updateUserDetails(
   previousState: FormState,
   data: FormData
 ): Promise<FormState> {
+  console.log('updateUserDetails');
   const supabase = createClient();
 
   const formData = Object.fromEntries(data);
@@ -32,7 +33,7 @@ export async function updateUserDetails(
 
   const { first_name, last_name, gender, phone, address } = parsedFormData.data;
 
-  const { data: userData, error: userError } = await supabase
+  const { error: userError } = await supabase
     .from('profiles')
     .update({
       first_name,
@@ -75,6 +76,7 @@ export const uploadAvatar = async (
       success: false,
       message: 'Failed to upload avatar',
       issues: [error.message],
+      data: null,
     };
   }
 

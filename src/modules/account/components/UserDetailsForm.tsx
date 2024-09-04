@@ -72,6 +72,8 @@ const UserDetailsForm = ({
   const validGender =
     gender === 'Male' || gender === 'Female' ? gender : undefined;
 
+  console.log('validGender', validGender);
+
   return (
     <Card>
       <CardHeader>

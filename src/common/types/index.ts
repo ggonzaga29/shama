@@ -33,6 +33,5 @@ export type UploadedFile = {
 };
 
 export type OnUploadResponse =
-  | { success: false; message: string; issues?: string[] }
+  | { success: false; message: string; issues?: string[]; data: null }
   | { success: true; successMessage: string; data: UploadedFile };
-

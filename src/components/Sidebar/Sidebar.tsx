@@ -9,7 +9,7 @@ import { useTheme } from 'next-themes';
 
 const Sidebar = () => {
   const { isOpen, toggleSidebar } = useSidebar();
-  const { theme } = useTheme();
+  const { resolvedTheme: theme } = useTheme();
 
   return (
     <aside

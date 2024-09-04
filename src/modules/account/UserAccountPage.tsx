@@ -24,7 +24,7 @@ export default async function AccountPage() {
     return null;
   }
 
-  const { data: userProfile, error: profileError } = await supabase
+  const { data: userProfile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', data.user?.id)

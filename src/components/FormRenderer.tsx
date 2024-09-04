@@ -154,6 +154,7 @@ const FormRenderer = <T extends FieldValues>({
 
   const form = useForm<T>({
     resolver: zodResolver(schema),
+    defaultValues,
   });
 
   const formRef = useRef<HTMLFormElement>(null);
@@ -169,6 +170,7 @@ const FormRenderer = <T extends FieldValues>({
     if (state.success) {
       toast.success(state.successMessage);
       // FIX: form.reset() doesn't work for some reason
+      // fix? force the form to re-render with the default values
       const fields = Object.keys(form.formState.touchedFields);
 
       if (redirectUrl) {

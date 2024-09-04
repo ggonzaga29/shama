@@ -7,6 +7,7 @@ import { Button } from 'src/components/ui/Button';
 import { TrashCan } from '@carbon/icons-react';
 import ZoomableImage from 'src/components/ZoomableImage';
 import { OnUploadResponse, UploadedFile } from 'src/common/types';
+import useFileDropHandler from 'src/components/FileUploader/hooks/useFileDropHandler';
 
 type FileUploaderProps = {
   onUpload: (file: FormData) => Promise<OnUploadResponse>;
@@ -38,43 +39,10 @@ const FileUploader: FC<FileUploaderProps> = ({
   maxFileSize = 1 * 1024 * 1024,
   acceptedFileTypes,
 }) => {
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-
-  /**
-   * Handles the drop event when files are dropped into the dropzone.
-   * Converts each file to an ArrayBuffer and calls the onUpload function.
-   *
-   * @param {File[]} acceptedFiles - The files that were dropped.
-   */
-  const onDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      acceptedFiles.forEach((file) => {
-        if (file.size > maxFileSize) {
-          console.error(
-            `File size exceeds the maximum of ${maxFileSize} bytes`
-          );
-          return;
-        }
-
-        file.arrayBuffer().then((buffer) => {
-          const blob = new Blob([buffer], { type: file.type });
-          const formData = new FormData();
-          formData.append('file', blob, file.name);
-          onUpload(formData).then((uploadedFile) => {
-            if (uploadedFile.success) {
-              const newFile: UploadedFile = {
-                id: uploadedFile.data.id,
-                fullPath: uploadedFile.data.fullPath,
-                path: uploadedFile.data.path,
-              };
-              setUploadedFiles((prevFiles) => [...prevFiles, newFile]);
-            }
-          });
-        });
-      });
-    },
-    [onUpload]
-  );
+  const { onDrop, uploadedFiles } = useFileDropHandler({
+    maxFileSize,
+    onUpload,
+  });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
