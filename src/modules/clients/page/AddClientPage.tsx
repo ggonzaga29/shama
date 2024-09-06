@@ -22,6 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
+import ClientTable from 'src/modules/clients/components/ClientTable';
 
 export type Payment = {
   id: string;
@@ -113,7 +114,8 @@ export default async function AddClientPage() {
       </Breadcrumb>
 
       <div className="mt-6">
-        <DataTable columns={columns} data={placeholderPayments} />
+        {/* <DataTable columns={columns} data={placeholderPayments} /> */}
+        <ClientTable />
       </div>
     </ContentLayout>
   );

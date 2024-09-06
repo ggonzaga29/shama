@@ -29,38 +29,34 @@ export async function getUser(uid: string) {
  * Returns the current user with their profile details
  */
 export async function getCurrentUser() {
-  try {
-    const supabase = createClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
+  const supabase = createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    if (!user) {
-      return null;
-    }
-
-    const { data: profileData, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    if (profileError) {
-      throw new Error(profileError.message);
-    }
-
-    return {
-      ...user,
-      profile: profileData,
-    };
-  } catch (error: any) {
-    throw new Error(`Failed to get current user: ${error.message}`);
+  if (error) {
+    throw new Error(error.message);
   }
+
+  if (!user) {
+    return null;
+  }
+
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  return {
+    ...user,
+    profile: profileData,
+  };
 }
 
 /**

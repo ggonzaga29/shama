@@ -1,10 +1,10 @@
 'use server';
 
 import { createClient } from 'src/common/lib/supabase/server';
+import { OnUploadResponse, UploadedFile } from 'src/common/types';
+import { FormState } from 'src/components/FormRenderer/types';
 import { userDetailsSchema } from 'src/modules/account/schema';
 import { v4 as uuidv4 } from 'uuid';
-import { FormState } from 'src/components/FormRenderer';
-import { OnUploadResponse, UploadedFile } from 'src/common/types';
 
 export async function updateUserDetails(
   previousState: FormState,
@@ -31,7 +31,8 @@ export async function updateUserDetails(
     };
   }
 
-  const { first_name, last_name, gender, phone, address } = parsedFormData.data;
+  const { user_id, first_name, last_name, gender, phone, address } =
+    parsedFormData.data;
 
   const { error: userError } = await supabase
     .from('profiles')
@@ -42,7 +43,7 @@ export async function updateUserDetails(
       phone,
       address,
     })
-    .eq('id', '631022ae-f19a-4b04-b193-0214ad16d451');
+    .eq('id', user_id);
 
   if (userError) {
     return {

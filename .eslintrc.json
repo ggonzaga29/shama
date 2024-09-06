@@ -41,5 +41,5 @@
     "next.config.js",
     "src/common/types/supabase.ts",
     "node_modules/**"
-  ],
+  ]
 }

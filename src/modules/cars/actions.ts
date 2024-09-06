@@ -2,7 +2,7 @@
 
 import { createClient } from 'src/common/lib/supabase/server';
 import { carFormSchema, CarFormSchema } from 'src/modules/cars/schema';
-import { FormState } from 'src/components/FormRenderer';
+import { FormState } from 'src/components/FormRenderer/FormRenderer';
 import { revalidatePath } from 'next/cache';
 
 export async function getAllCars() {

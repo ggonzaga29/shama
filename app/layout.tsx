@@ -63,7 +63,7 @@ export default function RootLayout({
           )}
         >
           <ThemeProvider attribute="class" disableTransitionOnChange>
-            <NextTopLoader />
+            <NextTopLoader showSpinner={false} />
             {children}
             <Toaster />
           </ThemeProvider>

@@ -1,11 +1,11 @@
 'use client';
 
+import { useTheme } from 'next-themes';
 import { cn } from 'src/common/utils/cvaUtils';
-import Menu from 'src/components/Sidebar/Menu';
 import SidebarToggle from 'src/components/Sidebar/components/SidebarToggle';
 import { useSidebar } from 'src/components/Sidebar/context/SidebarContext';
+import Menu from 'src/components/Sidebar/Menu';
 import SupabaseImage from 'src/components/SupabaseImage';
-import { useTheme } from 'next-themes';
 
 const Sidebar = () => {
   const { isOpen, toggleSidebar } = useSidebar();
@@ -15,7 +15,7 @@ const Sidebar = () => {
     <aside
       className={cn(
         'fixed left-0 top-0 z-20 h-screen -translate-x-full select-none transition-[width] duration-300 ease-in-out lg:translate-x-0',
-        isOpen === false ? 'w-[90px]' : 'w-72'
+        !isOpen ? 'w-[90px]' : 'w-72'
       )}
     >
       <SidebarToggle isOpen={isOpen} toggleSidebar={toggleSidebar} />

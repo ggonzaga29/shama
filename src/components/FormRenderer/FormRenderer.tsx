@@ -5,15 +5,10 @@ import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { useFormState } from 'react-dom';
-import {
-  FieldValues,
-  Path,
-  useForm,
-  DefaultValues,
-  PathValue,
-} from 'react-hook-form';
+import { FieldValues, Path, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { cn } from 'src/common/utils/cvaUtils';
+import { FormRendererProps } from 'src/components/FormRenderer/types';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
   Form,
@@ -29,103 +24,25 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectValue,
   SelectTrigger,
+  SelectValue,
 } from 'src/components/ui/Select';
 import { Textarea } from 'src/components/ui/Textarea';
-import { ZodSchema } from 'zod';
-
-export type FormState = {
-  message?: string;
-  fields?: Record<string, string>;
-  issues?: string[];
-  success?: boolean;
-  successMessage?: string;
-};
-
-export type FormFieldDefinition<T> = {
-  /**
-   * The name of the form field, which corresponds to a key in the form data object.
-   */
-  name: keyof T;
-
-  /**
-   * The label for the form field, which will be displayed to the user.
-   */
-  label: string;
-
-  /**
-   * The type of the form field. It can be one of the following:
-   * - 'text'
-   * - 'number'
-   * - 'password'
-   * - 'email'
-   * - 'select'
-   * - TODO: Add 'checkbox' type
-   * - TODO: Add 'radio' type
-   */
-  type?: 'text' | 'number' | 'password' | 'email' | 'select' | 'textarea';
-
-  /**
-   * The placeholder text for the form field.
-   */
-  placeholder?: string;
-
-  /**
-   * An optional description for the form field.
-   */
-  description?: string;
-
-  /**
-   * An optional colspan value for the form field, which determines how many columns the field should span.
-   */
-  colspan?: number;
-
-  /**
-   * An optional flag indicating whether the form field is required.
-   */
-  required?: boolean;
-} & (
-  | {
-      /**
-       * If the type is 'select', this property is required and defines the options for the select input.
-       */
-      type: 'select';
-      selectOptions: Array<{ label: string; value: string }>;
-    }
-  | {
-      /**
-       * If the type is not 'select', the options property should not be provided.
-       */
-      type?: 'text' | 'number' | 'password' | 'email' | 'textarea';
-      selectOptions?: never;
-    }
-);
-
-export type FormFieldDefinitionArray<T> = FormFieldDefinition<T>[];
-
-export type FormRendererProps<T> = {
-  fields: FormFieldDefinition<T>[];
-  formAction: (previousState: FormState, data: FormData) => Promise<FormState>;
-  schema: ZodSchema<T>;
-  columns?: number;
-  submitButtonLabel?: string;
-  defaultValues?: DefaultValues<T>;
-  redirectUrl?: string;
-  className?: string;
-  buttonClassName?: string;
-};
 
 /**
  * A generic form component that uses react-hook-form for form management and zod for form validation.
  * It takes in a list of field definitions, a form action function, a zod schema for validation, and some optional parameters.
  * @param {FormFieldDefinition<T>[]} fields - An array of field definitions for the form fields.
  * @param {(previousState: FormState, data: FormData) => Promise<FormState>} formAction - A function that takes the previous form state and form data and returns a new form state.
+ * @param onSuccess - A function that is called when the form action is successful.
  * @param {ZodSchema<T>} schema - A zod schema for form validation.
  * @param {number} [columns=1] - The number of columns in the form grid. Defaults to 1.
  * @param {string} [submitButtonLabel='Submit'] - The label for the submit button. Defaults to 'Submit'.
  * @param {DefaultValues<T>} [defaultValues] - Default values for the form fields.
  *
+ * @param redirectUrl
+ * @param className
+ * @param buttonClassName
  * @example
  * <FormRenderer
  *   fields={fields}
@@ -139,6 +56,7 @@ export type FormRendererProps<T> = {
 const FormRenderer = <T extends FieldValues>({
   fields,
   formAction,
+  onSuccess,
   schema,
   columns = 1,
   submitButtonLabel = 'Submit',
@@ -167,17 +85,23 @@ const FormRenderer = <T extends FieldValues>({
   }, [defaultValues]);
 
   useEffect(() => {
-    if (state.success) {
+    if (state.success && !form.formState.isSubmitting) {
       toast.success(state.successMessage);
       // FIX: form.reset() doesn't work for some reason
       // fix? force the form to re-render with the default values
-      const fields = Object.keys(form.formState.touchedFields);
+      form.reset(undefined, { keepDirtyValues: true });
 
       if (redirectUrl) {
         router.push(redirectUrl);
       }
     }
-  }, [state.success, state.successMessage]);
+  }, [state.success, state.successMessage, form.formState.isSubmitting]);
+
+  useEffect(() => {
+    if (state.success && onSuccess) {
+      onSuccess(state);
+    }
+  }, [state]);
 
   const handleSelectChange = (value: string, fieldName: string) => {
     if (!value) {
@@ -211,8 +135,15 @@ const FormRenderer = <T extends FieldValues>({
         action={formStateAction}
         onSubmit={(event) => {
           event.preventDefault();
-          form.handleSubmit(() => {
-            formStateAction(new FormData(formRef.current!));
+          form.handleSubmit(async () => {
+            try {
+              await formStateAction(new FormData(formRef.current!));
+              return new Promise<void>((resolve) => {
+                setTimeout(() => resolve(), 0);
+              });
+            } catch (error) {
+              console.error(error);
+            }
           })(event);
         }}
       >
@@ -229,8 +160,9 @@ const FormRenderer = <T extends FieldValues>({
                       return (
                         <FormItem
                           className={cn(
+                            'col-span-full md:col-auto',
                             formField.colspan
-                              ? `col-span-${formField.colspan}`
+                              ? `md:col-span-${formField.colspan}`
                               : ''
                           )}
                         >
@@ -257,8 +189,9 @@ const FormRenderer = <T extends FieldValues>({
                       return (
                         <FormItem
                           className={cn(
+                            'col-span-full md:col-auto',
                             formField.colspan
-                              ? `col-span-${formField.colspan}`
+                              ? `md:col-span-${formField.colspan}`
                               : ''
                           )}
                         >
@@ -267,7 +200,10 @@ const FormRenderer = <T extends FieldValues>({
                           </FormLabel>
                           <Select
                             onValueChange={(value) =>
-                              handleSelectChange(value, formField.name as string)
+                              handleSelectChange(
+                                value,
+                                formField.name as string
+                              )
                             }
                             defaultValue={field.value}
                             name={formField.name as Path<T>}
@@ -279,7 +215,10 @@ const FormRenderer = <T extends FieldValues>({
                             </FormControl>
                             <SelectContent>
                               {formField.selectOptions.map((option) => (
-                                <SelectItem value={option.value}>
+                                <SelectItem
+                                  key={option.label}
+                                  value={option.value}
+                                >
                                   {option.label}
                                 </SelectItem>
                               ))}
@@ -295,14 +234,30 @@ const FormRenderer = <T extends FieldValues>({
                         </FormItem>
                       );
 
+                    case 'hidden':
+                      return (
+                        <FormItem className="hidden">
+                          <input
+                            type="hidden"
+                            {...field}
+                            value={field.value ?? formField.value}
+                          />
+                        </FormItem>
+                      );
+
+                    //   TODO!: Implement ASAP
+                    case 'file':
+                      return <></>;
+
                     default:
                       return (
                         <FormItem
-                          className={
+                          className={cn(
+                            'col-span-full md:col-auto',
                             formField.colspan
-                              ? `col-span-${formField.colspan}`
+                              ? `md:col-span-${formField.colspan}`
                               : ''
-                          }
+                          )}
                         >
                           <FormLabel htmlFor={formField.name as string}>
                             {formField.label}
@@ -310,7 +265,7 @@ const FormRenderer = <T extends FieldValues>({
                           <FormControl>
                             <Input
                               placeholder={formField.placeholder}
-                              type={formField.type}
+                              type={formField.type ?? 'text'}
                               {...field}
                               autoFocus={index === 0}
                             />
@@ -328,7 +283,7 @@ const FormRenderer = <T extends FieldValues>({
               />
             ))}
           </div>
-          <div className={`mt-6 col-span-${columns}`}>
+          <div className={cn(`mt-6`, `col-span-${columns}`)}>
             <EnhancedButton
               type="submit"
               variant="gooeyRight"

@@ -1,19 +1,21 @@
 'use server';
 
-import { createClient } from 'src/common/lib/supabase/server';
-import { FormState } from 'src/components/FormRenderer';
-import { clientFormSchema } from 'src/modules/clients/schema';
-import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
+import { createClient } from 'src/common/lib/supabase/server';
+import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
+import { FormState } from 'src/components/FormRenderer/types';
+import { clientFormSchema } from 'src/modules/clients/schema';
+import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
 
 export async function submitClientForm(
   previousState: FormState,
   data: FormData
 ): Promise<FormState> {
-  const formData = Object.fromEntries(data);
-  console.log(formData);
-  const parsedFormData = clientFormSchema.safeParse(formData);
   const supabase = createClient();
+  const formData = Object.fromEntries(data);
+  const parsedFormData = clientFormSchema.safeParse(formData);
+  const metadata = await getUserRequestMetadata();
 
   if (!parsedFormData.success) {
     const fields = mapHookFormErrorsToZodIssues(data);
@@ -30,13 +32,21 @@ export async function submitClientForm(
   console.log(parsedFormData.data);
   const { name, email, phone, customer_type, notes } = parsedFormData.data;
 
-  const { error } = await supabase.from('clients').insert({
-    name,
-    email,
-    phone,
-    customer_type,
-    notes,
-  });
+  const { error } = await supabase
+    .from('clients')
+    .insert({
+      name,
+      email,
+      phone,
+      customer_type,
+      notes,
+    })
+    .select();
+
+  // const { error } = await supabase.from('crud_logs').insert({});
+  //
+  // const currentUser = await supabase.auth.getUser();
+  // console.log(metadata);
 
   if (error) {
     return {
