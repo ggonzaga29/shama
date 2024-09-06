@@ -241,6 +241,7 @@ export type Database = {
       }
       crud_logs: {
         Row: {
+          action: Database["public"]["Enums"]["crud_action"] | null
           created_at: string
           id: number
           metadata: Json | null
@@ -250,6 +251,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          action?: Database["public"]["Enums"]["crud_action"] | null
           created_at?: string
           id?: number
           metadata?: Json | null
@@ -259,6 +261,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          action?: Database["public"]["Enums"]["crud_action"] | null
           created_at?: string
           id?: number
           metadata?: Json | null
@@ -762,6 +765,7 @@ export type Database = {
       availability_status: "available" | "under maintenance" | "rented"
       booking_status: "booked" | "payment_pending" | "completed"
       booking_type: "self_drive" | "flexible_driving" | "pick_up_drop_off"
+      crud_action: "CREATE" | "READ" | "UPDATE" | "DELETE"
       customer_type: "personal" | "hotel" | "travel_agency" | "other"
       invoice_status: "pending" | "paid"
       maintenance_status: "scheduled" | "in_progress" | "completed"
