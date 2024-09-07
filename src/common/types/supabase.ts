@@ -239,6 +239,47 @@ export type Database = {
         }
         Relationships: []
       }
+      crud_logs: {
+        Row: {
+          action: Database["public"]["Enums"]["crud_action"] | null
+          created_at: string
+          id: number
+          metadata: Json | null
+          record_id: string | null
+          table_name: string | null
+          timestamp: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action?: Database["public"]["Enums"]["crud_action"] | null
+          created_at?: string
+          id?: number
+          metadata?: Json | null
+          record_id?: string | null
+          table_name?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: Database["public"]["Enums"]["crud_action"] | null
+          created_at?: string
+          id?: number
+          metadata?: Json | null
+          record_id?: string | null
+          table_name?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crud_logs_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       driver_files: {
         Row: {
           created_at: string | null
@@ -724,6 +765,7 @@ export type Database = {
       availability_status: "available" | "under maintenance" | "rented"
       booking_status: "booked" | "payment_pending" | "completed"
       booking_type: "self_drive" | "flexible_driving" | "pick_up_drop_off"
+      crud_action: "CREATE" | "READ" | "UPDATE" | "DELETE"
       customer_type: "personal" | "hotel" | "travel_agency" | "other"
       invoice_status: "pending" | "paid"
       maintenance_status: "scheduled" | "in_progress" | "completed"
