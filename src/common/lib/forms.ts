@@ -3,9 +3,13 @@
 // NOTE: Some forms may be custom and not used in the FormRenderer
 
 import { FormFieldDefinitionArray } from 'src/components/FormRenderer/types';
-import { UserDetailsSchema } from 'src/modules/account/schema';
+import {
+  UserAvatarSchema,
+  UserDetailsSchema,
+} from 'src/modules/account/schema';
 import { CarFormSchema } from 'src/modules/cars/schema';
 import { ClientFormSchema } from 'src/modules/clients/schema';
+import { uploadAvatar } from 'src/modules/account/actions';
 
 // Client Create Form Fields
 export const createClientFormFields: FormFieldDefinitionArray<ClientFormSchema> =
@@ -196,5 +200,16 @@ export const updateUserDetailsFormFields: FormFieldDefinitionArray<UserDetailsSc
       label: 'Address',
       placeholder: 'e.g. 144-E V. Rama Guadalupe, Cebu City',
       description: 'The address of the user.',
+    },
+  ];
+
+export const userAvatarFormFields: FormFieldDefinitionArray<UserAvatarSchema> =
+  [
+    {
+      name: 'avatar',
+      label: 'Avatar',
+      type: 'file',
+      description: 'The avatar of the user.',
+      onUpload: uploadAvatar,
     },
   ];

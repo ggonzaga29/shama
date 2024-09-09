@@ -1,9 +1,16 @@
 'use server';
 
 import { createClient } from 'src/common/lib/supabase/server';
-import { OnUploadResponse, UploadedFile } from 'src/common/types';
+import {
+  OnUploadResponse,
+  UploadedFile,
+  UploadedFiles,
+} from 'src/common/types';
 import { FormState } from 'src/components/FormRenderer/types';
-import { userDetailsSchema } from 'src/modules/account/schema';
+import {
+  userAvatarSchema,
+  userDetailsSchema,
+} from 'src/modules/account/schema';
 import { v4 as uuidv4 } from 'uuid';
 
 export async function updateUserDetails(
@@ -15,6 +22,8 @@ export async function updateUserDetails(
 
   const formData = Object.fromEntries(data);
   const parsedFormData = userDetailsSchema.safeParse(formData);
+
+  console.log('formData', formData);
 
   if (!parsedFormData.success) {
     const fields: Record<string, string> = {};
@@ -85,5 +94,55 @@ export const uploadAvatar = async (
     success: true,
     successMessage: 'Avatar uploaded successfully',
     data: data as UploadedFile,
+  };
+};
+
+export const submitAvatarForm = async (
+  previousState: FormState,
+  data: FormData
+): Promise<FormState> => {
+  const formData = Object.fromEntries(data);
+  const supabase = createClient();
+  const parsedFormData = userAvatarSchema.safeParse(formData);
+
+  if (!parsedFormData.success) {
+    const fields: Record<string, string> = {};
+    for (const key of Object.keys(formData)) {
+      fields[key] = formData[key].toString();
+    }
+
+    return {
+      message: 'Invalid form data',
+      fields,
+      issues: parsedFormData.error.issues.map((issue) => issue.message),
+    };
+  }
+
+  const { data: currentUser, error } = await supabase.auth.getUser();
+
+  if (error || !currentUser) {
+    return {
+      message: 'Failed to fetch user',
+      issues: [error ? error.message : 'No user found'],
+    };
+  }
+
+  const { error: userError } = await supabase
+    .from('profiles')
+    .update({
+      avatar: parsedFormData.data.avatar,
+    })
+    .eq('id', currentUser.user?.id);
+
+  if (userError) {
+    return {
+      message: 'Failed to update avatar',
+      issues: [userError.message],
+    };
+  }
+
+  return {
+    success: true,
+    successMessage: 'Avatar updated successfully',
   };
 };

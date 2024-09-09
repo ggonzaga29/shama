@@ -1,5 +1,6 @@
 import { SupabaseClient, User } from '@supabase/supabase-js';
 import { Database } from 'src/common/types/supabase';
+import { z } from 'zod';
 
 // Abstract the types from the supabase client
 export type Car = Database['public']['Tables']['vehicles']['Row'];
@@ -26,11 +27,15 @@ export type UserWithProfile = User & {
 export type TypedSupabaseClient = SupabaseClient<Database>;
 
 // Upload types
-export type UploadedFile = {
-  path: string;
-  id: string;
-  fullPath: string;
-};
+export const uploadedFile = z.object({
+  path: z.string(),
+  id: z.string(),
+  fullPath: z.string(),
+});
+export const uploadedFiles = z.array(uploadedFile);
+
+export type UploadedFile = z.infer<typeof uploadedFile>;
+export type UploadedFiles = z.infer<typeof uploadedFiles>;
 
 export type OnUploadResponse =
   | { success: false; message: string; issues?: string[]; data: null }

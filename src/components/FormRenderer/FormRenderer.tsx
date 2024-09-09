@@ -3,12 +3,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { FieldValues, Path, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { cn } from 'src/common/utils/cvaUtils';
+import FileUploader from 'src/components/FileUploader/FileUploader';
 import { FormRendererProps } from 'src/components/FormRenderer/types';
+import { Checkbox } from 'src/components/ui/Checkbox';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
   Form,
@@ -66,6 +68,7 @@ const FormRenderer = <T extends FieldValues>({
   buttonClassName,
 }: FormRendererProps<T>) => {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [state, formStateAction] = useFormState(formAction, {
     message: '',
   });
@@ -85,7 +88,12 @@ const FormRenderer = <T extends FieldValues>({
   }, [defaultValues]);
 
   useEffect(() => {
+    if (state.success && onSuccess) {
+      onSuccess(state);
+    }
+
     if (state.success && !form.formState.isSubmitting) {
+      setIsLoading(false);
       toast.success(state.successMessage);
       // FIX: form.reset() doesn't work for some reason
       // fix? force the form to re-render with the default values
@@ -97,11 +105,7 @@ const FormRenderer = <T extends FieldValues>({
     }
   }, [state.success, state.successMessage, form.formState.isSubmitting]);
 
-  useEffect(() => {
-    if (state.success && onSuccess) {
-      onSuccess(state);
-    }
-  }, [state]);
+  useEffect(() => {}, [state]);
 
   const handleSelectChange = (value: string, fieldName: string) => {
     if (!value) {
@@ -109,7 +113,6 @@ const FormRenderer = <T extends FieldValues>({
     }
 
     form.setValue(fieldName as Path<T>, value as any);
-    const values = form.getValues();
     form.clearErrors(fieldName as Path<T>);
   };
 
@@ -137,10 +140,17 @@ const FormRenderer = <T extends FieldValues>({
           event.preventDefault();
           form.handleSubmit(async () => {
             try {
-              await formStateAction(new FormData(formRef.current!));
-              return new Promise<void>((resolve) => {
-                setTimeout(() => resolve(), 0);
-              });
+              setIsLoading(true);
+              formStateAction(new FormData(formRef.current!));
+              /** @see: https://github.com/react-hook-form/react-hook-form/issues/1363
+               * Submit handler needs to return a promise to determine when the form is done submitting
+               * There may be a better solution
+               */
+              // return new Promise<void>((resolve) => {
+              //   setTimeout(() => {
+              //     resolve();
+              //   }, 500);
+              // });
             } catch (error) {
               console.error(error);
             }
@@ -245,9 +255,59 @@ const FormRenderer = <T extends FieldValues>({
                         </FormItem>
                       );
 
-                    //   TODO!: Implement ASAP
+                    case 'checkbox':
+                      return (
+                        <FormItem
+                          className={cn(
+                            'col-span-full md:col-auto',
+                            'flex items-center space-x-3',
+                            formField.colspan
+                              ? `md:col-span-${formField.colspan}`
+                              : ''
+                          )}
+                        >
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel htmlFor={formField.name as string}>
+                              {formField.label}
+                            </FormLabel>
+                            {formField.description && (
+                              <FormDescription className="block">
+                                {formField.description}
+                              </FormDescription>
+                            )}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      );
+
                     case 'file':
-                      return <></>;
+                      return (
+                        <FormItem
+                          className={cn(
+                            'col-span-full md:col-auto',
+                            'flex items-center space-x-3',
+                            formField.colspan
+                              ? `md:col-span-${formField.colspan}`
+                              : ''
+                          )}
+                        >
+                          <FormControl>
+                            <FileUploader
+                              field={field}
+                              onUpload={formField.onUpload}
+                              acceptedFileTypes={formField.acceptedFileTypes}
+                              maxFileSize={formField.maxFileSize}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
 
                     default:
                       return (
@@ -287,7 +347,7 @@ const FormRenderer = <T extends FieldValues>({
             <EnhancedButton
               type="submit"
               variant="gooeyRight"
-              loading={form.formState.isSubmitting}
+              loading={isLoading}
               className={buttonClassName}
             >
               {submitButtonLabel}

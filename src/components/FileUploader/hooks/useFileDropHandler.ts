@@ -1,22 +1,25 @@
 import { useCallback, useState } from 'react';
+import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
 import { OnUploadResponse, UploadedFile } from 'src/common/types';
 
-type UseFileDropHandlerProps = {
+type UseFileDropHandlerProps<T extends FieldValues> = {
   maxFileSize: number;
   onUpload: (file: FormData) => Promise<OnUploadResponse>;
-}
+  field: ControllerRenderProps<T, Path<T>>;
+};
 
 /**
  * Custom hook to handle file drop events.
  * Converts each file to an ArrayBuffer, creates a Blob, and uploads it using the provided onUpload function.
- * 
+ *
  * @param {UseFileDropHandlerProps} props - The properties required by the hook.
  * @returns {object} - An object containing the onDrop function and the list of uploaded files.
  */
-const useFileDropHandler = ({
+const useFileDropHandler = <T extends FieldValues>({
   maxFileSize,
   onUpload,
-}: UseFileDropHandlerProps) => {
+  field,
+}: UseFileDropHandlerProps<T>) => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
 
   /**
@@ -46,6 +49,8 @@ const useFileDropHandler = ({
                 fullPath: uploadedFile.data.fullPath,
                 path: uploadedFile.data.path,
               };
+
+              field.onChange([...uploadedFiles, newFile]);
               setUploadedFiles((prevFiles) => [...prevFiles, newFile]);
             }
           });

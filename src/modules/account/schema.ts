@@ -17,3 +17,9 @@ export const userDetailsSchema = z.object({
 });
 
 export type UserDetailsSchema = z.infer<typeof userDetailsSchema>;
+
+export const userAvatarSchema = z.object({
+  avatar: z.any(), // JSON string,
+});
+
+export type UserAvatarSchema = z.infer<typeof userAvatarSchema>;

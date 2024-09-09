@@ -32,7 +32,7 @@ export async function submitClientForm(
   console.log(parsedFormData.data);
   const { name, email, phone, customer_type, notes } = parsedFormData.data;
 
-  const { error } = await supabase
+  const { data: clientData, error } = await supabase
     .from('clients')
     .insert({
       name,
@@ -41,12 +41,24 @@ export async function submitClientForm(
       customer_type,
       notes,
     })
-    .select();
+    .select()
+    .single();
 
-  // const { error } = await supabase.from('crud_logs').insert({});
-  //
-  // const currentUser = await supabase.auth.getUser();
-  // console.log(metadata);
+  const currentUser = await supabase.auth.getUser();
+  const { error: crudLogInsertError } = await supabase
+    .from('crud_logs')
+    .insert({
+      user_id: currentUser.data?.user?.id,
+      table_name: 'clients',
+      record_id: clientData?.id,
+      action: 'CREATE',
+      metadata: JSON.stringify(metadata),
+      timestamp: new Date().toISOString(),
+    });
+
+  if (crudLogInsertError) {
+    console.error('Failed to insert crud log', crudLogInsertError.message);
+  }
 
   if (error) {
     return {

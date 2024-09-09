@@ -1,3 +1,8 @@
+'use client';
+
+// import FileUploader from 'src/components/FileUploader/FileUploader';
+import { userAvatarFormFields } from 'src/common/lib/forms';
+import FormRenderer from 'src/components/FormRenderer/FormRenderer';
 import {
   Card,
   CardContent,
@@ -5,8 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from 'src/components/ui/Card';
-import FileUploader from 'src/components/FileUploader/FileUploader';
-import { uploadAvatar } from 'src/modules/account/actions';
+import { submitAvatarForm } from 'src/modules/account/actions';
+import { userAvatarSchema } from 'src/modules/account/schema';
 
 const UserAvatarForm = () => {
   return (
@@ -16,12 +21,10 @@ const UserAvatarForm = () => {
         <CardDescription>Upload a profile picture</CardDescription>
       </CardHeader>
       <CardContent>
-        <FileUploader
-          onUpload={uploadAvatar}
-          acceptedFileTypes={{
-            'image/jpeg': [],
-            'image/png': [],
-          }}
+        <FormRenderer
+          fields={userAvatarFormFields}
+          formAction={submitAvatarForm}
+          schema={userAvatarSchema}
         />
       </CardContent>
     </Card>

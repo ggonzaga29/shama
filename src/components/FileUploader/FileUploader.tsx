@@ -1,20 +1,18 @@
 'use client';
 
-import { FC, useCallback, useState } from 'react';
 import { Accept, useDropzone } from 'react-dropzone';
-import SupabaseImage from 'src/components/SupabaseImage';
-import { Button } from 'src/components/ui/Button';
-import { TrashCan } from '@carbon/icons-react';
-import ZoomableImage from 'src/components/ZoomableImage';
-import { OnUploadResponse, UploadedFile } from 'src/common/types';
+import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
+import { OnUploadResponse } from 'src/common/types';
 import useFileDropHandler from 'src/components/FileUploader/hooks/useFileDropHandler';
+import ZoomableImage from 'src/components/ZoomableImage';
 
-type FileUploaderProps = {
+type FileUploaderProps<T extends FieldValues> = {
   onUpload: (file: FormData) => Promise<OnUploadResponse>;
   maxFileCount?: number;
   maxFileSize?: number;
   acceptedFileTypes?: Accept;
   showUploads?: 'preview' | 'list';
+  field: ControllerRenderProps<T, Path<T>>;
 };
 
 /**
@@ -26,22 +24,24 @@ type FileUploaderProps = {
  * @param {number} [maxFileSize=1 * 1024 * 1024] - The maximum size of a single file in bytes.
  * @param {Accept} [acceptedFileTypes] - The accepted file types for the dropzone.
  * @example  <FileUploader
-            onUpload={uploadAvatar}
-            acceptedFileTypes={{
-              'image/jpeg': [],
-              'image/png': [],
-            }}
-        />
+ onUpload={uploadAvatar}
+ acceptedFileTypes={{
+ 'image/jpeg': [],
+ 'image/png': [],
+ }}
+ />
  */
-const FileUploader: FC<FileUploaderProps> = ({
+const FileUploader = <T extends FieldValues>({
   onUpload,
   maxFileCount = 1,
-  maxFileSize = 1 * 1024 * 1024,
+  maxFileSize = maxFileCount * 1024 * 1024,
   acceptedFileTypes,
-}) => {
+  field,
+}: FileUploaderProps<T>) => {
   const { onDrop, uploadedFiles } = useFileDropHandler({
     maxFileSize,
     onUpload,
+    field,
   });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -50,6 +50,7 @@ const FileUploader: FC<FileUploaderProps> = ({
     disabled: uploadedFiles.length >= maxFileCount,
   });
 
+  // @see https://github.com/colinhacks/zod/discussions/2215
   return (
     <div>
       <div
@@ -57,17 +58,25 @@ const FileUploader: FC<FileUploaderProps> = ({
         className="mb-4 rounded-md border border-dashed border-gray-300 p-4"
       >
         <input {...getInputProps()} />
+        {/* Silly hack to register the field */}
+        <input
+          type="text"
+          name={field.name}
+          value={JSON.stringify(field.value)}
+        />
         {isDragActive ? (
           <p>Drop the {maxFileCount === 1 ? 'file' : 'files'} here ...</p>
         ) : (
           <p>
-            Drag 'n' drop {maxFileCount === 1 ? 'a file' : 'some files'} here,
-            or click to select {maxFileCount === 1 ? 'a file' : 'files'}
+            Drag &apos;n&apos; drop{' '}
+            {maxFileCount === 1 ? 'a file' : 'some files'} here, or click to
+            select {maxFileCount === 1 ? 'a file' : 'files'}
           </p>
         )}
       </div>
       <div className="flex flex-wrap gap-4">
         {uploadedFiles.map((file) => (
+          // eslint-disable-next-line react/jsx-key
           <ZoomableImage
             src={file.fullPath}
             alt={file.path}
