@@ -1,6 +1,6 @@
 'use client';
 
-import { useSidebar } from 'src/components/Sidebar/context/DesktopSidebarContext';
+import { useSidebar } from 'src/components/Sidebar/context/SidebarContext';
 
 const Hamburger = () => {
   const { toggleSidebar } = useSidebar();

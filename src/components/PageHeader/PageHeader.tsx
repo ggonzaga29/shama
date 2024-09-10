@@ -1,6 +1,7 @@
 import { cva } from 'class-variance-authority';
 import { FC, forwardRef } from 'react';
 import { cn } from 'src/common/utils/cvaUtils';
+import PageHeaderBreadcrumbs from 'src/components/PageHeader/PageHeaderBreadcrumbs';
 
 type PageHeaderTitleProps = {
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -55,6 +56,15 @@ const PageHeaderAside = forwardRef<
 
 PageHeaderAside.displayName = 'PageHeaderAside';
 
+const PageHeaderDescription = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return <div ref={ref} className={cn(className)} {...props} />;
+});
+
+PageHeaderDescription.displayName = 'PageHeaderDescription';
+
 type PageHeaderProps = {
   children: React.ReactNode;
   className?: string;
@@ -63,17 +73,18 @@ type PageHeaderProps = {
 const PageHeader: FC<PageHeaderProps> & {
   Title: typeof PageHeaderTitle;
   Aside: typeof PageHeaderAside;
+  Description: typeof PageHeaderDescription;
 } = ({ children, className }) => {
   return (
-    <section
-      className={cn('mb-12 flex items-center justify-between', className)}
-    >
-      {children}
-    </section>
+    <header className={cn('mb-12 flex flex-col justify-between', className)}>
+      <PageHeaderBreadcrumbs />
+      <div className="mt-4 flex items-center justify-between">{children}</div>
+    </header>
   );
 };
 
 PageHeader.Title = PageHeaderTitle;
 PageHeader.Aside = PageHeaderAside;
+PageHeader.Description = PageHeaderDescription;
 
 export default PageHeader;

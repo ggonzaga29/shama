@@ -4,20 +4,11 @@ import {
   createAdminClient,
   createClient,
 } from 'src/common/lib/supabase/server';
+import { TypedSupabaseClient } from 'src/common/types';
 
 // TODO: Implement Pagination since the listUsers method only returns 100 users
-export async function getAllUsers() {
-  const supabase = createAdminClient();
-  const {
-    data: { users },
-    error,
-  } = await supabase.auth.admin.listUsers();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return users;
+export async function getAllUsers(client: TypedSupabaseClient) {
+  return client.auth.admin.listUsers();
 }
 
 export async function getUser(uid: string) {
@@ -38,38 +29,34 @@ export async function getUser(uid: string) {
  * Returns the current user with their profile details
  */
 export async function getCurrentUser() {
-  try {
-    const supabase = createAdminClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
+  const supabase = createClient();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    if (!user) {
-      return null;
-    }
-
-    const { data: profileData, error: profileError } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .maybeSingle();
-
-    if (profileError) {
-      throw new Error(profileError.message);
-    }
-
-    return {
-      ...user,
-      profile: profileData,
-    };
-  } catch (error: any) {
-    throw new Error(`Failed to get current user: ${error.message}`);
+  if (error) {
+    throw new Error(error.message);
   }
+
+  if (!user) {
+    return null;
+  }
+
+  const { data: profileData, error: profileError } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    throw new Error(profileError.message);
+  }
+
+  return {
+    ...user,
+    profile: profileData,
+  };
 }
 
 /**

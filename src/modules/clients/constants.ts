@@ -1,0 +1,73 @@
+import { createColumnHelper } from '@tanstack/react-table';
+import { Client } from 'src/common/types';
+
+export const clients: Client[] = [
+  {
+    id: '1e1d4e6e-4d3b-4b6a-8b7e-1a2b3c4d5e6f',
+    customer_type: 'personal',
+    name: 'John Doe',
+    phone: '555-1234',
+    email: 'john.doe@example.com',
+    business_name: null,
+    notes: 'Preferred contact via email.',
+    created_at: '2023-01-01T12:00:00Z',
+    updated_at: '2023-01-01T12:00:00Z',
+  },
+  {
+    id: '2e2d4e6e-4d3b-4b6a-8b7e-1a2b3c4d5e6f',
+    customer_type: 'hotel',
+    name: 'Jane Smith',
+    phone: '555-5678',
+    email: 'jane.smith@example.com',
+    business_name: 'Smith Enterprises',
+    notes: 'Follow up on the last meeting.',
+    created_at: '2023-01-02T12:00:00Z',
+    updated_at: '2023-01-02T12:00:00Z',
+  },
+  {
+    id: '3e3d4e6e-4d3b-4b6a-8b7e-1a2b3c4d5e6f',
+    customer_type: 'personal',
+    name: 'Alice Johnson',
+    phone: '555-9012',
+    email: 'alice.johnson@example.com',
+    business_name: null,
+    notes: 'Interested in new products.',
+    created_at: '2023-01-03T12:00:00Z',
+    updated_at: '2023-01-03T12:00:00Z',
+  },
+  {
+    id: '4e4d4e6e-4d3b-4b6a-8b7e-1a2b3c4d5e6f',
+    customer_type: 'travel_agency',
+    name: 'Bob Brown',
+    phone: '555-3456',
+    email: 'bob.brown@example.com',
+    business_name: 'Brown Co.',
+    notes: 'Needs a quote for bulk order.',
+    created_at: '2023-01-04T12:00:00Z',
+    updated_at: '2023-01-04T12:00:00Z',
+  },
+  {
+    id: '5e5d4e6e-4d3b-4b6a-8b7e-1a2b3c4d5e6f',
+    customer_type: 'personal',
+    name: 'Charlie Black',
+    phone: '555-7890',
+    email: 'charlie.black@example.com',
+    business_name: null,
+    notes: 'Requested a callback.',
+    created_at: '2023-01-05T12:00:00Z',
+    updated_at: '2023-01-05T12:00:00Z',
+  },
+  {
+    id: '6e6d4e6e-4d3b-4b6a-8b7e-1a2b3c4d5e6f',
+    customer_type: 'hotel',
+    name: 'Diana White',
+    phone: '555-2345',
+    email: 'diana.white@example.com',
+    business_name: 'White Industries',
+    notes: 'Interested in partnership.',
+    created_at: '2023-01-06T12:00:00Z',
+    updated_at: '2023-01-06T12:00:00Z',
+  },
+];
+
+

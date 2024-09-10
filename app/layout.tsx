@@ -1,9 +1,12 @@
 import 'src/theme/globals.css';
 
 import type { Metadata } from 'next';
-import { Inter as FontSans } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
+import { Figtree as FontSans } from 'next/font/google';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
+import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
+import { ThemeProvider } from 'src/context/ThemeProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -31,20 +34,6 @@ export const metadata: Metadata = {
     'car rental operations',
     'management tool',
   ],
-  icons: {
-    icon: [
-      {
-        media: '(prefers-color-scheme: light)',
-        url: 'assets/images/logoLight.png',
-        type: 'image/png',
-      },
-      {
-        media: '(prefers-color-scheme: dark)',
-        url: 'assets/images/logoDark.png',
-        type: 'image/png',
-      },
-    ],
-  },
 };
 
 export default function RootLayout({
@@ -53,16 +42,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={cn('bg-background font-sans antialiased', fontSans.variable)}
-      >
-        {children}
-        <Toaster />
-        {/* <ToastLauncher /> */}
-      </body>
-    </html>
+    <ReactQueryClientProvider>
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <link
+            href="/logoLight.ico"
+            rel="icon"
+            media="(prefers-color-scheme: light)"
+          />
+          <link
+            href="/logoDark.ico"
+            rel="icon"
+            media="(prefers-color-scheme: dark)"
+          />
+        </head>
+        <body
+          className={cn(
+            'bg-background font-sans antialiased',
+            fontSans.variable
+          )}
+        >
+          <ThemeProvider attribute="class" disableTransitionOnChange>
+            <NextTopLoader showSpinner={false} />
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </body>
+      </html>
+    </ReactQueryClientProvider>
   );
 }
-
-export const dynamic = 'force-dynamic';

@@ -46,6 +46,7 @@ const LoginForm = () => {
         <Input
           placeholder="example@example.com"
           {...register('email', inputProps)}
+          autoFocus
         />
         <span className="flex items-center gap-2 text-xs">
           {errors.email && (

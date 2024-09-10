@@ -1,0 +1,54 @@
+'use client';
+
+import { updateUserDetailsFormFields } from 'src/common/lib/forms';
+import { UserProfile } from 'src/common/types';
+import FormRenderer from 'src/components/FormRenderer/FormRenderer';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from 'src/components/ui/Card';
+import { updateUserDetails } from 'src/modules/account/actions';
+import { userDetailsSchema } from 'src/modules/account/schema';
+
+const UserDetailsForm = ({
+  userProfile,
+}: {
+  userProfile: Partial<UserProfile>;
+}) => {
+  const { id, first_name, last_name, gender, address, phone } = userProfile;
+
+  // Type guard for gender
+  const validGender =
+    gender === 'Male' || gender === 'Female' ? gender : undefined;
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Profile Details</CardTitle>
+        <CardDescription>Update your profile details</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <FormRenderer
+          schema={userDetailsSchema}
+          fields={updateUserDetailsFormFields}
+          formAction={updateUserDetails}
+          columns={2}
+          submitButtonLabel="Update"
+          defaultValues={{
+            user_id: id ?? '',
+            first_name: first_name ?? '',
+            last_name: last_name ?? '',
+            phone: phone ?? '',
+            address: address ?? '',
+            gender: validGender,
+          }}
+        />
+      </CardContent>
+    </Card>
+  );
+};
+
+export default UserDetailsForm;

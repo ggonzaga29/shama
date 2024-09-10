@@ -17,14 +17,14 @@ export function createClient() {
           try {
             cookieStore.set({ name, value, ...options });
           } catch (error) {
-            console.error('Failed to set cookie');
+            /* empty */
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options });
           } catch (error) {
-            console.error('Failed to remove cookie');
+            /* empty */
           }
         },
       },

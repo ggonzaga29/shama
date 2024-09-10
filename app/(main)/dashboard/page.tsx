@@ -1,4 +1,6 @@
+import { Dashboard } from '@carbon/icons-react';
 import { createClient } from 'src/common/lib/supabase/server';
+import ContentLayout from 'src/components/ContentLayout';
 import { Button } from 'src/components/ui/Button';
 
 export const metadata = {
@@ -6,14 +8,12 @@ export const metadata = {
 };
 
 export default async function PrivatePage() {
-  const supabase = createClient();
-
-  const { data } = await supabase.auth.getUser();
-
   return (
-    <div>
-      Hello {data.user?.email}
-      <Button>Click me</Button>
-    </div>
+    <ContentLayout
+      title="Dashboard"
+      Icon={<Dashboard className="h-6 w-6" />}
+    >
+      Dashboard
+    </ContentLayout>
   );
 }

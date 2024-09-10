@@ -6,11 +6,11 @@ const slugs: Slugs = {
   DASHBOARD: '/',
   AUTH: '/auth',
   AUTH_CONFIRM: '/api/auth/confirm',
-  USERS: '/management/users',
-  DRIVERS: '/management/drivers',
-  CLIENTS: '/management/clients',
-  CARS: '/management/cars',
-  CAR_MAINTENANCE: '/management/cars/maintenance',
+  USERS: '/users',
+  DRIVERS: '/drivers',
+  CLIENTS: '/clients',
+  CARS: '/cars',
+  CAR_MAINTENANCE: '/cars/maintenance',
 };
 
 export const getSlugByPathname = (pathname: string) => {
