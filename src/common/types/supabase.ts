@@ -450,6 +450,35 @@ export type Database = {
           },
         ]
       }
+      profile_avatars: {
+        Row: {
+          id: string
+          is_selected: boolean | null
+          path: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          is_selected?: boolean | null
+          path?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          is_selected?: boolean | null
+          path?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_avatars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           address: string | null
