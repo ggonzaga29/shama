@@ -1,10 +1,8 @@
 import { useCallback, useState } from 'react';
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { OnUploadResponse, UploadedFile } from 'src/common/types';
 
 type UseFileDropHandlerProps<T extends FieldValues> = {
   maxFileSize: number;
-  onUpload: (file: FormData) => Promise<OnUploadResponse>;
   field: ControllerRenderProps<T, Path<T>>;
 };
 
@@ -17,10 +15,10 @@ type UseFileDropHandlerProps<T extends FieldValues> = {
  */
 const useFileDropHandler = <T extends FieldValues>({
   maxFileSize,
-  onUpload,
   field,
 }: UseFileDropHandlerProps<T>) => {
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const { onChange } = field;
 
   /**
    * Handles the drop event when files are dropped into the dropzone.
@@ -30,34 +28,22 @@ const useFileDropHandler = <T extends FieldValues>({
    */
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
-      acceptedFiles.forEach((file) => {
+      const validFiles = acceptedFiles.filter((file) => {
         if (file.size > maxFileSize) {
           console.error(
             `File size exceeds the maximum of ${maxFileSize} bytes`
           );
-          return;
+          return false;
         }
-
-        file.arrayBuffer().then((buffer) => {
-          const blob = new Blob([buffer], { type: file.type });
-          const formData = new FormData();
-          formData.append('file', blob, file.name);
-          onUpload(formData).then((uploadedFile) => {
-            if (uploadedFile.success) {
-              const newFile: UploadedFile = {
-                id: uploadedFile.data.id,
-                fullPath: uploadedFile.data.fullPath,
-                path: uploadedFile.data.path,
-              };
-
-              field.onChange([...uploadedFiles, newFile]);
-              setUploadedFiles((prevFiles) => [...prevFiles, newFile]);
-            }
-          });
-        });
+        return true;
       });
+
+      if (validFiles.length > 0) {
+        field.onChange(validFiles);
+        setUploadedFiles(validFiles);
+      }
     },
-    [maxFileSize, onUpload]
+    [maxFileSize]
   );
 
   return { onDrop, uploadedFiles };

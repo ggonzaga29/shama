@@ -20,7 +20,7 @@ export function Navbar({ title, Icon }: NavbarProps) {
             <h1 className="font-bold">{title}</h1>
           </div>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        <div className="flex flex-1 items-center justify-end gap-1">
           <FullScreenToggle />
           <ModeToggle />
           <NotificationMenu />

@@ -20,8 +20,11 @@ export type Driver = Database['public']['Tables']['drivers']['Row'];
 export type UserProfile = Database['public']['Tables']['profiles']['Row'];
 export type Client = Database['public']['Tables']['clients']['Row'];
 
-export type UserWithProfile = User & {
+export type Avatar = Database['public']['Tables']['profile_avatars']['Row'];
+
+export type UserWithProfileAndAvatar = User & {
   profile: Database['public']['Tables']['profiles']['Row'] | null;
+  avatar?: Avatar | null;
 };
 
 export type TypedSupabaseClient = SupabaseClient<Database>;
@@ -40,3 +43,45 @@ export type UploadedFiles = z.infer<typeof uploadedFiles>;
 export type OnUploadResponse =
   | { success: false; message: string; issues?: string[]; data: null }
   | { success: true; successMessage: string; data: UploadedFile };
+
+export const fileInputAcceptSchema = z.enum([
+  'image/jpeg',
+  'image/jpg',
+  'image/png',
+  'image/webp',
+  'image/*',
+  'video/mp4',
+  'video/mpeg',
+  'video/*',
+  'audio/mpeg',
+  'audio/wav',
+  'audio/*',
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'text/plain',
+  'text/csv',
+  '.jpeg',
+  '.jpg',
+  '.png',
+  '.webp',
+  '.mp4',
+  '.mpeg',
+  '.mp3',
+  '.wav',
+  '.pdf',
+  '.doc',
+  '.docx',
+  '.xls',
+  '.xlsx',
+  '.ppt',
+  '.pptx',
+  '.txt',
+  '.csv',
+]);
+
+export type FileInputAcceptType = z.infer<typeof fileInputAcceptSchema>;

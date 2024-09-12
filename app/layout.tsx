@@ -1,12 +1,12 @@
 import 'src/theme/globals.css';
 
 import type { Metadata } from 'next';
-import NextTopLoader from 'nextjs-toploader';
 import { Figtree as FontSans } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
-import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
 import { ThemeProvider } from 'src/context/ThemeProvider';
+import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],

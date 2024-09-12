@@ -9,7 +9,6 @@ import {
 } from 'src/modules/account/schema';
 import { CarFormSchema } from 'src/modules/cars/schema';
 import { ClientFormSchema } from 'src/modules/clients/schema';
-import { uploadAvatar } from 'src/modules/account/actions';
 
 // Client Create Form Fields
 export const createClientFormFields: FormFieldDefinitionArray<ClientFormSchema> =
@@ -207,9 +206,9 @@ export const userAvatarFormFields: FormFieldDefinitionArray<UserAvatarSchema> =
   [
     {
       name: 'avatar',
-      label: 'Avatar',
       type: 'file',
-      description: 'The avatar of the user.',
-      onUpload: uploadAvatar,
+      description:
+        'Upload an image for your profile picture. (JPG, JPEG, PNG, WEBP)',
+      accept: 'image/*',
     },
   ];

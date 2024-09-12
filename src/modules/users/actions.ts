@@ -53,9 +53,29 @@ export async function getCurrentUser() {
     throw new Error(profileError.message);
   }
 
+  // Get Current User Profile Avatar
+  const { data: avatarData, error: avatarError } = await supabase
+    .from('profile_avatars')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('is_selected', true)
+    .maybeSingle();
+
+  if (avatarError) {
+    console.error(avatarError);
+  }
+
+  if (!avatarData || !avatarData.path) {
+    return {
+      ...user,
+      profile: profileData,
+    };
+  }
+
   return {
     ...user,
     profile: profileData,
+    avatar: avatarData,
   };
 }
 

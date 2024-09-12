@@ -1,23 +1,24 @@
-import { memo } from 'react';
-import { Button } from 'src/components/ui/Button';
-import { AddAlt, Export, SettingsAdjust } from '@carbon/icons-react';
-import { Input } from 'src/components/ui/Input';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-} from 'src/components/ui/DropdownMenu';
+'use client';
+
+import { Export, SettingsAdjust } from '@carbon/icons-react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
-  RowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { memo, useEffect, useState } from 'react';
+import { createClient } from 'src/common/lib/supabase/client';
 import { Client } from 'src/common/types';
+import { Button } from 'src/components/ui/Button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from 'src/components/ui/DropdownMenu';
+import { Input } from 'src/components/ui/Input';
 import {
   Table,
   TableBody,
@@ -26,7 +27,7 @@ import {
   TableHeader,
   TableRow,
 } from 'src/components/ui/Table';
-import { clients } from 'src/modules/clients/constants';
+import { getClients } from 'src/modules/clients/actions';
 import AddClientModal from 'src/modules/clients/components/AddClientModal';
 
 export const columnHelper = createColumnHelper<Client>();
@@ -42,12 +43,38 @@ const columns = [
   }),
 ];
 
-const ClientTable = memo(() => {
+// eslint-disable-next-line react/display-name
+const ClientTable = memo(({ clients }: { clients: Client[] }) => {
+  const supabase = createClient();
+  const [data, setData] = useState(clients);
+
   const table = useReactTable({
-    data: clients,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  useEffect(() => {
+    const changes = supabase
+      .channel('db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'clients',
+        },
+        async () => {
+          const clients = await getClients();
+          setData(clients);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      changes.unsubscribe();
+    };
+  }, []);
 
   return (
     <div>
@@ -57,7 +84,7 @@ const ClientTable = memo(() => {
           <Input placeholder="Search for a keyword..." />
         </div>
         <div className="flex items-center gap-2">
-          <AddClientModal/>
+          <AddClientModal />
           <Button
             variant="outline"
             className="flex items-center justify-center gap-2"

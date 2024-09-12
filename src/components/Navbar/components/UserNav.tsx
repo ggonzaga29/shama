@@ -1,8 +1,9 @@
 'use client';
 
 import { Dashboard, Logout, User } from '@carbon/icons-react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from 'src/components/ui/Avatar';
+import { Avatar, AvatarFallback } from 'src/components/ui/Avatar';
 import { Button } from 'src/components/ui/Button';
 import {
   DropdownMenu,
@@ -27,9 +28,7 @@ const UserNav = () => {
     return null;
   }
 
-  const { profile } = user;
-
-  console.log(profile);
+  const { profile, avatar } = user;
 
   return (
     <DropdownMenu>
@@ -39,17 +38,25 @@ const UserNav = () => {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
-                className="relative size-8 rounded-full"
+                className="relative !ml-4 size-8 rounded-full"
               >
                 <Avatar className="size-8">
-                  <AvatarImage
-                    src={profile?.avatar ?? ''}
-                    alt={profile?.first_name ?? ''}
-                  />
-                  <AvatarFallback className="bg-transparent">
-                    {profile?.first_name?.charAt(0)}
-                    {profile?.last_name?.charAt(0)}
-                  </AvatarFallback>
+                  {avatar?.path ? (
+                    <div className="aspect-square size-full">
+                      <Image
+                        src={`avatars/${avatar.path}`}
+                        alt="User Avatar"
+                        layout="fill"
+                        objectFit="cover"
+                        priority={true}
+                      />
+                    </div>
+                  ) : (
+                    <AvatarFallback className="bg-transparent">
+                      {profile?.first_name?.charAt(0)}
+                      {profile?.last_name?.charAt(0)}
+                    </AvatarFallback>
+                  )}
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>

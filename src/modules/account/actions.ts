@@ -1,11 +1,9 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
 import { createClient } from 'src/common/lib/supabase/server';
-import {
-  OnUploadResponse,
-  UploadedFile,
-  UploadedFiles,
-} from 'src/common/types';
+import { OnUploadResponse, UploadedFile } from 'src/common/types';
 import { FormState } from 'src/components/FormRenderer/types';
 import {
   userAvatarSchema,
@@ -61,6 +59,8 @@ export async function updateUserDetails(
     };
   }
 
+  revalidatePath('/account');
+
   return {
     success: true,
     successMessage: 'User details updated successfully',
@@ -102,6 +102,7 @@ export const submitAvatarForm = async (
   data: FormData
 ): Promise<FormState> => {
   const formData = Object.fromEntries(data);
+  console.log(formData);
   const supabase = createClient();
   const parsedFormData = userAvatarSchema.safeParse(formData);
 
@@ -118,28 +119,70 @@ export const submitAvatarForm = async (
     };
   }
 
-  const { data: currentUser, error } = await supabase.auth.getUser();
+  const file = parsedFormData.data.avatar;
 
-  if (error || !currentUser) {
+  // If validation success, check if file is empty, size is too large, or type is invalid
+  if (file.size === 0) {
     return {
-      message: 'Failed to fetch user',
-      issues: [error ? error.message : 'No user found'],
+      message: 'Invalid file',
+      issues: ['File is empty'],
     };
   }
 
-  const { error: userError } = await supabase
-    .from('profiles')
-    .update({
-      avatar: parsedFormData.data.avatar,
-    })
-    .eq('id', currentUser.user?.id);
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
   if (userError) {
     return {
-      message: 'Failed to update avatar',
+      message: 'Failed to fetch user',
       issues: [userError.message],
     };
   }
+
+  if (!user) {
+    return {
+      message: 'User not found',
+      issues: ['User not found'],
+    };
+  }
+
+  // Upload the avatar to profile_avatars
+
+  try {
+    uploadToBucket({
+      bucketName: 'avatars',
+      file,
+      upsert: false,
+      randomizeFilename: true,
+      randomizedNamePrefix: 'avatar',
+      onFileUploaded: async ({ path }) => {
+        await supabase
+          .from('profile_avatars')
+          .update({ is_selected: false })
+          .eq('user_id', user.id);
+
+        const { error: profileAvatarError } = await supabase
+          .from('profile_avatars')
+          .insert({
+            user_id: user.id,
+            path: path,
+            is_selected: true,
+          });
+
+        if (profileAvatarError) {
+          throw new Error(profileAvatarError.message);
+        }
+      },
+    });
+  } catch (error) {
+    return {
+      message: 'Failed to upload avatar',
+    };
+  }
+
+  revalidatePath('/account');
 
   return {
     success: true,

@@ -1,7 +1,5 @@
 import { ReactNode } from 'react';
-import { Accept } from 'react-dropzone';
-import { DefaultValues } from 'react-hook-form';
-import { OnUploadResponse } from 'src/common/types';
+import { Control, DefaultValues, FieldValues } from 'react-hook-form';
 import { ZodSchema, ZodType } from 'zod';
 
 export type FormState = {
@@ -36,8 +34,7 @@ export type FormFieldDefinition<T> = {
     | 'checkbox'
     | 'radio'
     | 'hidden'
-    | 'file'
-    | 'file_multiple';
+    | 'file';
 
   /**
    * The placeholder text for the form field.
@@ -89,34 +86,47 @@ export type FormFieldDefinition<T> = {
     }
   | {
       type: 'file';
-      label: string;
-      maxFileSize?: number;
-      acceptedFileTypes?: Accept;
-      onUpload: (file: FormData) => Promise<OnUploadResponse>;
-    }
-  | {
-      type: 'file_multiple';
-      label: string;
-      acceptedFileTypes?: Accept;
-      maxFileCount: number;
-      maxFileSize?: number;
-      onUpload: (file: FormData) => Promise<OnUploadResponse>;
+      label?: string;
+      maxFileSize?: number; // in bytes
+      accept?: string;
     }
 );
 
 export type FormFieldDefinitionArray<T> = FormFieldDefinition<T>[];
+
+type GridColumn =
+  | 'none'
+  | 'subgrid'
+  | 1
+  | 2
+  | 3
+  | 4
+  | 5
+  | 6
+  | 7
+  | 8
+  | 9
+  | 10
+  | 11
+  | 12;
 
 export type FormRendererProps<T> = {
   fields: FormFieldDefinition<T>[];
   formAction: (previousState: FormState, data: FormData) => Promise<FormState>;
   onSuccess?: (data: FormState) => void;
   schema: ZodSchema<T>;
-  columns?: number;
+  columns?: GridColumn;
   submitButtonLabel?: string;
   defaultValues?: DefaultValues<T>;
   redirectUrl?: string;
   className?: string;
   buttonClassName?: string;
+};
+
+export type CustomFieldProps<T extends FieldValues> = {
+  formField: FormFieldDefinition<T>;
+  control: Control<T, any>;
+  autoFocus?: boolean;
 };
 
 export interface ZodFileCheck extends ZodType<File> {

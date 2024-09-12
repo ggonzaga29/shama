@@ -2,12 +2,9 @@
 
 import { Accept, useDropzone } from 'react-dropzone';
 import { ControllerRenderProps, FieldValues, Path } from 'react-hook-form';
-import { OnUploadResponse } from 'src/common/types';
 import useFileDropHandler from 'src/components/FileUploader/hooks/useFileDropHandler';
-import ZoomableImage from 'src/components/ZoomableImage';
 
 type FileUploaderProps<T extends FieldValues> = {
-  onUpload: (file: FormData) => Promise<OnUploadResponse>;
   maxFileCount?: number;
   maxFileSize?: number;
   acceptedFileTypes?: Accept;
@@ -32,7 +29,6 @@ type FileUploaderProps<T extends FieldValues> = {
  />
  */
 const FileUploader = <T extends FieldValues>({
-  onUpload,
   maxFileCount = 1,
   maxFileSize = maxFileCount * 1024 * 1024,
   acceptedFileTypes,
@@ -40,12 +36,11 @@ const FileUploader = <T extends FieldValues>({
 }: FileUploaderProps<T>) => {
   const { onDrop, uploadedFiles } = useFileDropHandler({
     maxFileSize,
-    onUpload,
     field,
   });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
+    // onDrop,
     accept: acceptedFileTypes,
     disabled: uploadedFiles.length >= maxFileCount,
   });
@@ -57,12 +52,11 @@ const FileUploader = <T extends FieldValues>({
         {...getRootProps()}
         className="mb-4 rounded-md border border-dashed border-gray-300 p-4"
       >
-        <input {...getInputProps()} />
-        {/* Silly hack to register the field */}
         <input
-          type="text"
-          name={field.name}
-          value={JSON.stringify(field.value)}
+          {...getInputProps({
+            onChange: (e) => onDrop(e.target.files as unknown as File[]),
+          })}
+          {...field}
         />
         {isDragActive ? (
           <p>Drop the {maxFileCount === 1 ? 'file' : 'files'} here ...</p>
@@ -75,16 +69,17 @@ const FileUploader = <T extends FieldValues>({
         )}
       </div>
       <div className="flex flex-wrap gap-4">
-        {uploadedFiles.map((file) => (
+        {/* {uploadedFiles.map((file) => (
           // eslint-disable-next-line react/jsx-key
-          <ZoomableImage
-            src={file.fullPath}
-            alt={file.path}
-            className="aspect-square cursor-pointer rounded-md border object-cover"
-            width={200}
-            height={200}
-          />
-        ))}
+          // <ZoomableImage
+          //   src={file.fullPath}
+          //   alt={file.path}
+          //   className="aspect-square cursor-pointer rounded-md border object-cover"
+          //   width={200}
+          //   height={200}
+          // />
+          // <Image key={file.name} src={file.} alt="Uploaded Image" />
+        ))} */}
       </div>
     </div>
   );

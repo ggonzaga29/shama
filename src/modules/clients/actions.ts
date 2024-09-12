@@ -1,12 +1,10 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { headers } from 'next/headers';
 import { createClient } from 'src/common/lib/supabase/server';
 import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
+import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
 import { FormState } from 'src/components/FormRenderer/types';
 import { clientFormSchema } from 'src/modules/clients/schema';
-import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
 
 export async function submitClientForm(
   previousState: FormState,
@@ -67,10 +65,20 @@ export async function submitClientForm(
     };
   }
 
-  revalidatePath('/clients');
-
   return {
     success: true,
     successMessage: 'Successfully added client',
   };
+}
+
+export async function getClients() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('clients').select();
+
+  if (error) {
+    console.error('Failed to fetch clients', error.message);
+    return [];
+  }
+
+  return data;
 }
