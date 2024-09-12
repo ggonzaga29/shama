@@ -2,7 +2,6 @@ import { createSingleFileSchema } from 'src/common/utils/schemaUtils';
 import { z } from 'zod';
 
 export const userDetailsSchema = z.object({
-  user_id: z.string(),
   first_name: z.string().trim().min(3, {
     message: 'Name must be at least 3 characters',
   }),

@@ -20,6 +20,9 @@ export type Driver = Database['public']['Tables']['drivers']['Row'];
 export type UserProfile = Database['public']['Tables']['profiles']['Row'];
 export type Client = Database['public']['Tables']['clients']['Row'];
 
+export type Table<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Row'];
+
 export type Avatar = Database['public']['Tables']['profile_avatars']['Row'];
 
 export type UserWithProfileAndAvatar = User & {

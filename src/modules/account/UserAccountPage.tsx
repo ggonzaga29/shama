@@ -1,4 +1,5 @@
 import { User } from '@carbon/icons-react';
+import { createClient } from 'src/common/lib/supabase/server';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -8,19 +9,17 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-
-import UserAvatarForm from './components/UserAvatarForm';
-import UserDetailsForm from 'src/modules/account/components/UserDetailsForm';
+import UserDetailsFormWrapper from 'src/modules/account/components/UserDetailsFormWrapper';
 import UserPreferencesForm from 'src/modules/account/components/UserPreferencesForm';
 
-import { createClient } from 'src/common/lib/supabase/server';
+import UserAvatarForm from './components/UserAvatarForm';
 
 export default async function AccountPage() {
   const supabase = createClient();
   const { data, error } = await supabase.auth.getUser();
   // get user profile data
 
-  if (!data.user) {
+  if (!data.user || error) {
     return null;
   }
 
@@ -31,7 +30,7 @@ export default async function AccountPage() {
     .single();
 
   return (
-    <ContentLayout title="Account" Icon={<User className="h-6 w-6" />}>
+    <ContentLayout title="Account" Icon={<User className="size-6" />}>
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -48,7 +47,7 @@ export default async function AccountPage() {
         {/* User Avatar Form */}
         <UserAvatarForm />
         {/* User Details Form */}
-        <UserDetailsForm userProfile={userProfile} />
+        <UserDetailsFormWrapper userProfile={userProfile} />
         {/* User Preferences Form */}
         <UserPreferencesForm />
       </div>

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
+import { actionClient } from 'src/common/lib/safeActions';
 import { createClient } from 'src/common/lib/supabase/server';
 import { OnUploadResponse, UploadedFile } from 'src/common/types';
 import { FormState } from 'src/components/FormRenderer/types';
@@ -11,7 +12,7 @@ import {
 } from 'src/modules/account/schema';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function updateUserDetails(
+export async function old(
   previousState: FormState,
   data: FormData
 ): Promise<FormState> {
@@ -66,6 +67,22 @@ export async function updateUserDetails(
     successMessage: 'User details updated successfully',
   };
 }
+
+const updateUserDetails = actionClient
+  .schema(userDetailsSchema)
+  .action(async ({ parsedInput }) => {
+    const supabase = createClient();
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { error } = await supabase.from('profiles').update(parsedInput);
+  });
 
 export const uploadAvatar = async (
   formData: FormData

@@ -1,53 +1,82 @@
 'use client';
 
-import { updateUserDetailsFormFields } from 'src/common/lib/forms';
-import { UserProfile } from 'src/common/types';
-import FormRenderer from 'src/components/FormRenderer/FormRenderer';
+import { Send } from '@carbon/icons-react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Table } from 'src/common/types';
+import { cn } from 'src/common/utils/cvaUtils';
+import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from 'src/components/ui/Card';
-import { updateUserDetails } from 'src/modules/account/actions';
-import { userDetailsSchema } from 'src/modules/account/schema';
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from 'src/components/ui/Form';
+import { Input } from 'src/components/ui/Input';
+import {
+  UserDetailsSchema,
+  userDetailsSchema,
+} from 'src/modules/account/schema';
 
 const UserDetailsForm = ({
-  userProfile,
+  profile,
 }: {
-  userProfile: Partial<UserProfile>;
+  profile: Table<'profiles'> | null;
 }) => {
-  const { id, first_name, last_name, gender, address, phone } = userProfile;
-
   // Type guard for gender
   const validGender =
-    gender === 'Male' || gender === 'Female' ? gender : undefined;
+    profile?.gender === 'Male' || profile?.gender === 'Female'
+      ? profile?.gender
+      : undefined;
+
+  // Necessary type guard for form
+  const form = useForm<UserDetailsSchema>({
+    resolver: zodResolver(userDetailsSchema),
+    defaultValues: {
+      first_name: profile?.first_name ?? '',
+      last_name: profile?.last_name ?? '',
+      gender: validGender,
+      phone: profile?.phone ?? '',
+      address: profile?.address ?? '',
+    },
+  });
+
+  const { control } = form;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Profile Details</CardTitle>
-        <CardDescription>Update your profile details</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <FormRenderer
-          schema={userDetailsSchema}
-          fields={updateUserDetailsFormFields}
-          formAction={updateUserDetails}
-          columns={2}
-          submitButtonLabel="Update"
-          defaultValues={{
-            user_id: id ?? '',
-            first_name: first_name ?? '',
-            last_name: last_name ?? '',
-            phone: phone ?? '',
-            address: address ?? '',
-            gender: validGender,
-          }}
+    <Form {...form}>
+      <form className="grid grid-cols-2 gap-4">
+        <FormField
+          name="first_name"
+          control={control}
+          render={({ field }) => (
+            <FormItem className={cn('col-span-1')}>
+              <FormLabel htmlFor="first_name">First name</FormLabel>
+              <FormControl>
+                <Input type={'text'} {...field} />
+              </FormControl>
+              <FormDescription>Enter your first name</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </CardContent>
-    </Card>
+        <div className="col-span-2">
+          <EnhancedButton
+            type="submit"
+            variant="expandIcon"
+            Icon={Send}
+            // disabled={!isDirty || isPending}
+            // loading={isPending}
+            // className={buttonClassName}
+          >
+            Update
+          </EnhancedButton>
+        </div>
+      </form>
+    </Form>
   );
 };
 

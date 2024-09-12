@@ -14,7 +14,7 @@ export type FormFieldDefinition<T> = {
   /**
    * The name of the form field, which corresponds to a key in the form data object.
    */
-  name: keyof T;
+  name: keyof T | string;
 
   /**
    * The type of the form field.
