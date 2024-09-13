@@ -12,62 +12,6 @@ import {
 } from 'src/modules/account/schema';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function old(
-  previousState: FormState,
-  data: FormData
-): Promise<FormState> {
-  console.log('updateUserDetails');
-  const supabase = createClient();
-
-  const formData = Object.fromEntries(data);
-  const parsedFormData = userDetailsSchema.safeParse(formData);
-
-  console.log('formData', formData);
-
-  if (!parsedFormData.success) {
-    const fields: Record<string, string> = {};
-    for (const key of Object.keys(formData)) {
-      fields[key] = formData[key].toString();
-    }
-
-    console.log(parsedFormData.error.issues);
-
-    return {
-      message: 'Invalid form data',
-      fields,
-      issues: parsedFormData.error.issues.map((issue) => issue.message),
-    };
-  }
-
-  const { user_id, first_name, last_name, gender, phone, address } =
-    parsedFormData.data;
-
-  const { error: userError } = await supabase
-    .from('profiles')
-    .update({
-      first_name,
-      last_name,
-      gender,
-      phone,
-      address,
-    })
-    .eq('id', user_id);
-
-  if (userError) {
-    return {
-      message: 'Failed to add vehicle',
-      issues: [userError.message],
-    };
-  }
-
-  revalidatePath('/account');
-
-  return {
-    success: true,
-    successMessage: 'User details updated successfully',
-  };
-}
-
 export const updateUserDetails = actionClient
   .schema(userDetailsSchema)
   .action(async ({ parsedInput }) => {
