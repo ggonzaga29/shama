@@ -68,7 +68,7 @@ export async function old(
   };
 }
 
-const updateUserDetails = actionClient
+export const updateUserDetails = actionClient
   .schema(userDetailsSchema)
   .action(async ({ parsedInput }) => {
     const supabase = createClient();
@@ -81,7 +81,15 @@ const updateUserDetails = actionClient
       return;
     }
 
-    const { error } = await supabase.from('profiles').update(parsedInput);
+    const { error } = await supabase
+      .from('profiles')
+      .update(parsedInput)
+      .eq('id', user.id);
+    console.log('Action Running');
+
+    if (error) {
+      console.log(error);
+    }
   });
 
 export const uploadAvatar = async (

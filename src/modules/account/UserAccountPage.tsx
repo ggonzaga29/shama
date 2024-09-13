@@ -1,5 +1,5 @@
 import { User } from '@carbon/icons-react';
-import { createClient } from 'src/common/lib/supabase/server';
+import { Suspense } from 'react';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -9,26 +9,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
+import UserAvatarForm from 'src/modules/account/components/UserAvatarForm';
 import UserDetailsFormWrapper from 'src/modules/account/components/UserDetailsFormWrapper';
 import UserPreferencesForm from 'src/modules/account/components/UserPreferencesForm';
 
-import UserAvatarForm from './components/UserAvatarForm';
-
 export default async function AccountPage() {
-  const supabase = createClient();
-  const { data, error } = await supabase.auth.getUser();
-  // get user profile data
-
-  if (!data.user || error) {
-    return null;
-  }
-
-  const { data: userProfile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', data.user?.id)
-    .single();
-
   return (
     <ContentLayout title="Account" Icon={<User className="size-6" />}>
       <Breadcrumb>
@@ -47,7 +32,9 @@ export default async function AccountPage() {
         {/* User Avatar Form */}
         <UserAvatarForm />
         {/* User Details Form */}
-        <UserDetailsFormWrapper userProfile={userProfile} />
+        <Suspense>
+          <UserDetailsFormWrapper />
+        </Suspense>
         {/* User Preferences Form */}
         <UserPreferencesForm />
       </div>
