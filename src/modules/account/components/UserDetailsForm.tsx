@@ -6,8 +6,8 @@ import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-ho
 import { useAction } from 'next-safe-action/hooks';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 import { Table } from 'src/common/types';
-import { cn } from 'src/common/utils/cvaUtils';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
   Form,
@@ -19,6 +19,13 @@ import {
   FormMessage,
 } from 'src/components/ui/Form';
 import { Input } from 'src/components/ui/Input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from 'src/components/ui/Select';
 import { updateUserDetails } from 'src/modules/account/actions';
 import {
   UserDetailsSchema,
@@ -57,12 +64,18 @@ const UserDetailsForm = ({
     control,
     handleSubmit,
     formState: { isDirty },
+    reset,
   } = form;
 
   const onSubmit = handleSubmit((input) => {
     startTransition(async () => {
       try {
         await action.executeAsync(input);
+        toast.success('User profile updated successfuly');
+        // Optimistic Reset
+        reset(input, {
+          keepDirtyValues: true,
+        });
       } catch (e) {
         console.error('Something went wrong with submitting the form.');
       }
@@ -86,7 +99,7 @@ const UserDetailsForm = ({
             </FormItem>
           )}
         />
-         <FormField
+        <FormField
           name="last_name"
           control={control}
           render={({ field }) => (
@@ -96,6 +109,64 @@ const UserDetailsForm = ({
                 <Input type={'text'} {...field} />
               </FormControl>
               <FormDescription>Enter your first name</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="phone"
+          control={control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="phone">Phone number</FormLabel>
+              <FormControl>
+                <Input type={'text'} {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter your phone number. E.g. +63123456789
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="gender"
+          control={control}
+          render={({ field: { name: fieldName, value, onChange } }) => {
+            return (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <Select
+                  defaultValue={value}
+                  onValueChange={onChange}
+                  name={fieldName}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a value" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="Male">Male</SelectItem>
+                    <SelectItem value="Female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormDescription>Select your gender</FormDescription>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+        <FormField
+          name="address"
+          control={control}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel htmlFor="address">Address</FormLabel>
+              <FormControl>
+                <Input type={'text'} {...field} />
+              </FormControl>
+              <FormDescription>Enter your address, e.g.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
