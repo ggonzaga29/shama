@@ -1,4 +1,5 @@
 import { User } from '@carbon/icons-react';
+import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import ContentLayout from 'src/components/ContentLayout';
 import {
@@ -9,9 +10,16 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import UserAvatarForm from 'src/modules/account/components/UserAvatarForm';
-import UserDetailsFormWrapper from 'src/modules/account/components/UserDetailsFormWrapper';
-import UserPreferencesForm from 'src/modules/account/components/UserPreferencesForm';
+
+const UserAvatarForm = dynamic(
+  () => import('src/modules/account/components/UserAvatarForm')
+);
+const UserDetailsFormWrapper = dynamic(
+  () => import('src/modules/account/components/UserDetailsFormWrapper')
+);
+const UserPreferencesForm = dynamic(
+  () => import('src/modules/account/components/UserPreferencesForm')
+);
 
 export default async function AccountPage() {
   return (

@@ -1,4 +1,5 @@
 import { CustomerService } from '@carbon/icons-react';
+import dynamic from 'next/dynamic';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -9,7 +10,10 @@ import {
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
 import { getClients } from 'src/modules/clients/actions';
-import ClientTable from 'src/modules/clients/components/ClientTable';
+
+const ClientTable = dynamic(
+  () => import('src/modules/clients/components/ClientTable')
+);
 
 export default async function AddClientPage() {
   const clients = await getClients();
