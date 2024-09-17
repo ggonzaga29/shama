@@ -29,7 +29,7 @@ export const SidebarProvider: FC<SidebarProviderProps> = ({ children }) => {
       const mainContentElement = document.getElementById('main-content');
 
       if (mainContentElement) {
-        mainContentElement.classList.toggle('sidebar-active'); 
+        mainContentElement.classList.toggle('sidebar-active');
       }
     }
 

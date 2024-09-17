@@ -1,7 +1,17 @@
 'use client';
 
+import debounce from 'debounce';
 import { CircleEllipsis, Eye, Pencil, Trash } from 'lucide-react';
+import { FC, useState, useTransition } from 'react';
+import { toast } from 'sonner';
+import { Database } from 'src/common/types/supabase';
 import { Button } from 'src/components/ui/Button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from 'src/components/ui/Dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,12 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from 'src/components/ui/Dialog';
+import { ScrollArea, ScrollBar } from 'src/components/ui/Scrollarea';
 import {
   Table,
   TableBody,
@@ -24,12 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from 'src/components/ui/Table';
-import { ScrollArea, ScrollBar } from 'src/components/ui/Scrollarea';
-import { Database } from 'src/common/types/supabase';
-import debounce from 'debounce';
-import { FC, useState, useTransition } from 'react';
 import { deleteCar } from 'src/modules/cars/actions';
-import { toast } from 'sonner';
 
 type CarGridCardActionsProps = {
   car: Partial<Database['public']['Tables']['vehicles']['Row']>;
@@ -37,7 +37,7 @@ type CarGridCardActionsProps = {
 
 const CarGridCardActions: FC<CarGridCardActionsProps> = ({ car }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const handleDelete = (id: string) => {
     startTransition(async () => {
       toast.loading(`Deleting ${car.name}...`);

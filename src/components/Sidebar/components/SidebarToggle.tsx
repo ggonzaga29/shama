@@ -1,5 +1,4 @@
 import { ChevronLeft } from 'lucide-react';
-
 import { cn } from 'src/common/utils/cvaUtils';
 import { Button } from 'src/components/ui/Button';
 
@@ -13,7 +12,7 @@ const SidebarToggle = ({ isOpen, toggleSidebar }: SidebarToggleProps) => {
     <div className="invisible absolute -right-[16px] top-[12px] z-20 lg:visible">
       <Button
         onClick={() => toggleSidebar()}
-        className="h-8 w-8 rounded-md"
+        className="size-8 rounded-md"
         variant="outline"
         size="icon"
       >

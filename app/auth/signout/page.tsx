@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation';
-import { logout } from 'src/modules/auth/actions';
+import { signout } from 'src/modules/auth/actions';
 
 export default function SignoutPage() {
   let redirectPath: string | null = null;
 
   try {
-    logout();
+    signout();
     redirectPath = `/auth`;
   } catch (error) {
     /* empty */

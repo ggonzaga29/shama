@@ -1,21 +1,17 @@
 import {
-
-  LucideIcon,
-} from 'lucide-react';
-
-import {
   CarbonIconType,
-  Dashboard,
-  CustomerService,
   Catalog,
-  Watsonx,
-  ReportData,
-  InventoryManagement,
-  Identification,
-  VehicleServices,
-  UserRole,
+  CustomerService,
+  Dashboard,
   Events,
+  Identification,
+  InventoryManagement,
+  ReportData,
+  UserRole,
+  VehicleServices,
+  Watsonx,
 } from '@carbon/icons-react';
+import { LucideIcon } from 'lucide-react';
 
 type Submenu = {
   href: string;

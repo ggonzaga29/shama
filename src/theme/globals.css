@@ -70,6 +70,10 @@
       'calt' 1;
   }
 
+  .rdp-vhidden {
+    @apply hidden;
+  }
+
   html,
   body {
     height: 100%;

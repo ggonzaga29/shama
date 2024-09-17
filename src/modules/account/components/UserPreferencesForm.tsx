@@ -13,9 +13,7 @@ const UserDetailsForm = () => {
         <CardTitle>User Preferences</CardTitle>
         <CardDescription>Update your user preferences</CardDescription>
       </CardHeader>
-      <CardContent>
-        Coming soon...
-      </CardContent>
+      <CardContent>Coming soon...</CardContent>
     </Card>
   );
 };

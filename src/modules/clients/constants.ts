@@ -1,4 +1,3 @@
-import { createColumnHelper } from '@tanstack/react-table';
 import { Client } from 'src/common/types';
 
 export const clients: Client[] = [
@@ -69,5 +68,3 @@ export const clients: Client[] = [
     updated_at: '2023-01-06T12:00:00Z',
   },
 ];
-
-

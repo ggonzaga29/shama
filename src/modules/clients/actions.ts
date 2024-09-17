@@ -1,10 +1,14 @@
 'use server';
 
+import { actionClient } from 'src/common/lib/safeActions';
 import { createClient } from 'src/common/lib/supabase/server';
 import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
 import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
 import { FormState } from 'src/components/FormRenderer/types';
-import { clientFormSchema } from 'src/modules/clients/schema';
+import {
+  clientFormSchema,
+  personalClientFormSchema,
+} from 'src/modules/clients/schema';
 
 export async function submitClientForm(
   previousState: FormState,
@@ -82,3 +86,9 @@ export async function getClients() {
 
   return data;
 }
+
+export const addPersonalClient = actionClient
+  .schema(personalClientFormSchema)
+  .action(async () => {
+    console.log('Adding personal client');
+  });

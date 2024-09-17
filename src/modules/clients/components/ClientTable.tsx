@@ -1,10 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Export, SettingsAdjust } from '@carbon/icons-react';
 import {
+  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
+  PaginationState,
   useReactTable,
 } from '@tanstack/react-table';
 import { memo, useEffect, useState } from 'react';
@@ -32,7 +35,7 @@ import AddClientModal from 'src/modules/clients/components/AddClientModal';
 
 export const columnHelper = createColumnHelper<Client>();
 
-const columns = [
+const dataColumns = [
   columnHelper.accessor('id', {
     header: 'ID',
     cell: (info) => info.getValue(),
@@ -43,10 +46,20 @@ const columns = [
   }),
 ];
 
+type TableData = Record<string, any>;
+
 // eslint-disable-next-line react/display-name
 const ClientTable = memo(({ clients }: { clients: Client[] }) => {
   const supabase = createClient();
   const [data, setData] = useState(clients);
+  const [columns, setColumns] = useState<ColumnDef<TableData>[]>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+  const [{ pageIndex, pageSize }] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+  const [pageCount, setPageCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const table = useReactTable({
     data,
@@ -74,7 +87,7 @@ const ClientTable = memo(({ clients }: { clients: Client[] }) => {
     return () => {
       changes.unsubscribe();
     };
-  }, []);
+  }, [supabase]);
 
   return (
     <div>

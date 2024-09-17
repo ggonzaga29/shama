@@ -18,7 +18,7 @@ const useFileDropHandler = <T extends FieldValues>({
   field,
 }: UseFileDropHandlerProps<T>) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
-  const { onChange } = field;
+  // const { onChange } = field;
 
   /**
    * Handles the drop event when files are dropped into the dropzone.

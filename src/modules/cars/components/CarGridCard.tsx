@@ -1,22 +1,9 @@
-import {
-  Armchair,
-  CircleEllipsis,
-  CirclePlus,
-  Cog,
-  Droplet,
-  Eye,
-  Fuel,
-  Info,
-  Pencil,
-  Trash,
-} from 'lucide-react';
-import Image from 'next/image';
+import { Armchair, CirclePlus, Cog, Droplet, Fuel, Info } from 'lucide-react';
 import { FC } from 'react';
 import { Database } from 'src/common/types/supabase';
 import { cn } from 'src/common/utils/cvaUtils';
 import SupabaseImage from 'src/components/SupabaseImage';
 import { Badge } from 'src/components/ui/Badge';
-import { Button } from 'src/components/ui/Button';
 import { Card, CardContent } from 'src/components/ui/Card';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {

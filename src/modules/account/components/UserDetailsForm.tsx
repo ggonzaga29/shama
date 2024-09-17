@@ -8,6 +8,7 @@ import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Table } from 'src/common/types';
+import { cn } from 'src/common/utils/cvaUtils';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import {
   Form,
@@ -84,7 +85,13 @@ const UserDetailsForm = ({
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-2 gap-4" onSubmit={onSubmit}>
+      <form
+        className={cn(
+          'grid grid-cols-1 gap-4 md:grid-cols-2',
+          '[&>*]:col-span-2 [&>*]:md:col-span-1'
+        )}
+        onSubmit={onSubmit}
+      >
         <FormField
           name="first_name"
           control={control}
@@ -171,7 +178,7 @@ const UserDetailsForm = ({
             </FormItem>
           )}
         />
-        <div className="col-span-2">
+        <div className="!col-span-2">
           <EnhancedButton
             type="submit"
             variant="expandIcon"

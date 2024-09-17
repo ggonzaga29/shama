@@ -1,4 +1,4 @@
-import AccountPage from "src/modules/account/UserAccountPage";
+import AccountPage from 'src/modules/account/UserAccountPage';
 
 export const metadata = {
   title: 'Account | Shama Travel & Tours',

@@ -1,9 +1,9 @@
 'use server';
 
-import { createClient } from 'src/common/lib/supabase/server';
-import { carFormSchema, CarFormSchema } from 'src/modules/cars/schema';
-import { FormState } from 'src/components/FormRenderer/FormRenderer';
 import { revalidatePath } from 'next/cache';
+import { createClient } from 'src/common/lib/supabase/server';
+import { FormState } from 'src/components/FormRenderer/types';
+import { carFormSchema } from 'src/modules/cars/schema';
 
 export async function getAllCars() {
   const supabase = createClient();
@@ -79,24 +79,22 @@ export async function submitCarForm(
     };
   }
 
-  const { data: vehicleData, error: vehicleError } = await supabase
-    .from('vehicles')
-    .insert({
-      name: parsedFormData.data.name,
-      default_price: parsedFormData.data.default_price,
-      license_plate: parsedFormData.data.license_plate,
-      transmission: parsedFormData.data.transmission,
-      fuel_type: parsedFormData.data.fuel_type,
-      seating_capacity: parsedFormData.data.seating_capacity,
-      model: parsedFormData.data.model,
-      type: parsedFormData.data.type,
-      displacement: parsedFormData.data.displacement,
-      fuel_capacity: parsedFormData.data.fuel_capacity,
-      power_transmission: parsedFormData.data.power_transmission,
-      tires: parsedFormData.data.tires,
-      wheels: parsedFormData.data.wheels,
-      image_url: parsedFormData.data.image_url,
-    });
+  const { error: vehicleError } = await supabase.from('vehicles').insert({
+    name: parsedFormData.data.name,
+    default_price: parsedFormData.data.default_price,
+    license_plate: parsedFormData.data.license_plate,
+    transmission: parsedFormData.data.transmission,
+    fuel_type: parsedFormData.data.fuel_type,
+    seating_capacity: parsedFormData.data.seating_capacity,
+    model: parsedFormData.data.model,
+    type: parsedFormData.data.type,
+    displacement: parsedFormData.data.displacement,
+    fuel_capacity: parsedFormData.data.fuel_capacity,
+    power_transmission: parsedFormData.data.power_transmission,
+    tires: parsedFormData.data.tires,
+    wheels: parsedFormData.data.wheels,
+    image_url: parsedFormData.data.image_url,
+  });
 
   if (vehicleError) {
     return {
