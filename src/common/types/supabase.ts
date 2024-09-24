@@ -450,6 +450,95 @@ export type Database = {
           },
         ]
       }
+      personal_client_files: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          path: string | null
+          personal_client_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          path?: string | null
+          personal_client_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          path?: string | null
+          personal_client_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "personal_client_files_personal_client_id_fkey"
+            columns: ["personal_client_id"]
+            isOneToOne: false
+            referencedRelation: "personal_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      personal_clients: {
+        Row: {
+          address: string | null
+          created_at: string
+          date_of_birth: string | null
+          driver_license_number: string
+          email: string | null
+          emergency_contact_email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
+          first_name: string
+          gender: string | null
+          id: number
+          last_name: string
+          middle_name: string | null
+          phone: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          driver_license_number: string
+          email?: string | null
+          emergency_contact_email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          first_name: string
+          gender?: string | null
+          id?: number
+          last_name: string
+          middle_name?: string | null
+          phone?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          driver_license_number?: string
+          email?: string | null
+          emergency_contact_email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          first_name?: string
+          gender?: string | null
+          id?: number
+          last_name?: string
+          middle_name?: string | null
+          phone?: string | null
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
       profile_avatars: {
         Row: {
           id: string
