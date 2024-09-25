@@ -75,21 +75,19 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
           />
         </div>
 
-        <div className="flex items-center justify-between p-4">
-          <div className="flex gap-4">
-            <span className="flex items-center gap-2 text-sm">
-              <PassengerPlus size={16} />
-              {car.seating_capacity}
-            </span>
-            <span className="flex items-center gap-2 text-sm">
-              <Gears size={16} />
-              {car.transmission}
-            </span>
-            <span className="flex items-center gap-2 text-sm">
-              <GasStation size={16} />
-              {car.fuel_type}
-            </span>
-          </div>
+        <div className="flex flex-wrap gap-4 p-4">
+          <span className="flex items-center gap-2 text-sm">
+            <PassengerPlus size={16} />
+            {car.seating_capacity}
+          </span>
+          <span className="flex items-center gap-2 text-sm">
+            <Gears size={16} />
+            {car.transmission}
+          </span>
+          <span className="flex items-center gap-2 text-sm">
+            <GasStation size={16} />
+            {car.fuel_type}
+          </span>
         </div>
 
         <div className="flex items-center justify-between px-4 pb-4">
@@ -97,9 +95,21 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
             <span className="font-bold">Php</span>
             {car.default_price} / Day
           </span>
-          <Button size="icon">
-            <Add size={24} />
-          </Button>
+
+          <div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button size="icon">
+                    <Add size={24} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Add to Booking</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
         </div>
       </CardContent>
     </Card>

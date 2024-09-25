@@ -87,21 +87,21 @@ export function getMenuList(pathname: string): Group[] {
       isAdminGroup: false,
       menus: [
         {
-          href: 'fleet/cars',
+          href: '/fleet/cars',
           label: 'Vehicle Inventory',
           active: pathname.includes('/fleet/maintenance'),
           icon: InventoryManagement,
           submenus: [],
         },
         {
-          href: 'fleet/drivers',
+          href: '/fleet/drivers',
           label: 'Driver Management',
           active: pathname.includes('/fleet/maintenance'),
           icon: Identification,
           submenus: [],
         },
         {
-          href: 'fleet/maintenance',
+          href: '/fleet/maintenance',
           label: 'Maintenance',
           active: pathname.includes('/fleet/maintenance'),
           icon: VehicleServices,

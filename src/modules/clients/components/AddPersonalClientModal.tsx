@@ -23,7 +23,7 @@ const AddClientModal = () => {
           className="flex items-center justify-center gap-2"
         >
           <AddAlt size={16} />
-          Add a Client
+          Add a Personal Client
         </Button>
       </DialogTrigger>
       <DialogContent className="h-screen min-w-full overflow-y-auto">

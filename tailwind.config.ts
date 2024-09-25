@@ -1,11 +1,16 @@
 import colors from './src/theme/colors';
 import type { Config } from 'tailwindcss';
 import { fontFamily } from 'tailwindcss/defaultTheme';
+const { nextui } = require('@nextui-org/theme');
 
 const config = {
   darkMode: ['class'],
   mode: 'jit',
-  content: ['app/**/*.{ts,tsx}', 'src/**/*.{ts,tsx}'],
+  content: [
+    'app/**/*.{ts,tsx}',
+    'src/**/*.{ts,tsx}',
+    './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input|calendar).js',
+  ],
   theme: {
     container: {
       center: true,
@@ -98,7 +103,7 @@ const config = {
       pattern: /^grid-cols-([1-9]|1[0-2])$/,
     },
   ],
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), nextui()],
 } satisfies Config;
 
 export default config;

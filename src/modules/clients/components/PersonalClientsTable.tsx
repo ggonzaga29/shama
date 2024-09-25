@@ -15,7 +15,7 @@ import {
   getPersonalClients,
   getPersonalClientsCSV,
 } from 'src/modules/clients/actions';
-import AddClientModal from 'src/modules/clients/components/AddClientModal';
+import AddClientModal from 'src/modules/clients/components/AddPersonalClientModal';
 
 const columnHelper = createColumnHelper<PersonalClient>();
 
