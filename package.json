@@ -10,7 +10,7 @@
     "lint:fix": "next lint --fix",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "update-types": "npx supabase gen types typescript --project-id \"$PROJECT_REF\" > src/common/types/supabase.ts",
+    "update-types": "npx -y supabase gen types --lang=typescript --project-id \"tgkzvkmhzlknpgnunivd\" > src/common/types/supabase.ts",
     "prepare": "husky"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "@radix-ui/react-scroll-area": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
+    "@radix-ui/react-tabs": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@supabase-cache-helpers/postgrest-react-query": "^1.6.5",
     "@supabase/ssr": "^0.3.0",
@@ -53,6 +54,7 @@
     "next-view-transitions": "^0.2.0",
     "nextjs-better-unstable-cache": "^1.1.0",
     "nextjs-toploader": "^3.6.15",
+    "nuqs": "^1.19.2",
     "react": "^18.3.1",
     "react-day-picker": "^8.9.1",
     "react-device-detect": "^2.2.3",

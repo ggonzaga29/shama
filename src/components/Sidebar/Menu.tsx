@@ -4,7 +4,7 @@ import { Logout, UserSponsor } from '@carbon/icons-react';
 import { Ellipsis } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { getMenuList } from 'src/common/lib/menuList';
 import { cn } from 'src/common/utils/cvaUtils';
 import { CollapseMenuButton } from 'src/components/Sidebar/components/CollapsibleMenuButton';
@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from 'src/components/ui/Tooltip';
+import { signout } from 'src/modules/auth/actions';
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -25,6 +26,7 @@ interface MenuProps {
 const Menu: FC<MenuProps> = ({ isOpen }) => {
   const pathname = usePathname();
   const menuList = getMenuList(pathname);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   return (
     <div className="flex h-full flex-col justify-between">
@@ -122,13 +124,14 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
           <Tooltip delayDuration={100}>
             <TooltipTrigger asChild>
               <EnhancedButton
-                onClick={() => {}}
-                // variant="outline"
+                onClick={() => {
+                  setIsSigningOut(true);
+                  signout();
+                }}
+                loading={isSigningOut}
+                Icon={Logout}
                 className="mb-2 mt-5 h-10 w-full justify-center"
               >
-                <span className={cn(isOpen === false ? '' : 'mr-2')}>
-                  <Logout size={16} />
-                </span>
                 <p
                   className={cn(
                     // "whitespace-nowrap",

@@ -40,7 +40,7 @@ export function getMenuList(pathname: string): Group[] {
       isAdminGroup: false,
       menus: [
         {
-          href: '/dashboard',
+          href: '/',
           label: 'Dashboard',
           active: pathname.includes('/dashboard'),
           icon: Dashboard,

@@ -1,5 +1,6 @@
 import { CustomerService } from '@carbon/icons-react';
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -9,15 +10,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import { getClients } from 'src/modules/clients/actions';
 
-const ClientTable = dynamic(
-  () => import('src/modules/clients/components/ClientTable')
+const ClientsTableWrapper = dynamic(
+  () => import('src/modules/clients/components/ClientsTableWrapper')
 );
 
 export default async function AddClientPage() {
-  const clients = await getClients();
-
   return (
     <ContentLayout
       title="Clients"
@@ -35,9 +33,9 @@ export default async function AddClientPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="mt-6">
-        <ClientTable clients={clients} />
-      </div>
+      <Suspense>
+        <ClientsTableWrapper />
+      </Suspense>
     </ContentLayout>
   );
 }

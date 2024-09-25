@@ -168,6 +168,133 @@ export type Database = {
           },
         ]
       }
+      business_client_employee: {
+        Row: {
+          business_client_id: string
+          created_at: string
+          email: string | null
+          employee_name: string
+          employee_number: string | null
+          id: string
+          phone: string | null
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_client_id: string
+          created_at?: string
+          email?: string | null
+          employee_name: string
+          employee_number?: string | null
+          id?: string
+          phone?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_client_id?: string
+          created_at?: string
+          email?: string | null
+          employee_name?: string
+          employee_number?: string | null
+          id?: string
+          phone?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_business_client"
+            columns: ["business_client_id"]
+            isOneToOne: false
+            referencedRelation: "business_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_client_employee_files: {
+        Row: {
+          created_at: string
+          description: string | null
+          employee_id: string
+          id: string
+          path: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          employee_id: string
+          id?: string
+          path: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          employee_id?: string
+          id?: string
+          path?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_employee"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "business_client_employee"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_clients: {
+        Row: {
+          address: string | null
+          business_name: string
+          city: string | null
+          country: string | null
+          created_at: string
+          email: string | null
+          id: string
+          phone: string | null
+          postal_code: string | null
+          registration_number: string | null
+          state: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          business_name: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          registration_number?: string | null
+          state?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          registration_number?: string | null
+          state?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       client_files: {
         Row: {
           client_id: string
