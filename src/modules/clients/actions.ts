@@ -87,8 +87,90 @@ export async function getClients() {
   return data;
 }
 
+export async function getPersonalClients() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.from('personal_clients').select();
+
+  if (error) {
+    console.error('Failed to fetch personal clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getBusinessClients() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.from('business_clients').select();
+
+  if (error) {
+    console.error('Failed to fetch business clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getPersonalClientsCSV() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('personal_clients')
+    .select()
+    .csv();
+
+  if (error) {
+    console.error('Failed to fetch personal clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getBusinessClientsCSV() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('business_clients')
+    .select()
+    .csv();
+
+  if (error) {
+    console.error('Failed to fetch business clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
 export const addPersonalClient = actionClient
   .schema(personalClientFormSchema)
-  .action(async () => {
-    console.log('Adding personal client');
+  .action(async ({ parsedInput }) => {
+    const supabase = createClient();
+
+    // Convert Date to ISO string format
+    const formattedDateOfBirth =
+      parsedInput.date_of_birth instanceof Date
+        ? parsedInput.date_of_birth.toISOString()
+        : parsedInput.date_of_birth;
+
+    const { data, error } = await supabase
+      .from('personal_clients')
+      .insert({
+        ...parsedInput,
+        date_of_birth: formattedDateOfBirth,
+      })
+      .select();
+
+    if (error) {
+      console.error('Error inserting data:', error);
+      return { successful: false, error: error.message };
+    }
+
+    return {
+      successful: true,
+      data,
+    };
   });

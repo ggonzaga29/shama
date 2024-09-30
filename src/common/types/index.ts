@@ -19,6 +19,9 @@ export type FullCarVariant = CarVariant & {
 export type Driver = Database['public']['Tables']['drivers']['Row'];
 export type UserProfile = Database['public']['Tables']['profiles']['Row'];
 export type Client = Database['public']['Tables']['clients']['Row'];
+export type PersonalClient =
+  Database['public']['Tables']['personal_clients']['Row'];
+export type PersonalClientInsert = Omit<PersonalClient, 'id'>;
 
 export type Table<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Row'];

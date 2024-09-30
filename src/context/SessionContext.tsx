@@ -10,6 +10,7 @@
 'use client';
 
 import { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import { redirect } from 'next/navigation';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { createClient } from 'src/common/lib/supabase/client';
 import { Avatar, UserWithProfileAndAvatar } from 'src/common/types';
@@ -44,6 +45,9 @@ export const SessionProvider: FC<SessionProviderProps> = ({
         if (event === 'SIGNED_OUT') {
           setSession(null);
           setUser(null);
+          redirect(
+            `/auth?message=${encodeURIComponent('You have been signed out')}`
+          );
         } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
           setSession(session);
         }

@@ -1,7 +1,7 @@
 import { cn } from 'src/common/utils/cvaUtils';
 import { SidebarProvider } from 'src/components/Sidebar/context/SidebarContext';
 import Sidebar from 'src/components/Sidebar/Sidebar';
-import { ScrollArea } from 'src/components/ui/Scrollarea';
+import ToastLauncher from 'src/components/ToastLauncher/ToastLauncher';
 import { SessionProvider } from 'src/context/SessionContext';
 import { getCurrentUser } from 'src/modules/users/actions';
 
@@ -11,7 +11,6 @@ interface MainLayoutProps {
 
 export default async function MainLayout({ children }: MainLayoutProps) {
   const user = await getCurrentUser();
-  console.log('user', user);
 
   if (!user) {
     return null;
@@ -27,16 +26,17 @@ export default async function MainLayout({ children }: MainLayoutProps) {
             {/* <PageHeader /> */}
             <Sidebar />
 
-            <ScrollArea
+            <main
               id="main-content"
               className={cn(
-                'min-h-[calc(100vh_-_56px)] w-full bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
+                'h-screen max-h-screen w-full overflow-y-auto bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
               )}
             >
               {children}
-            </ScrollArea>
+            </main>
           </div>
         </div>
+        <ToastLauncher />
       </SidebarProvider>
     </SessionProvider>
   );

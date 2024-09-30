@@ -21,7 +21,7 @@ export async function loginAction(data: LoginSchema) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect(`/?message=${encodeURIComponent('You have been signed in')}`);
 }
 
 export async function signup(formData: FormData) {
@@ -45,5 +45,4 @@ export async function signup(formData: FormData) {
 export async function signout() {
   const supabase = createClient();
   await supabase.auth.signOut();
-  revalidatePath('/', 'layout');
 }

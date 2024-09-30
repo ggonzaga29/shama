@@ -36,10 +36,10 @@ export const personalClientFormSchema = z.object({
   phone: z.string().trim().max(11, {
     message: 'Phone number must be at most 11 characters',
   }),
-  date_of_birth: date().optional(),
+  date_of_birth: date(),
   gender: z.string().optional(),
-  address: z.string().optional(),
-  driver_license_number: z.string().trim().optional(),
+  address: z.string(),
+  driver_license_number: z.string().trim(),
   zip_code: z.string().trim().optional(),
   emergency_contact_name: z.string().trim().optional(),
   emergency_contact_phone: z.string().trim().optional(),

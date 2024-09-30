@@ -21,12 +21,12 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
-  const [date, setDate] = React.useState<Date>(new Date());
   const currentYear = new Date().getFullYear();
   const fromYear = props.fromYear ?? 1940;
+  const toYear = props.toYear ?? currentYear;
 
   const years = Array.from(
-    { length: currentYear - fromYear + 1 },
+    { length: toYear - fromYear + 1 },
     (_, index) => fromYear + index
   );
 
@@ -44,6 +44,8 @@ function Calendar({
     'November',
     'December',
   ];
+
+  const [date, setDate] = React.useState<Date>(new Date(toYear, 0, 1));
 
   return (
     <div className="space-y-4">

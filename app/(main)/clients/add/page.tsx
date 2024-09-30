@@ -1,3 +1,3 @@
-import AddClientPage from 'src/modules/clients/page/AddClientPage';
+import AddClientPage from 'src/modules/clients/page/ClientPage';
 
 export default AddClientPage;

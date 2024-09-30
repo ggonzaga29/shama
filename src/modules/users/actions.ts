@@ -1,5 +1,6 @@
 'use server';
 
+import { redirect } from 'next/navigation';
 import {
   createAdminClient,
   createClient,
@@ -36,7 +37,7 @@ export async function getCurrentUser() {
   } = await supabase.auth.getUser();
 
   if (error) {
-    throw new Error(error.message);
+    redirect('/auth');
   }
 
   if (!user) {
