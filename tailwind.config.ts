@@ -9,7 +9,8 @@ const config = {
   content: [
     'app/**/*.{ts,tsx}',
     'src/**/*.{ts,tsx}',
-    './node_modules/@nextui-org/theme/dist/components/(button|snippet|code|input|calendar).js',
+    './node_modules/@nextui-org/theme/dist/components/(button|calendar|date-input|date-picker|image|spinner|ripple|popover).js',
+    // './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     container: {
@@ -103,7 +104,18 @@ const config = {
       pattern: /^grid-cols-([1-9]|1[0-2])$/,
     },
   ],
-  plugins: [require('tailwindcss-animate'), nextui()],
+  plugins: [
+    require('tailwindcss-animate'),
+    nextui({
+      layout: {
+        radius: {
+          small: '0px',
+          medium: '0px',
+          large: '0px',
+        },
+      },
+    }),
+  ],
 } satisfies Config;
 
 export default config;

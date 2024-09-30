@@ -1,3 +1,5 @@
+'use client';
+
 import { Add, GasStation, Gears, PassengerPlus } from '@carbon/icons-react';
 import { Armchair, CirclePlus, Cog, Droplet, Fuel, Info } from 'lucide-react';
 import Image from 'next/image';
@@ -65,7 +67,7 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
 
         <div className="w-full border-b px-4 !pt-0">
           <Image
-            src={`cars/${car.image_url ?? 'null.png'}`}
+            src={`cars/${car.image_url ?? ''}`}
             alt={car.name ?? ''}
             width={100}
             height={45}

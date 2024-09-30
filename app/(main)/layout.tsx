@@ -29,7 +29,7 @@ export default async function MainLayout({ children }: MainLayoutProps) {
             <main
               id="main-content"
               className={cn(
-                'max-h-[calc(100vh)] w-full overflow-y-auto bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
+                'h-screen max-h-screen w-full overflow-y-auto bg-zinc-50 transition-[margin-left] duration-300 ease-in-out dark:bg-zinc-900'
               )}
             >
               {children}
