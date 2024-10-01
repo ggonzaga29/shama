@@ -69,7 +69,7 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
                           <Tooltip delayDuration={100}>
                             <TooltipTrigger asChild>
                               <Button
-                                variant={active ? 'secondary' : 'ghost'}
+                                variant={active ? 'default' : 'ghost'}
                                 className="mb-1 h-10 w-full justify-start"
                                 asChild
                               >

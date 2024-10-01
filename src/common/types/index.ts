@@ -2,12 +2,13 @@ import { SupabaseClient, User } from '@supabase/supabase-js';
 import { Database } from 'src/common/types/supabase';
 import { z } from 'zod';
 
+export type Table<T extends keyof Database['public']['Tables']> =
+  Database['public']['Tables'][T]['Row'];
+
 // Abstract the types from the supabase client
-export type Car = Database['public']['Tables']['vehicles']['Row'];
-export type CarVariant =
-  Database['public']['Tables']['vehicle_variants']['Row'];
-export type CarVariantMetadata =
-  Database['public']['Tables']['vehicle_variant_metadata']['Row'];
+export type Car = Table<'vehicles'>;
+export type CarVariant = Table<'vehicle_variants'>;
+export type CarVariantMetadata = Table<'vehicle_variant_metadata'>;
 export type CarVariantImage =
   Database['public']['Tables']['vehicle_variant_images']['Row'];
 export type FullCarVariant = CarVariant & {
@@ -16,15 +17,12 @@ export type FullCarVariant = CarVariant & {
       vehicle_variant_images: Partial<CarVariantImage>[];
     }[];
 };
-export type Driver = Database['public']['Tables']['drivers']['Row'];
+export type Driver = Table<'drivers'>;
 export type UserProfile = Database['public']['Tables']['profiles']['Row'];
 export type Client = Database['public']['Tables']['clients']['Row'];
 export type PersonalClient =
   Database['public']['Tables']['personal_clients']['Row'];
 export type PersonalClientInsert = Omit<PersonalClient, 'id'>;
-
-export type Table<T extends keyof Database['public']['Tables']> =
-  Database['public']['Tables'][T]['Row'];
 
 export type Avatar = Database['public']['Tables']['profile_avatars']['Row'];
 

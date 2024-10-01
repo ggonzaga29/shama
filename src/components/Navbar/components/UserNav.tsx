@@ -46,8 +46,8 @@ const UserNav = () => {
                       <Image
                         src={`avatars/${avatar.path}`}
                         alt="User Avatar"
-                        layout="fill"
-                        objectFit="cover"
+                        width={32}
+                        height={32}
                         priority={true}
                       />
                     </div>

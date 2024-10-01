@@ -1,4 +1,4 @@
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from '@carbon/icons-react';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Button } from 'src/components/ui/Button';
 
@@ -9,6 +9,7 @@ interface SidebarToggleProps {
 
 const SidebarToggle = ({ isOpen, toggleSidebar }: SidebarToggleProps) => {
   return (
+    // eslint-disable-next-line tailwindcss/enforces-negative-arbitrary-values
     <div className="invisible absolute -right-[16px] top-[12px] z-20 lg:visible">
       <Button
         onClick={() => toggleSidebar()}
@@ -18,7 +19,7 @@ const SidebarToggle = ({ isOpen, toggleSidebar }: SidebarToggleProps) => {
       >
         <ChevronLeft
           className={cn(
-            'h-4 w-4 transition-transform duration-700 ease-in-out',
+            'h-4 w-4 transition-transform duration-400 ease-out',
             isOpen === false ? 'rotate-180' : 'rotate-0'
           )}
         />

@@ -42,7 +42,7 @@ export function getMenuList(pathname: string): Group[] {
         {
           href: '/',
           label: 'Dashboard',
-          active: pathname.includes('/dashboard'),
+          active: pathname === '/',
           icon: Dashboard,
           submenus: [],
         },
@@ -89,14 +89,14 @@ export function getMenuList(pathname: string): Group[] {
         {
           href: '/fleet/cars',
           label: 'Vehicle Inventory',
-          active: pathname.includes('/fleet/maintenance'),
+          active: pathname.includes('/fleet/cars'),
           icon: InventoryManagement,
           submenus: [],
         },
         {
           href: '/fleet/drivers',
           label: 'Driver Management',
-          active: pathname.includes('/fleet/maintenance'),
+          active: pathname.includes('/fleet/drivers'),
           icon: Identification,
           submenus: [],
         },

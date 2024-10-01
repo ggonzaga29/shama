@@ -511,31 +511,43 @@ export type Database = {
       }
       drivers: {
         Row: {
+          address: string | null
           created_at: string | null
           email: string | null
+          employee_id: string | null
           first_name: string
           id: string
           last_name: string
+          license_expiry_date: string | null
+          license_number: string | null
           middle_name: string | null
           phone: string | null
           updated_at: string | null
         }
         Insert: {
+          address?: string | null
           created_at?: string | null
           email?: string | null
+          employee_id?: string | null
           first_name: string
           id?: string
           last_name: string
+          license_expiry_date?: string | null
+          license_number?: string | null
           middle_name?: string | null
           phone?: string | null
           updated_at?: string | null
         }
         Update: {
+          address?: string | null
           created_at?: string | null
           email?: string | null
+          employee_id?: string | null
           first_name?: string
           id?: string
           last_name?: string
+          license_expiry_date?: string | null
+          license_number?: string | null
           middle_name?: string | null
           phone?: string | null
           updated_at?: string | null
@@ -1004,7 +1016,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      enable_row_level_security: {
+        Args: {
+          table_name: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       availability_status: "available" | "under maintenance" | "rented"

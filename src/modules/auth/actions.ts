@@ -46,3 +46,22 @@ export async function signout() {
   const supabase = createClient();
   await supabase.auth.signOut();
 }
+
+export async function checkAuth() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error('Authentication error: ' + error.message);
+  }
+
+  if (!user) {
+    throw new Error('No user found');
+  }
+
+  return user;
+}
