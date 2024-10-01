@@ -11,10 +11,10 @@ import {
 
 export default function DriversLayout({
   children,
-  driverDetailView,
+  detail,
 }: {
   children: React.ReactNode;
-  driverDetailView: React.ReactNode;
+  detail: React.ReactNode;
 }) {
   return (
     <ContentLayout title="Drivers" Icon={<Identification />}>
@@ -32,9 +32,9 @@ export default function DriversLayout({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex max-h-[85vh] gap-2 border bg-background">
+      <div className="flex max-h-[82vh] gap-2 border bg-background">
         {children}
-        {driverDetailView}
+        {detail}
       </div>
     </ContentLayout>
   );
