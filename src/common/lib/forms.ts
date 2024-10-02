@@ -9,6 +9,7 @@ import {
 } from 'src/modules/account/schema';
 import { CarFormSchema } from 'src/modules/cars/schema';
 import { ClientFormSchema } from 'src/modules/clients/schema';
+import { AddDriverSchema } from 'src/modules/drivers/schema';
 
 // Client Create Form Fields
 export const createClientFormFields: FormFieldDefinitionArray<ClientFormSchema> =
@@ -212,3 +213,38 @@ export const userAvatarFormFields: FormFieldDefinitionArray<UserAvatarSchema> =
       accept: 'image/*',
     },
   ];
+
+export const addDriverFormFields: FormFieldDefinitionArray<AddDriverSchema> = [
+  {
+    name: 'email',
+    type: 'email',
+    label: 'Email',
+  },
+  {
+    name: 'first_name',
+    label: 'First Name',
+  },
+  {
+    name: 'middle_name',
+    label: 'Middle Name',
+  },
+  {
+    name: 'last_name',
+    label: 'Last Name',
+  },
+  {
+    name: 'phone',
+    label: 'Phone',
+  },
+  {
+    name: 'license_number',
+    label: 'License Number',
+  },
+  {
+    name: 'avatar',
+    type: 'file',
+    description:
+      'Upload an image for your profile picture. (JPG, JPEG, PNG, WEBP)',
+    accept: 'image/*',
+  },
+];

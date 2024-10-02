@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useRef } from 'react';
@@ -8,9 +9,9 @@ import { cn } from 'src/common/utils/cvaUtils';
 import { Avatar, AvatarFallback } from 'src/components/ui/Avatar';
 
 const DriverListCard = ({
-  driver: { id, first_name, last_name },
+  driver: { id, first_name, last_name, avatar_url },
 }: {
-  driver: Pick<Driver, 'id' | 'first_name' | 'last_name'>;
+  driver: Pick<Driver, 'id' | 'first_name' | 'last_name' | 'avatar_url'>;
 }) => {
   const pathname = usePathname();
   const isActive = useMemo(() => pathname.includes(id), [pathname, id]);
@@ -36,7 +37,20 @@ const DriverListCard = ({
         ref={ref}
       >
         <Avatar>
-          <AvatarFallback>{initials}</AvatarFallback>
+          {avatar_url ? (
+            <div className="size-full">
+              <Image
+                src={`driver_avatars/${avatar_url}`}
+                alt="User Avatar"
+                width={32}
+                height={32}
+                priority={true}
+                className="size-full object-cover"
+              />
+            </div>
+          ) : (
+            <AvatarFallback>{initials}</AvatarFallback>
+          )}
         </Avatar>
         <div>
           <span>

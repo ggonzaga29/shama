@@ -10,9 +10,9 @@ export const createSingleFileSchema = ({
 }) => {
   return z.custom<File>().superRefine((file, ctx) => {
     // Comes from react-hook-form and I don't why
-    if (typeof file === 'string') {
-      return true;
-    }
+    // if (typeof file === 'string') {
+    //   return true;
+    // }
 
     // The rest is server validation
 
@@ -43,3 +43,13 @@ export const createSingleFileSchema = ({
     return true;
   });
 };
+
+export const singleFileSchema = z
+  .array(z.instanceof(File))
+  .max(1)
+  .or(z.instanceof(File));
+
+export const multipleFilesSchema = z.array(z.instanceof(File));
+
+// If the file submission has only one file, the shape of the schema is a single file object, not an array of files.
+export const fileSchema = z.array(z.instanceof(File)).or(z.instanceof(File));

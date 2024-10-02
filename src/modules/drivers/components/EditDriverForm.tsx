@@ -4,47 +4,56 @@
 import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
-import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Infer } from 'next-safe-action/adapters/types';
 import { useAction } from 'next-safe-action/hooks';
-import { useState, useTransition } from 'react';
+import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { Driver } from 'src/common/types';
 import { cn } from 'src/common/utils/cvaUtils';
-import { Button } from 'src/components/ui/Button';
-import { Calendar } from 'src/components/ui/Calendar';
+import { mapInputToFormData } from 'src/common/utils/formUtils';
+import DateField from 'src/components/FIelds/DateField';
+import FileDropzoneField from 'src/components/FIelds/FileDropzoneField';
+import TextField from 'src/components/FIelds/TextField';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from 'src/components/ui/Form';
-import { Input } from 'src/components/ui/Input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from 'src/components/ui/Popover';
-import { addDriver } from 'src/modules/drivers/actions';
-import { addDriverSchema } from 'src/modules/drivers/schema';
+import { Form, FormField, FormItem } from 'src/components/ui/Form';
+import { editDriver } from 'src/modules/drivers/actions';
+import { editDriverSchema } from 'src/modules/drivers/schema';
 
-const AddDriverForm = () => {
-  const action = useAction(addDriver);
-  const [isDatePopoverOpen, setIsDatePopoverOpen] = useState(false);
+const transformStringToDate = (date?: string | null) => {
+  if (!date) return null;
+
+  return new Date(date);
+};
+
+type FieldValues = Infer<typeof editDriverSchema>;
+
+const EditDriverForm = ({ defaultValues }: { defaultValues?: Driver }) => {
+  const action = useAction(editDriver);
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
-    typeof addDriverSchema
+    typeof editDriverSchema
   >(action.result.validationErrors, { joinBy: '\n' });
 
-  const form = useForm<Infer<typeof addDriverSchema>>({
-    resolver: zodResolver(addDriverSchema),
+  const form = useForm<FieldValues>({
+    resolver: zodResolver(editDriverSchema),
     errors: hookFormValidationErrors,
+    defaultValues: {
+      id: defaultValues?.id ?? undefined,
+      email: defaultValues?.email ?? undefined,
+      birth_date: transformStringToDate(defaultValues?.birth_date) ?? undefined,
+      first_name: defaultValues?.first_name ?? undefined,
+      middle_name: defaultValues?.middle_name ?? undefined,
+      last_name: defaultValues?.last_name ?? undefined,
+      license_number: defaultValues?.license_number ?? undefined,
+      license_expiry_date:
+        transformStringToDate(defaultValues?.license_expiry_date) ?? undefined,
+      employee_id: defaultValues?.employee_id ?? undefined,
+      address: defaultValues?.address ?? undefined,
+    },
   });
 
   const {
@@ -57,17 +66,10 @@ const AddDriverForm = () => {
   const onSubmit = handleSubmit((input) => {
     startTransition(async () => {
       try {
-        const formData = new FormData();
-        Object.entries(input).forEach(([key, value]) => {
-          if (value instanceof Date) {
-            formData.append(key, value.toISOString()); // Convert Date to ISO string
-          } else if (value !== undefined && value !== null) {
-            formData.append(key, value.toString());
-          }
-        });
-
+        const formData = mapInputToFormData(input);
         await action.executeAsync(formData);
-        toast.success('Successfully added a new client.');
+        toast.success('Driver updated successfully. Redirecting...');
+        router.push(`/fleet/drivers/${input.id}`);
         reset(input, {
           keepDirtyValues: true,
         });
@@ -87,243 +89,105 @@ const AddDriverForm = () => {
         onSubmit={onSubmit}
       >
         <FormField
+          name="id"
+          control={control}
+          render={({ field }) => {
+            return (
+              <FormItem className="hidden">
+                <input type="hidden" {...field} value={field.value} />
+              </FormItem>
+            );
+          }}
+        />
+
+        <TextField
           name="email"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="email">Email</FormLabel>
-              <FormControl>
-                <Input type="email" {...field} id="email" />
-              </FormControl>
-              <FormDescription>
-                The employee's primary email address for account-related
-                communications.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Email"
+          description="The employee's primary email address for account-related communications."
         />
-        <FormField
-          control={control}
+
+        <DateField
           name="birth_date"
-          render={({ field }) => (
-            <FormItem className="">
-              <FormLabel>Date of birth</FormLabel>
-              <FormControl>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        'w-full justify-start text-left font-normal',
-                        !field.value && 'text-muted-foreground'
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 size-4" />
-                      {field.value ? (
-                        format(field.value, 'PPP')
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                      }}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
-              <FormDescription>
-                The employee's date of birth, used to verify age and eligibility
-                for certain services.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          control={control}
+          label="Date of birth"
+          description="The employee's date of birth, used to verify age and eligibility for certain services."
         />
-        <FormField
+
+        <TextField
           name="first_name"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="first_name">First name</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} id="first_name" />
-              </FormControl>
-              <FormDescription>
-                The employee's legal first name as it appears on official
-                documents.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="First name"
+          description="The employee's legal first name as it appears on official documents."
         />
-        <FormField
+
+        <TextField
           name="middle_name"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="middle_name">Middle name</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} id="middle_name" />
-              </FormControl>
-              <FormDescription>
-                The employee's middle name or initial (if applicable).
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Middle name"
+          description="The employee's middle name or initial (if applicable)."
         />
-        <FormField
+
+        <TextField
           name="last_name"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="last_name">Last name</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} id="last_name" />
-              </FormControl>
-              <FormDescription>
-                The employee's legal last name or surname.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Last name"
+          description="The employee's legal last name or surname."
         />
-        <FormField
+
+        <TextField
           name="license_number"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="license_number">License Number</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} id="license_number" />
-              </FormControl>
-              <FormDescription>
-                The employee's driver's license number.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="License Number"
+          description="The employee's driver's license number."
         />
-        <FormField
-          control={control}
+
+        <DateField
           name="license_expiry_date"
-          render={({ field }) => (
-            <FormItem className="">
-              <FormLabel>License Expiry Date</FormLabel>
-              <FormControl>
-                <Popover
-                  open={isDatePopoverOpen}
-                  onOpenChange={setIsDatePopoverOpen}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className={cn(
-                        'w-full justify-start text-left font-normal',
-                        !field.value && 'text-muted-foreground'
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 size-4" />
-                      {field.value ? (
-                        format(field.value, 'PPP')
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                        setIsDatePopoverOpen(false);
-                      }}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
-              <FormDescription>
-                The expiration date of the employee's driver's license, ensuring
-                it is valid and up-to-date.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          control={control}
+          label="License Expiry Date"
+          description="The expiration date of the employee's driver's license, ensuring it is valid and up-to-date."
         />
-        <FormField
+
+        <TextField
           name="employee_id"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="employee_id">Employee ID</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} id="employee_id" />
-              </FormControl>
-              <FormDescription>
-                The unique identifier assigned to the employee.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Employee ID"
+          description="The unique identifier assigned to the employee."
         />
-        <FormField
+
+        <TextField
           name="address"
           control={control}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor="address">Address</FormLabel>
-              <FormControl>
-                <Input type="text" {...field} id="address" />
-              </FormControl>
-              <FormDescription>
-                The employee's residential address.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Address"
+          description="The employee's residential address."
         />
-        <FormField
+
+        <p className="!col-span-2 text-sm text-muted-foreground">
+          Note: Adding a new Avatar will replace the existing one. Adding new
+          files will append to the existing ones.
+        </p>
+
+        <FileDropzoneField<FieldValues>
           name="avatar_file"
           control={control}
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          render={({ field: { value, onChange, ...field } }) => (
-            <FormItem>
-              <FormLabel htmlFor="avatar_file">Avatar</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  value={value?.filename}
-                  placeholder="Upload an image"
-                  accept="image/*"
-                  type="file"
-                  onChange={(e) => {
-                    onChange(e.target.files?.[0]);
-                  }}
-                  id="avatar_file"
-                />
-              </FormControl>
-              <FormDescription>
-                Upload a profile picture for the employee.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
+          label="Avatar"
+          description="Upload a profile picture for the employee."
+          fileInputProps={{
+            hideOnDisabled: true,
+            maxFileCount: 1,
+          }}
+        />
+
+        <FileDropzoneField<FieldValues>
+          name="files"
+          control={control}
+          label="Files"
+          description="Upload any additional files or documents related to the
+                employee. E.g.: CV, Driver's License, etc."
+          fileInputProps={{
+            maxFileCount: 5,
+          }}
         />
         <div className="!col-span-2">
           <EnhancedButton
@@ -333,7 +197,7 @@ const AddDriverForm = () => {
             disabled={!isDirty || isPending}
             loading={isPending}
           >
-            Add Client
+            Update Driver
           </EnhancedButton>
         </div>
       </form>
@@ -341,4 +205,4 @@ const AddDriverForm = () => {
   );
 };
 
-export default AddDriverForm;
+export default EditDriverForm;

@@ -1,4 +1,5 @@
 import { Identification } from '@carbon/icons-react';
+import dynamic from 'next/dynamic';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -8,11 +9,14 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import AddDriverForm from 'src/modules/drivers/components/AddDriverForm';
+
+const AddDriverForm = dynamic(
+  () => import('src/modules/drivers/components/AddDriverForm')
+);
 
 export default function AddDriversPage() {
   return (
-    <ContentLayout title="Drivers" Icon={<Identification />}>
+    <ContentLayout title="Add a Driver" Icon={<Identification />}>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>

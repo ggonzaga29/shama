@@ -104,14 +104,18 @@ const FormRenderer = <T extends FieldValues>({
 
   const onSubmit = handleSubmit(async () => {
     if (!isDirty) {
+      console.error('Form is not dirty');
       toast.error('Please fill out the form before submitting');
       return;
     }
+
+    console.log('Submitting form...');
 
     startTransition(async () => {
       try {
         await formStateAction(new FormData(formRef.current!));
       } catch (error) {
+        console.error(error);
         toast.error('An error occurred while submitting the form.');
       }
     });

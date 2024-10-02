@@ -67,7 +67,7 @@ export default function RootLayout({
             <NextUIProvider>
               <NextTopLoader showSpinner={false} />
               {children}
-              <Toaster />
+              <Toaster richColors />
             </NextUIProvider>
           </ThemeProvider>
         </body>

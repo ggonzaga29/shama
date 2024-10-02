@@ -26,3 +26,24 @@ export function formatBytes(
     sizeType === 'accurate' ? accurateSizes[i] ?? 'Bytest' : sizes[i] ?? 'Bytes'
   }`;
 }
+
+export const mapInputToFormData = (input: Record<string, any>) => {
+  const formData = new FormData();
+
+  Object.entries(input).forEach(([key, value]) => {
+    if (value instanceof Date) {
+      formData.append(key, value.toISOString()); // Convert Date to ISO string
+    } else if (
+      Array.isArray(value) &&
+      value.every((file) => file instanceof File)
+    ) {
+      value.forEach((file) => {
+        formData.append(key, file);
+      });
+    } else if (value !== undefined && value !== null) {
+      formData.append(key, value.toString()); // Convert other types to string
+    }
+  });
+
+  return formData;
+};

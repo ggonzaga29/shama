@@ -10,6 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  useFormField,
 } from 'src/components/ui/Form';
 import { Input } from 'src/components/ui/Input';
 
@@ -20,6 +21,8 @@ const FileInputField = <T extends FieldValues>({
   control,
   autoFocus,
 }: FileInputFieldProps<T>) => {
+  const { errors } = useFormField();
+
   if (formField.type !== 'file') {
     return null;
   }
@@ -67,7 +70,11 @@ const FileInputField = <T extends FieldValues>({
               colspan ? `md:col-span-${colspan}` : ''
             )}
           >
-            <FormLabel htmlFor={name as string}>{label}</FormLabel>
+            <FormLabel htmlFor={name as string}>
+              {label}
+
+              {JSON.stringify(errors)}
+            </FormLabel>
             <FormControl>
               <Input
                 placeholder={placeholder}

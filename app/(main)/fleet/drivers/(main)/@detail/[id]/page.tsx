@@ -1,9 +1,12 @@
 import {
   Add,
   CalendarAdd,
+  CloudDownload,
+  DocumentBlank,
   Edit,
   Email,
   Identification,
+  Launch,
   ListNumbered,
   Location,
   Phone,
@@ -20,6 +23,7 @@ import {
   TooltipTrigger,
 } from 'src/components/ui/Tooltip';
 import { getDriverById } from 'src/modules/drivers/actions';
+import DeleteDriverButton from 'src/modules/drivers/components/DeleteDriverButton';
 
 export default async function DriverDetailPage({
   params,
@@ -28,15 +32,19 @@ export default async function DriverDetailPage({
 }) {
   const { data } = (await getDriverById({ id: params.id })) || {};
 
+  if (!data) {
+    return null;
+  }
+
   return (
-    <div className="relative w-full max-w-full space-y-2">
+    <div className="relative flex size-full max-h-[inherit] flex-col gap-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
             <Link href="/fleet/drivers/add">
               <Button
                 size="icon"
-                className="absolute bottom-4 right-4 rounded-full"
+                className="absolute bottom-4 right-8 rounded-full"
               >
                 <Add size={32} />
               </Button>
@@ -57,7 +65,7 @@ export default async function DriverDetailPage({
               }
               width={128}
               height={128}
-              className="rounded-full object-cover"
+              className="size-full rounded-full object-cover"
               alt="Driver avatar"
             />
           </div>
@@ -68,7 +76,9 @@ export default async function DriverDetailPage({
               </h4>
             </div>
             <div className="text-sm text-muted-foreground">
-              License Number: {data?.license_number}
+              {data?.license_number && (
+                <>License Number: {data.license_number}</>
+              )}
             </div>
           </div>
         </div>
@@ -84,34 +94,34 @@ export default async function DriverDetailPage({
               Edit
             </Button>
           </Link>
-          <Button
-            variant="outline"
-            className="flex items-center justify-center gap-2"
-          >
-            <TrashCan size={16} />
-            Delete
-          </Button>
+          {data?.id && <DeleteDriverButton id={data.id} />}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 p-4">
+      <div className="grid grid-cols-2 gap-4 overflow-y-auto p-4">
         <Card>
           <CardContent className="py-4">
             <h4 className="mb-4 text-lg font-bold">Personal Information</h4>
 
             <ul className="flex flex-col gap-2 [&>li]:flex [&>li]:items-center">
-              <li>
-                <Email size={16} className="mr-2" />
-                {data?.email}
-              </li>
-              <li>
-                <Phone size={16} className="mr-2" />
-                {data?.phone}
-              </li>
-              <li>
-                <Location size={16} className="mr-2" />
-                {data?.address}
-              </li>
+              {data?.email && (
+                <li>
+                  <Email size={16} className="mr-2" />
+                  {data.email}
+                </li>
+              )}
+              {data?.phone && (
+                <li>
+                  <Phone size={16} className="mr-2" />
+                  {data.phone}
+                </li>
+              )}
+              {data?.address && (
+                <li>
+                  <Location size={16} className="mr-2" />
+                  {data.address}
+                </li>
+              )}
             </ul>
           </CardContent>
         </Card>
@@ -121,62 +131,88 @@ export default async function DriverDetailPage({
             <h4 className="mb-4 text-lg font-bold">Employee Information</h4>
 
             <ul className="flex flex-col gap-2 [&>li]:flex [&>li]:items-center">
-              <li>
-                <ListNumbered size={16} className="mr-2" />
-                {data?.employee_id}{' '}
-                <span className="ml-2 align-middle text-xs font-bold">
-                  (Employee Number)
-                </span>
-              </li>
-              <li>
-                <CalendarAdd size={16} className="mr-2" />
-                {data?.created_at}
-              </li>
-              <li>
-                <Identification size={16} className="mr-2" />
-                {data?.license_number}
-              </li>
-              <li>
-                <Identification size={16} className="mr-2" />
-                {data?.license_expiry_date}{' '}
-                <span className="ml-2 align-middle text-xs font-bold">
-                  (License Expiry Date)
-                </span>
-              </li>
+              {data?.employee_id && (
+                <li>
+                  <ListNumbered size={16} className="mr-2" />
+                  {data.employee_id}
+                  <span className="ml-2 align-middle text-xs font-bold">
+                    (Employee Number)
+                  </span>
+                </li>
+              )}
+              {data?.birth_date && (
+                <li>
+                  <CalendarAdd size={16} className="mr-2" />
+                  {data.birth_date}
+                </li>
+              )}
+              {data?.license_number && (
+                <li>
+                  <Identification size={16} className="mr-2" />
+                  {data?.license_number}
+                </li>
+              )}
+              {data?.license_expiry_date && (
+                <li>
+                  <Identification size={16} className="mr-2" />
+                  {data?.license_expiry_date}{' '}
+                  <span className="ml-2 align-middle text-xs font-bold">
+                    (License Expiry Date)
+                  </span>
+                </li>
+              )}
             </ul>
           </CardContent>
         </Card>
 
-        <Card className="col-span-2">
-          <CardContent className="py-4">
-            <h4 className="mb-4 text-lg font-bold">Files</h4>
-
-            <ul className="flex flex-col gap-2 [&>li]:flex [&>li]:items-center">
-              <li>
-                <ListNumbered size={16} className="mr-2" />
-                {data?.employee_id}{' '}
-                <span className="ml-2 align-middle text-xs font-bold">
-                  (Employee Number)
-                </span>
-              </li>
-              <li>
-                <CalendarAdd size={16} className="mr-2" />
-                {data?.created_at}
-              </li>
-              <li>
-                <Identification size={16} className="mr-2" />
-                {data?.license_number}
-              </li>
-              <li>
-                <Identification size={16} className="mr-2" />
-                {data?.license_expiry_date}{' '}
-                <span className="ml-2 align-middle text-xs font-bold">
-                  (License Expiry Date)
-                </span>
-              </li>
-            </ul>
-          </CardContent>
-        </Card>
+        {data?.driver_files.length > 0 && (
+          <Card className="col-span-2">
+            <CardContent className="py-4">
+              <h4 className="mb-4 text-lg font-bold">Files</h4>
+              <div className="h-[250px] overflow-y-auto pr-4">
+                <ul className="space-y-2">
+                  {data?.driver_files.map((file) => (
+                    <li
+                      key={file.id}
+                      className="flex items-center justify-between rounded-lg p-2 transition-colors hover:bg-secondary"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <DocumentBlank className="size-4" />
+                        <p>{file.file_name || 'Unnamed File'}</p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled
+                          // onClick={() => window.open(file.file_url, '_blank')}
+                          title="View file"
+                        >
+                          <Launch className="size-4" />
+                          <span className="sr-only">View file</span>
+                        </Button>
+                        <Button variant="ghost" size="sm" asChild disabled>
+                          <a
+                            href={file.file_url}
+                            download
+                            title="Download file"
+                          >
+                            <CloudDownload className="size-4" />
+                            <span className="sr-only">Download file</span>
+                          </a>
+                        </Button>
+                        <Button variant="ghost" size="sm" disabled>
+                          <TrashCan className="size-4" />
+                          <span className="sr-only">Delete File</span>
+                        </Button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );
