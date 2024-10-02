@@ -39,3 +39,5 @@ export default function DriversLayout({
     </ContentLayout>
   );
 }
+
+export const dynamic = 'force-dyna  mic';
