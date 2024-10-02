@@ -40,4 +40,4 @@ export default function DriversLayout({
   );
 }
 
-export const dynamic = 'force-dyna  mic';
+export const revalidate = 0;
