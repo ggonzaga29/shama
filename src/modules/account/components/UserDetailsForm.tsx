@@ -3,7 +3,6 @@
 import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
-import { Spinner } from '@nextui-org/spinner';
 import { useAction } from 'next-safe-action/hooks';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
@@ -184,13 +183,12 @@ const UserDetailsForm = ({
             type="submit"
             variant="expandIcon"
             Icon={Send}
-            loading={true}
+            loading={isPending || !isDirty}
             // className={buttonClassName}
           >
             Update
           </EnhancedButton>
         </div>
-        <Spinner className="stroke-red-500" color="primary" />
       </form>
     </Form>
   );

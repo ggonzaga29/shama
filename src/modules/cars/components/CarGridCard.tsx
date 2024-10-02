@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-imports */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { Add, GasStation, Gears, PassengerPlus } from '@carbon/icons-react';
