@@ -512,6 +512,8 @@ export type Database = {
       drivers: {
         Row: {
           address: string | null
+          avatar_url: string | null
+          birth_date: string | null
           created_at: string | null
           email: string | null
           employee_id: string | null
@@ -526,6 +528,8 @@ export type Database = {
         }
         Insert: {
           address?: string | null
+          avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           email?: string | null
           employee_id?: string | null
@@ -540,6 +544,8 @@ export type Database = {
         }
         Update: {
           address?: string | null
+          avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           email?: string | null
           employee_id?: string | null

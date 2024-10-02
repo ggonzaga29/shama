@@ -8,14 +8,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
+import AddDriverForm from 'src/modules/drivers/components/AddDriverForm';
 
-export default function DriversLayout({
-  children,
-  detail,
-}: {
-  children: React.ReactNode;
-  detail: React.ReactNode;
-}) {
+export default function AddDriversPage() {
   return (
     <ContentLayout title="Drivers" Icon={<Identification />}>
       <Breadcrumb className="mb-4">
@@ -27,14 +22,17 @@ export default function DriversLayout({
           <BreadcrumbItem>Fleet</BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage>Drivers</BreadcrumbPage>
+            <BreadcrumbLink href="/fleet/drivers">Drivers</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Add</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex max-h-[82vh] gap-2 border bg-background">
-        {children}
-        {detail}
+      <div className="border bg-background p-6">
+        <AddDriverForm />
       </div>
     </ContentLayout>
   );

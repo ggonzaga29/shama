@@ -89,3 +89,6 @@ export const fileInputAcceptSchema = z.enum([
 ]);
 
 export type FileInputAcceptType = z.infer<typeof fileInputAcceptSchema>;
+export type NullToUndefined<T> = {
+  [P in keyof T]: T[P] extends null ? undefined : T[P];
+};

@@ -4,7 +4,7 @@ import { createClient } from 'src/common/lib/supabase/server';
 import { v4 as uuidv4 } from 'uuid';
 
 type UploadFileToBucketProps = {
-  bucketName: 'avatars' | 'assets' | 'cars';
+  bucketName: 'avatars' | 'assets' | 'cars' | 'driver_avatars';
   upsert?: boolean;
   randomizeFilename?: boolean;
   randomizedNamePrefix?: string;
@@ -120,6 +120,10 @@ export async function uploadToBucket({
    * @throws {Error} If the file upload fails.
    */
   async function uploadSingleFile(file: File): Promise<string> {
+    if (!file.name) {
+      throw new Error('File name is required for upload');
+    }
+
     let filename = file.name;
 
     if (randomizeFilename) {
@@ -143,6 +147,7 @@ export async function uploadToBucket({
 
   // Handle single file upload
   if (file) {
+    console.log('Uploading single file');
     const path = await uploadSingleFile(file);
 
     if (onFileUploaded) {

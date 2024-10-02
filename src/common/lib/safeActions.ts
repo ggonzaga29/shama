@@ -34,17 +34,25 @@ export const actionClient = createSafeActionClient({
 
     console.log(chalk.green('\nAction Completed Successfully'));
     console.log(chalk.yellow('Duration:'), chalk.bold(`${duration} ms`));
-    console.log(
-      chalk.yellow('Timestamp:'),
-      chalk.bold(getCurrentDateTime())
-    );
+    console.log(chalk.yellow('Timestamp:'), chalk.bold(getCurrentDateTime()));
 
     if (metadata.verboseLogging) {
       console.log(chalk.magenta('\nResult:'));
       console.dir(result, { depth: null, colors: true });
 
-      console.log(chalk.blue('\n🔹 Client Input:'));
-      console.dir(clientInput, { depth: 0, colors: true });
+      if (clientInput instanceof FormData) {
+        console.log(chalk.blue('\n🔹 Client Input: FormData'));
+        for (const [key, value] of clientInput.entries()) {
+          if (value instanceof File) {
+            console.log(`${key}: ${value.name}`);
+          } else {
+            console.log(`${key}: ${value}`);
+          }
+        }
+      } else {
+        console.log(chalk.blue('\n🔹 Client Input:'));
+        console.dir(JSON.stringify(clientInput), { depth: null, colors: true });
+      }
     }
 
     console.log(chalk.red('\n🔸 Metadata:'));
