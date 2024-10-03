@@ -40,7 +40,7 @@ const LoginForm = () => {
   const inputProps = { register, disabled: loading };
 
   return (
-    <form className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
+    <form className="grid gap-2" onSubmit={handleSubmit(onSubmit)}>
       <div className="grid gap-2">
         <Label htmlFor="email">Email</Label>
         <Input
