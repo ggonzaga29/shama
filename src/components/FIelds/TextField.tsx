@@ -25,6 +25,7 @@ type TextFieldProps<TFieldValues extends FieldValues> = {
   description?: React.ReactNode;
   className?: string;
   control: Control<TFieldValues>;
+  placeholder?: string;
   type?: 'text' | 'password' | 'email' | 'number';
   render?: (props: {
     field: ControllerRenderProps<TFieldValues, FieldPath<TFieldValues>>;
@@ -103,6 +104,7 @@ const TextField = <TFieldValues extends FieldValues>({
   autoFocus,
   description,
   className,
+  placeholder,
   type = 'text',
   render,
 }: TextFieldProps<TFieldValues>) => {
@@ -125,6 +127,7 @@ const TextField = <TFieldValues extends FieldValues>({
                 id={name}
                 autoFocus={autoFocus}
                 value={field.value ?? ''} // Ensure controlled input
+                placeholder={placeholder}
               />
             </FormControl>
             <FormDescription>{description}</FormDescription>
