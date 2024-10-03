@@ -19,7 +19,7 @@ const Sidebar = () => {
       <SidebarToggle isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
       <div className="relative flex h-full flex-col px-3 py-4 shadow-md dark:shadow-zinc-800">
-        <div className="relative flex w-full items-center justify-center py-4">
+        <div className="relative my-4 flex w-full items-center justify-center">
           <div className="absolute">
             <Image
               src="assets/images/logoDarkWithText.png"
