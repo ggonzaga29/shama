@@ -178,6 +178,9 @@ export const addDriver = authActionClient
     verboseLogging: true,
   })
   .schema(addDriverSchema)
+  .outputSchema(
+    z.object({ success: z.boolean(), id: z.string().nullable() }).nullable()
+  )
   .action(async ({ parsedInput }) => {
     const supabase = createClient();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -264,6 +267,7 @@ export const addDriver = authActionClient
     revalidatePath('/fleet/drivers');
     return {
       success: true,
+      id: insertedDriver.id,
     };
   });
 

@@ -37,7 +37,7 @@ export default async function DriverDetailPage({
   }
 
   return (
-    <div className="relative flex size-full max-h-[inherit] flex-col gap-2">
+    <div className="relative flex max-h-[82vh] w-full flex-col gap-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -98,7 +98,7 @@ export default async function DriverDetailPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 overflow-y-auto p-4">
+      <div className="grid max-h-full grid-cols-2 gap-4 overflow-y-auto p-4">
         <Card>
           <CardContent className="py-4">
             <h4 className="mb-4 text-lg font-bold">Personal Information</h4>

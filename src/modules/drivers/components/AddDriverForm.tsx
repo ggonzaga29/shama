@@ -4,6 +4,7 @@
 import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
+import { useRouter } from 'next/navigation';
 import { Infer } from 'next-safe-action/adapters/types';
 import { useAction } from 'next-safe-action/hooks';
 import { useTransition } from 'react';
@@ -22,6 +23,7 @@ import { addDriverSchema } from 'src/modules/drivers/schema';
 type FieldValues = Infer<typeof addDriverSchema>;
 
 const AddDriverForm = () => {
+  const router = useRouter();
   const action = useAction(addDriver);
   const [isPending, startTransition] = useTransition();
 
@@ -29,7 +31,7 @@ const AddDriverForm = () => {
     typeof addDriverSchema
   >(action.result.validationErrors, { joinBy: '\n' });
 
-  const form = useForm<Infer<typeof addDriverSchema>>({
+  const form = useForm<FieldValues>({
     resolver: zodResolver(addDriverSchema),
     errors: hookFormValidationErrors,
   });
@@ -45,9 +47,13 @@ const AddDriverForm = () => {
     startTransition(async () => {
       try {
         const formData = mapInputToFormData(input);
-        await action.executeAsync(formData);
+        const result = await action.executeAsync(formData);
         toast.success('Driver created successfully.');
         reset();
+
+        if (result?.data?.id) {
+          router.push(`/fleet/drivers/${result.data.id}`);
+        }
       } catch (e) {
         console.error('Something went wrong with submitting the form.');
       }
