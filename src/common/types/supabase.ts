@@ -168,6 +168,133 @@ export type Database = {
           },
         ]
       }
+      business_client_employee: {
+        Row: {
+          business_client_id: string
+          created_at: string
+          email: string | null
+          employee_name: string
+          employee_number: string | null
+          id: string
+          phone: string | null
+          role: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_client_id: string
+          created_at?: string
+          email?: string | null
+          employee_name: string
+          employee_number?: string | null
+          id?: string
+          phone?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_client_id?: string
+          created_at?: string
+          email?: string | null
+          employee_name?: string
+          employee_number?: string | null
+          id?: string
+          phone?: string | null
+          role?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_business_client"
+            columns: ["business_client_id"]
+            isOneToOne: false
+            referencedRelation: "business_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_client_employee_files: {
+        Row: {
+          created_at: string
+          description: string | null
+          employee_id: string
+          id: string
+          path: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          employee_id: string
+          id?: string
+          path: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          employee_id?: string
+          id?: string
+          path?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_employee"
+            columns: ["employee_id"]
+            isOneToOne: false
+            referencedRelation: "business_client_employee"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      business_clients: {
+        Row: {
+          address: string | null
+          business_name: string
+          city: string | null
+          country: string | null
+          created_at: string
+          email: string | null
+          id: string
+          phone: string | null
+          postal_code: string | null
+          registration_number: string | null
+          state: string | null
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          business_name: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          registration_number?: string | null
+          state?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          phone?: string | null
+          postal_code?: string | null
+          registration_number?: string | null
+          state?: string | null
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       client_files: {
         Row: {
           client_id: string
@@ -384,31 +511,49 @@ export type Database = {
       }
       drivers: {
         Row: {
+          address: string | null
+          avatar_url: string | null
+          birth_date: string | null
           created_at: string | null
           email: string | null
+          employee_id: string | null
           first_name: string
           id: string
           last_name: string
+          license_expiry_date: string | null
+          license_number: string | null
           middle_name: string | null
           phone: string | null
           updated_at: string | null
         }
         Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           email?: string | null
+          employee_id?: string | null
           first_name: string
           id?: string
           last_name: string
+          license_expiry_date?: string | null
+          license_number?: string | null
           middle_name?: string | null
           phone?: string | null
           updated_at?: string | null
         }
         Update: {
+          address?: string | null
+          avatar_url?: string | null
+          birth_date?: string | null
           created_at?: string | null
           email?: string | null
+          employee_id?: string | null
           first_name?: string
           id?: string
           last_name?: string
+          license_expiry_date?: string | null
+          license_number?: string | null
           middle_name?: string | null
           phone?: string | null
           updated_at?: string | null
@@ -446,6 +591,124 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      personal_client_files: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: number
+          path: string | null
+          personal_client_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          path?: string | null
+          personal_client_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: number
+          path?: string | null
+          personal_client_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "personal_client_files_personal_client_id_fkey"
+            columns: ["personal_client_id"]
+            isOneToOne: false
+            referencedRelation: "personal_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      personal_clients: {
+        Row: {
+          address: string | null
+          created_at: string
+          date_of_birth: string | null
+          driver_license_number: string
+          email: string | null
+          emergency_contact_email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
+          first_name: string
+          gender: string | null
+          id: number
+          last_name: string
+          middle_name: string | null
+          phone: string | null
+          zip_code: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          driver_license_number: string
+          email?: string | null
+          emergency_contact_email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          first_name: string
+          gender?: string | null
+          id?: number
+          last_name: string
+          middle_name?: string | null
+          phone?: string | null
+          zip_code?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          driver_license_number?: string
+          email?: string | null
+          emergency_contact_email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          first_name?: string
+          gender?: string | null
+          id?: number
+          last_name?: string
+          middle_name?: string | null
+          phone?: string | null
+          zip_code?: string | null
+        }
+        Relationships: []
+      }
+      profile_avatars: {
+        Row: {
+          id: string
+          is_selected: boolean | null
+          path: string | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          is_selected?: boolean | null
+          path?: string | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          is_selected?: boolean | null
+          path?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_avatars_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -759,7 +1022,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      enable_row_level_security: {
+        Args: {
+          table_name: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       availability_status: "available" | "under maintenance" | "rented"

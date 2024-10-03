@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from 'src/components/ui/Button';
 import { FitToScreen, Minimize } from '@carbon/icons-react';
 import { useState } from 'react';
+import { Button } from 'src/components/ui/Button';
 
 const FullScreenToggle = () => {
   const [isFullScreen, setIsFullScreen] = useState(false);

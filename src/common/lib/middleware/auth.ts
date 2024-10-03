@@ -8,9 +8,12 @@ export const checkAuth: MiddlewareFactory = (next) => {
       const supabase = createAdminClient();
       const pathname = request.nextUrl.pathname;
 
-      const { data, error } = await supabase.auth.getUser();
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.getSession();
 
-      if (error || !data?.user) {
+      if (error || !session?.user) {
         if (pathname !== '/auth') {
           return NextResponse.redirect(new URL('/auth', request.nextUrl));
         }

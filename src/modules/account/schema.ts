@@ -1,7 +1,7 @@
+import { createSingleFileSchema } from 'src/common/utils/schemaUtils';
 import { z } from 'zod';
 
 export const userDetailsSchema = z.object({
-  user_id: z.string(),
   first_name: z.string().trim().min(3, {
     message: 'Name must be at least 3 characters',
   }),
@@ -19,7 +19,9 @@ export const userDetailsSchema = z.object({
 export type UserDetailsSchema = z.infer<typeof userDetailsSchema>;
 
 export const userAvatarSchema = z.object({
-  avatar: z.any(), // JSON string,
+  avatar: createSingleFileSchema({
+    accept: ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'],
+  }),
 });
 
 export type UserAvatarSchema = z.infer<typeof userAvatarSchema>;

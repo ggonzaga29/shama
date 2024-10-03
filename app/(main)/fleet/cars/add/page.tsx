@@ -1,4 +1,4 @@
-import CarFormPage from 'src/modules/cars/page/CarFormPage';
+// import CarFormPage from 'src/modules/cars/page/CarFormPage';
 
 export async function generateMetadata() {
   return {
@@ -6,4 +6,6 @@ export async function generateMetadata() {
   };
 }
 
-export default CarFormPage;
+export default function CarFormPage() {
+  return <></>;
+}

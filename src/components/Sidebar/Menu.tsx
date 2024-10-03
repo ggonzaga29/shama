@@ -1,24 +1,23 @@
 'use client';
 
+import { Logout, UserSponsor } from '@carbon/icons-react';
+import { Ellipsis } from 'lucide-react';
 import Link from 'next/link';
-import { Ellipsis, LogOut } from 'lucide-react';
-import { Logout } from '@carbon/icons-react';
 import { usePathname } from 'next/navigation';
-import { UserSponsor } from '@carbon/icons-react';
-
-import { cn } from 'src/common/utils/cvaUtils';
+import { FC, useState } from 'react';
 import { getMenuList } from 'src/common/lib/menuList';
-import { Button } from 'src/components/ui/Button';
-import { ScrollArea } from 'src/components/ui/Scrollarea';
+import { cn } from 'src/common/utils/cvaUtils';
 import { CollapseMenuButton } from 'src/components/Sidebar/components/CollapsibleMenuButton';
+import { Button } from 'src/components/ui/Button';
+import { EnhancedButton } from 'src/components/ui/EnhancedButton';
+import { ScrollArea } from 'src/components/ui/Scrollarea';
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
   TooltipProvider,
+  TooltipTrigger,
 } from 'src/components/ui/Tooltip';
-import { FC } from 'react';
-import { EnhancedButton } from 'src/components/ui/EnhancedButton';
+import { signout } from 'src/modules/auth/actions';
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -27,27 +26,31 @@ interface MenuProps {
 const Menu: FC<MenuProps> = ({ isOpen }) => {
   const pathname = usePathname();
   const menuList = getMenuList(pathname);
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div className="flex h-full flex-col justify-between">
       <ScrollArea className="[&>div>div[style]]:!block">
-        <nav className="mt-4 h-full w-full">
-          <ul className="flex flex-col items-start space-y-1 px-2 ">
+        <nav className="mt-4 size-full">
+          <ul className="flex flex-col items-start space-y-1 px-2">
             {menuList.map(({ groupLabel, isAdminGroup, menus }, index) => (
               <li
                 className={cn('w-full', groupLabel ? 'pt-5' : '')}
                 key={index}
               >
                 {(isOpen && groupLabel) || isOpen === undefined ? (
-                  <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-muted-foreground flex items-center gap-2">
-                    {groupLabel} {isAdminGroup && <UserSponsor className='text-destructive'/>}
+                  <p className="flex max-w-[248px] items-center gap-2 truncate px-4 pb-2 text-sm font-medium text-muted-foreground">
+                    {groupLabel}{' '}
+                    {isAdminGroup && (
+                      <UserSponsor className="text-destructive" />
+                    )}
                   </p>
                 ) : !isOpen && isOpen !== undefined && groupLabel ? (
                   <TooltipProvider>
                     <Tooltip delayDuration={100}>
                       <TooltipTrigger className="w-full">
                         <div className="flex w-full items-center justify-center">
-                          <Ellipsis className="h-5 w-5" />
+                          <Ellipsis className="size-5" />
                         </div>
                       </TooltipTrigger>
                       <TooltipContent side="right">
@@ -66,7 +69,7 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
                           <Tooltip delayDuration={100}>
                             <TooltipTrigger asChild>
                               <Button
-                                variant={active ? 'secondary' : 'ghost'}
+                                variant={active ? 'default' : 'ghost'}
                                 className="mb-1 h-10 w-full justify-start"
                                 asChild
                               >
@@ -121,13 +124,14 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
           <Tooltip delayDuration={100}>
             <TooltipTrigger asChild>
               <EnhancedButton
-                onClick={() => {}}
-                // variant="outline"
+                onClick={() => {
+                  setIsSigningOut(true);
+                  signout();
+                }}
+                loading={isSigningOut}
+                Icon={Logout}
                 className="mb-2 mt-5 h-10 w-full justify-center"
               >
-                <span className={cn(isOpen === false ? '' : 'mr-2')}>
-                  <Logout size={16} />
-                </span>
                 <p
                   className={cn(
                     // "whitespace-nowrap",

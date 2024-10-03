@@ -1,11 +1,10 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
+import { actionClient } from 'src/common/lib/safeActions';
 import { createClient } from 'src/common/lib/supabase/server';
-import {
-  OnUploadResponse,
-  UploadedFile,
-  UploadedFiles,
-} from 'src/common/types';
+import { OnUploadResponse, UploadedFile } from 'src/common/types';
 import { FormState } from 'src/components/FormRenderer/types';
 import {
   userAvatarSchema,
@@ -13,59 +12,29 @@ import {
 } from 'src/modules/account/schema';
 import { v4 as uuidv4 } from 'uuid';
 
-export async function updateUserDetails(
-  previousState: FormState,
-  data: FormData
-): Promise<FormState> {
-  console.log('updateUserDetails');
-  const supabase = createClient();
+export const updateUserDetails = actionClient
+  .schema(userDetailsSchema)
+  .action(async ({ parsedInput }) => {
+    const supabase = createClient();
 
-  const formData = Object.fromEntries(data);
-  const parsedFormData = userDetailsSchema.safeParse(formData);
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  console.log('formData', formData);
-
-  if (!parsedFormData.success) {
-    const fields: Record<string, string> = {};
-    for (const key of Object.keys(formData)) {
-      fields[key] = formData[key].toString();
+    if (!user) {
+      return;
     }
 
-    console.log(parsedFormData.error.issues);
+    const { error } = await supabase
+      .from('profiles')
+      .update(parsedInput)
+      .eq('id', user.id);
+    console.log('Action Running');
 
-    return {
-      message: 'Invalid form data',
-      fields,
-      issues: parsedFormData.error.issues.map((issue) => issue.message),
-    };
-  }
-
-  const { user_id, first_name, last_name, gender, phone, address } =
-    parsedFormData.data;
-
-  const { error: userError } = await supabase
-    .from('profiles')
-    .update({
-      first_name,
-      last_name,
-      gender,
-      phone,
-      address,
-    })
-    .eq('id', user_id);
-
-  if (userError) {
-    return {
-      message: 'Failed to add vehicle',
-      issues: [userError.message],
-    };
-  }
-
-  return {
-    success: true,
-    successMessage: 'User details updated successfully',
-  };
-}
+    if (error) {
+      console.log(error);
+    }
+  });
 
 export const uploadAvatar = async (
   formData: FormData
@@ -102,6 +71,7 @@ export const submitAvatarForm = async (
   data: FormData
 ): Promise<FormState> => {
   const formData = Object.fromEntries(data);
+  console.log(formData);
   const supabase = createClient();
   const parsedFormData = userAvatarSchema.safeParse(formData);
 
@@ -118,28 +88,70 @@ export const submitAvatarForm = async (
     };
   }
 
-  const { data: currentUser, error } = await supabase.auth.getUser();
+  const file = parsedFormData.data.avatar;
 
-  if (error || !currentUser) {
+  // If validation success, check if file is empty, size is too large, or type is invalid
+  if (file.size === 0) {
     return {
-      message: 'Failed to fetch user',
-      issues: [error ? error.message : 'No user found'],
+      message: 'Invalid file',
+      issues: ['File is empty'],
     };
   }
 
-  const { error: userError } = await supabase
-    .from('profiles')
-    .update({
-      avatar: parsedFormData.data.avatar,
-    })
-    .eq('id', currentUser.user?.id);
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
   if (userError) {
     return {
-      message: 'Failed to update avatar',
+      message: 'Failed to fetch user',
       issues: [userError.message],
     };
   }
+
+  if (!user) {
+    return {
+      message: 'User not found',
+      issues: ['User not found'],
+    };
+  }
+
+  // Upload the avatar to profile_avatars
+
+  try {
+    uploadToBucket({
+      bucketName: 'avatars',
+      file,
+      upsert: false,
+      randomizeFilename: true,
+      randomizedNamePrefix: 'avatar',
+      onFileUploaded: async ({ path }) => {
+        await supabase
+          .from('profile_avatars')
+          .update({ is_selected: false })
+          .eq('user_id', user.id);
+
+        const { error: profileAvatarError } = await supabase
+          .from('profile_avatars')
+          .insert({
+            user_id: user.id,
+            path: path,
+            is_selected: true,
+          });
+
+        if (profileAvatarError) {
+          throw new Error(profileAvatarError.message);
+        }
+      },
+    });
+  } catch (error) {
+    return {
+      message: 'Failed to upload avatar',
+    };
+  }
+
+  revalidatePath('/account');
 
   return {
     success: true,

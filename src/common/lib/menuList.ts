@@ -1,21 +1,17 @@
 import {
-
-  LucideIcon,
-} from 'lucide-react';
-
-import {
   CarbonIconType,
-  Dashboard,
-  CustomerService,
   Catalog,
-  Watsonx,
-  ReportData,
-  InventoryManagement,
-  Identification,
-  VehicleServices,
-  UserRole,
+  CustomerService,
+  Dashboard,
   Events,
+  Identification,
+  InventoryManagement,
+  ReportData,
+  UserRole,
+  VehicleServices,
+  Watsonx,
 } from '@carbon/icons-react';
+import { LucideIcon } from 'lucide-react';
 
 type Submenu = {
   href: string;
@@ -44,9 +40,9 @@ export function getMenuList(pathname: string): Group[] {
       isAdminGroup: false,
       menus: [
         {
-          href: '/dashboard',
+          href: '/',
           label: 'Dashboard',
-          active: pathname.includes('/dashboard'),
+          active: pathname === '/',
           icon: Dashboard,
           submenus: [],
         },
@@ -91,21 +87,21 @@ export function getMenuList(pathname: string): Group[] {
       isAdminGroup: false,
       menus: [
         {
-          href: 'fleet/cars',
+          href: '/fleet/cars',
           label: 'Vehicle Inventory',
-          active: pathname.includes('/fleet/maintenance'),
+          active: pathname.includes('/fleet/cars'),
           icon: InventoryManagement,
           submenus: [],
         },
         {
-          href: 'fleet/drivers',
+          href: '/fleet/drivers',
           label: 'Driver Management',
-          active: pathname.includes('/fleet/maintenance'),
+          active: pathname.includes('/fleet/drivers'),
           icon: Identification,
           submenus: [],
         },
         {
-          href: 'fleet/maintenance',
+          href: '/fleet/maintenance',
           label: 'Maintenance',
           active: pathname.includes('/fleet/maintenance'),
           icon: VehicleServices,

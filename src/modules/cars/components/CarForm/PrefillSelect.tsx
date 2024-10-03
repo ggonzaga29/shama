@@ -1,6 +1,7 @@
 'use client';
 
 import { FC } from 'react';
+import { toast } from 'sonner';
 import { CarVariant, CarVariantMetadata } from 'src/common/types';
 import { Label } from 'src/components/ui/Label';
 import {
@@ -14,7 +15,6 @@ import {
 } from 'src/components/ui/Select';
 import { getCarVariantList } from 'src/modules/cars/actions';
 import { useAddCarContext } from 'src/modules/cars/context/AddCarContext';
-import { toast } from 'sonner';
 
 type VariantList = Awaited<ReturnType<typeof getCarVariantList>>;
 
@@ -57,7 +57,7 @@ const PrefillSelect: FC<PrefillSelectProps> = ({ variantList }) => {
   return (
     <div className="space-y-2">
       <Select onValueChange={handleChange}>
-        <SelectTrigger className="w-[20rem]">
+        <SelectTrigger className="w-80">
           <span className="font-bold">
             {selectedVehicle?.name ?? 'Select a vehicle'}
           </span>

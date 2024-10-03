@@ -1,23 +1,16 @@
-'use client';
-
-import Link from 'next/link';
 import { Menu as MenuIcon } from '@carbon/icons-react';
-
-import { Button } from 'src/components/ui/Button';
+import Image from 'next/image';
+import Link from 'next/link';
 import Menu from 'src/components/Sidebar/Menu';
+import { Button } from 'src/components/ui/Button';
 import {
   Sheet,
-  SheetHeader,
   SheetContent,
+  SheetHeader,
   SheetTrigger,
-  SheetTitle,
 } from 'src/components/ui/Sheet';
-import { useTheme } from 'next-themes';
-import SupabaseImage from 'src/components/SupabaseImage';
 
-export function SheetMenu() {
-  const { theme } = useTheme();
-
+const SheetMenu = () => {
   return (
     <Sheet>
       <SheetTrigger className="lg:hidden" asChild>
@@ -35,16 +28,12 @@ export function SheetMenu() {
             <Link href="/dashboard" className="flex items-center gap-2">
               <div className="relative flex w-full items-center justify-center py-4">
                 <div className="absolute">
-                  <SupabaseImage
-                    src={
-                      theme === 'dark'
-                        ? 'assets/images/logoDarkWithText.png'
-                        : 'assets/images/logoLightWithText.png'
-                    }
+                  <Image
+                    src="assets/images/logoDarkWithText.png"
                     alt="Logo"
                     width={100}
                     height={37}
-                    className={`transition-opacity duration-300`}
+                    className={`invert transition-opacity duration-300 dark:invert-0`}
                   />
                 </div>
               </div>
@@ -55,4 +44,6 @@ export function SheetMenu() {
       </SheetContent>
     </Sheet>
   );
-}
+};
+
+export default SheetMenu;

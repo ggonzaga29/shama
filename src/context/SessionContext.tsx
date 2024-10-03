@@ -10,18 +10,19 @@
 'use client';
 
 import { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import { redirect } from 'next/navigation';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { createClient } from 'src/common/lib/supabase/client';
-import { UserWithProfile } from 'src/common/types';
+import { Avatar, UserWithProfileAndAvatar } from 'src/common/types';
 
 type SessionContext = {
   session?: Session | null;
-  user?: UserWithProfile | null;
+  user?: UserWithProfileAndAvatar | null;
 };
 
 type SessionProviderProps = {
   children: React.ReactNode;
-  initialUser: UserWithProfile;
+  initialUser: UserWithProfileAndAvatar;
 };
 
 const SessionContext = createContext<SessionContext>({
@@ -34,7 +35,9 @@ export const SessionProvider: FC<SessionProviderProps> = ({
 }) => {
   const supabase = createClient();
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<UserWithProfile | null>(initialUser);
+  const [user, setUser] = useState<UserWithProfileAndAvatar | null>(
+    initialUser
+  );
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange(
@@ -42,6 +45,9 @@ export const SessionProvider: FC<SessionProviderProps> = ({
         if (event === 'SIGNED_OUT') {
           setSession(null);
           setUser(null);
+          redirect(
+            `/auth?message=${encodeURIComponent('You have been signed out')}`
+          );
         } else if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
           setSession(session);
         }
@@ -52,6 +58,62 @@ export const SessionProvider: FC<SessionProviderProps> = ({
       data.subscription.unsubscribe();
     };
   }, [supabase.auth]);
+
+  // Listen for Profile Avatar changes
+  useEffect(() => {
+    if (!user) return;
+
+    const profileAvatarChanges = supabase
+      .channel('table-filter-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT', // Listen only to INSERTs
+          schema: 'public',
+          table: 'profile_avatars',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload: { new: Avatar }) => {
+          setUser((prevUser) => {
+            if (!prevUser) return prevUser;
+
+            return {
+              ...prevUser,
+              avatar: payload.new,
+            };
+          });
+        }
+      )
+      .subscribe();
+
+    // FIX: Not working
+    // const profileChanges = supabase.channel('table-filter-changes').on(
+    //   'postgres_changes',
+    //   {
+    //     event: 'UPDATE',
+    //     schema: 'public',
+    //     table: 'profiles',
+    //     filter: `id=eq.${user.id}`,
+    //   },
+    //   (payload: { new: UserProfile }) => {
+    //     setUser((prevUser) => {
+    //       console.log('Profile Changes', payload.new);
+    //       if (!prevUser) return prevUser;
+
+    //       return {
+    //         ...prevUser,
+    //         profile: payload.new,
+    //       };
+    //     });
+    //   }
+    // );
+
+    return () => {
+      profileAvatarChanges.unsubscribe();
+      // profileChanges.unsubscribe();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <SessionContext.Provider value={{ session, user }}>

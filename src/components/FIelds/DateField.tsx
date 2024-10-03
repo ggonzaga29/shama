@@ -1,0 +1,89 @@
+import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
+import { Control, FieldPath, FieldValues } from 'react-hook-form';
+import { cn } from 'src/common/utils/cvaUtils';
+import { FileUploaderProps } from 'src/components/FormRenderer/components/FileUploader/FileUploader';
+import { Button } from 'src/components/ui/Button';
+import { Calendar, CalendarProps } from 'src/components/ui/Calendar';
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from 'src/components/ui/Form';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from 'src/components/ui/Popover';
+
+type DateFieldProps<TFieldValues extends FieldValues> = {
+  name: FieldPath<TFieldValues>;
+  fileInputProps?: FileUploaderProps;
+  label?: React.ReactNode;
+  description?: React.ReactNode;
+  className?: string;
+  control: Control<TFieldValues>;
+  calendarProps?: Omit<CalendarProps, 'selected' | 'onSelect' | 'mode'>;
+};
+
+const DateField = <TFieldValues extends FieldValues>({
+  name,
+  label,
+  control,
+  description,
+  className,
+  calendarProps,
+}: DateFieldProps<TFieldValues>) => {
+  return (
+    <FormField
+      control={control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className={className}>
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    'w-full justify-start text-left font-normal',
+                    !field.value && 'text-muted-foreground'
+                  )}
+                >
+                  <CalendarIcon className="mr-2 size-4" />
+                  {field.value ? (
+                    format(field.value, 'PPP')
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  disabled={(date) =>
+                    date > new Date() || date < new Date('1900-01-01')
+                  }
+                  initialFocus
+                  {...calendarProps}
+                  mode="single"
+                  selected={field.value}
+                  onSelect={(date) => {
+                    field.onChange(date);
+                  }}
+                />
+              </PopoverContent>
+            </Popover>
+          </FormControl>
+          <FormDescription>{description}</FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+};
+
+export default DateField;

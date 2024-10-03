@@ -1,12 +1,14 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { headers } from 'next/headers';
+import { actionClient } from 'src/common/lib/safeActions';
 import { createClient } from 'src/common/lib/supabase/server';
 import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
-import { FormState } from 'src/components/FormRenderer/types';
-import { clientFormSchema } from 'src/modules/clients/schema';
 import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
+import { FormState } from 'src/components/FormRenderer/types';
+import {
+  clientFormSchema,
+  personalClientFormSchema,
+} from 'src/modules/clients/schema';
 
 export async function submitClientForm(
   previousState: FormState,
@@ -67,10 +69,108 @@ export async function submitClientForm(
     };
   }
 
-  revalidatePath('/clients');
-
   return {
     success: true,
     successMessage: 'Successfully added client',
   };
 }
+
+export async function getClients() {
+  const supabase = createClient();
+  const { data, error } = await supabase.from('clients').select();
+
+  if (error) {
+    console.error('Failed to fetch clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getPersonalClients() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.from('personal_clients').select();
+
+  if (error) {
+    console.error('Failed to fetch personal clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getBusinessClients() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase.from('business_clients').select();
+
+  if (error) {
+    console.error('Failed to fetch business clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getPersonalClientsCSV() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('personal_clients')
+    .select()
+    .csv();
+
+  if (error) {
+    console.error('Failed to fetch personal clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export async function getBusinessClientsCSV() {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('business_clients')
+    .select()
+    .csv();
+
+  if (error) {
+    console.error('Failed to fetch business clients', error.message);
+    return [];
+  }
+
+  return data;
+}
+
+export const addPersonalClient = actionClient
+  .schema(personalClientFormSchema)
+  .action(async ({ parsedInput }) => {
+    const supabase = createClient();
+
+    // Convert Date to ISO string format
+    const formattedDateOfBirth =
+      parsedInput.date_of_birth instanceof Date
+        ? parsedInput.date_of_birth.toISOString()
+        : parsedInput.date_of_birth;
+
+    const { data, error } = await supabase
+      .from('personal_clients')
+      .insert({
+        ...parsedInput,
+        date_of_birth: formattedDateOfBirth,
+      })
+      .select();
+
+    if (error) {
+      console.error('Error inserting data:', error);
+      return { successful: false, error: error.message };
+    }
+
+    return {
+      successful: true,
+      data,
+    };
+  });

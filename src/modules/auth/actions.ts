@@ -21,7 +21,7 @@ export async function loginAction(data: LoginSchema) {
   }
 
   revalidatePath('/', 'layout');
-  redirect('/');
+  redirect(`/?message=${encodeURIComponent('You have been signed in')}`);
 }
 
 export async function signup(formData: FormData) {
@@ -42,10 +42,26 @@ export async function signup(formData: FormData) {
   redirect('/');
 }
 
-export async function logout() {
+export async function signout() {
   const supabase = createClient();
   await supabase.auth.signOut();
+}
 
-  revalidatePath('/');
-  redirect('/');
+export async function checkAuth() {
+  const supabase = createClient();
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error) {
+    throw new Error('Authentication error: ' + error.message);
+  }
+
+  if (!user) {
+    throw new Error('No user found');
+  }
+
+  return user;
 }

@@ -1,35 +1,22 @@
 'use client';
 
+import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useTransition } from 'react';
 import { useFormState } from 'react-dom';
-import { FieldValues, Path, useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { cn } from 'src/common/utils/cvaUtils';
-import FileUploader from 'src/components/FileUploader/FileUploader';
+import FileInputField from 'src/components/FormRenderer/components/FileInputField';
+import HiddenField from 'src/components/FormRenderer/components/HiddenField';
+import InputField from 'src/components/FormRenderer/components/InputField';
+import SelectField from 'src/components/FormRenderer/components/SelectField';
+import TextareaField from 'src/components/FormRenderer/components/TextareaField';
 import { FormRendererProps } from 'src/components/FormRenderer/types';
-import { Checkbox } from 'src/components/ui/Checkbox';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from 'src/components/ui/Form';
-import { Input } from 'src/components/ui/Input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from 'src/components/ui/Select';
-import { Textarea } from 'src/components/ui/Textarea';
+import { Form } from 'src/components/ui/Form';
 
 /**
  * A generic form component that uses react-hook-form for form management and zod for form validation.
@@ -55,6 +42,7 @@ import { Textarea } from 'src/components/ui/Textarea';
  *   defaultValues={defaultValues}
  * />
  */
+
 const FormRenderer = <T extends FieldValues>({
   fields,
   formAction,
@@ -68,7 +56,7 @@ const FormRenderer = <T extends FieldValues>({
   buttonClassName,
 }: FormRendererProps<T>) => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [state, formStateAction] = useFormState(formAction, {
     message: '',
   });
@@ -79,12 +67,19 @@ const FormRenderer = <T extends FieldValues>({
   });
 
   const formRef = useRef<HTMLFormElement>(null);
+  const {
+    control,
+    formState: { isDirty },
+    handleSubmit,
+    reset,
+  } = form;
 
   // @see https://github.com/react-hook-form/react-hook-form/issues/1150#issuecomment-594853715
   useEffect(() => {
     if (defaultValues) {
       form.reset(defaultValues);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultValues]);
 
   useEffect(() => {
@@ -92,29 +87,39 @@ const FormRenderer = <T extends FieldValues>({
       onSuccess(state);
     }
 
-    if (state.success && !form.formState.isSubmitting) {
-      setIsLoading(false);
+    if (state.success) {
       toast.success(state.successMessage);
       // FIX: form.reset() doesn't work for some reason
       // fix? force the form to re-render with the default values
-      form.reset(undefined, { keepDirtyValues: true });
+      // form.reset(undefined, { keepDirtyValues: true });
+      reset();
 
       if (redirectUrl) {
         router.push(redirectUrl);
       }
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.success, state.successMessage, form.formState.isSubmitting]);
 
-  useEffect(() => {}, [state]);
-
-  const handleSelectChange = (value: string, fieldName: string) => {
-    if (!value) {
+  const onSubmit = handleSubmit(async () => {
+    if (!isDirty) {
+      console.error('Form is not dirty');
+      toast.error('Please fill out the form before submitting');
       return;
     }
 
-    form.setValue(fieldName as Path<T>, value as any);
-    form.clearErrors(fieldName as Path<T>);
-  };
+    console.log('Submitting form...');
+
+    startTransition(async () => {
+      try {
+        await formStateAction(new FormData(formRef.current!));
+      } catch (error) {
+        console.error(error);
+        toast.error('An error occurred while submitting the form.');
+      }
+    });
+  });
 
   return (
     <Form {...form}>
@@ -133,221 +138,70 @@ const FormRenderer = <T extends FieldValues>({
           </ul>
         </div>
       )}
-      <form
-        ref={formRef}
-        action={formStateAction}
-        onSubmit={(event) => {
-          event.preventDefault();
-          form.handleSubmit(async () => {
-            try {
-              setIsLoading(true);
-              formStateAction(new FormData(formRef.current!));
-              /** @see: https://github.com/react-hook-form/react-hook-form/issues/1363
-               * Submit handler needs to return a promise to determine when the form is done submitting
-               * There may be a better solution
-               */
-              // return new Promise<void>((resolve) => {
-              //   setTimeout(() => {
-              //     resolve();
-              //   }, 500);
-              // });
-            } catch (error) {
-              console.error(error);
-            }
-          })(event);
-        }}
-      >
+      <form ref={formRef} onSubmit={onSubmit}>
         <Form {...form}>
           <div className={cn(`grid gap-4`, `grid-cols-${columns}`, className)}>
-            {fields.map((formField, index) => (
-              <FormField
-                key={formField.name as string}
-                control={form.control}
-                name={formField.name as Path<T>}
-                render={({ field }) => {
-                  switch (formField.type) {
-                    case 'textarea':
-                      return (
-                        <FormItem
-                          className={cn(
-                            'col-span-full md:col-auto',
-                            formField.colspan
-                              ? `md:col-span-${formField.colspan}`
-                              : ''
-                          )}
-                        >
-                          <FormLabel htmlFor={formField.name as string}>
-                            {formField.label}
-                          </FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder={formField.placeholder}
-                              {...field}
-                              autoFocus={index === 0}
-                            />
-                          </FormControl>
-                          {formField.description && (
-                            <FormDescription>
-                              {formField.description}
-                            </FormDescription>
-                          )}
-                          <FormMessage />
-                        </FormItem>
-                      );
+            {fields.map((formField, index) => {
+              const { type, name } = formField;
+              const isAutoFocus = index === 0;
 
-                    case 'select':
-                      return (
-                        <FormItem
-                          className={cn(
-                            'col-span-full md:col-auto',
-                            formField.colspan
-                              ? `md:col-span-${formField.colspan}`
-                              : ''
-                          )}
-                        >
-                          <FormLabel htmlFor={formField.name as string}>
-                            {formField.label}
-                          </FormLabel>
-                          <Select
-                            onValueChange={(value) =>
-                              handleSelectChange(
-                                value,
-                                formField.name as string
-                              )
-                            }
-                            defaultValue={field.value}
-                            name={formField.name as Path<T>}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a value" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {formField.selectOptions.map((option) => (
-                                <SelectItem
-                                  key={option.label}
-                                  value={option.value}
-                                >
-                                  {option.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+              switch (type) {
+                case 'textarea':
+                  return (
+                    <TextareaField
+                      key={name as string}
+                      formField={formField}
+                      control={control}
+                      autoFocus={isAutoFocus}
+                    />
+                  );
 
-                          {formField.description && (
-                            <FormDescription>
-                              {formField.description}
-                            </FormDescription>
-                          )}
-                          <FormMessage />
-                        </FormItem>
-                      );
+                case 'select':
+                  return (
+                    <SelectField
+                      key={name as string}
+                      formField={formField}
+                      control={control}
+                    />
+                  );
 
-                    case 'hidden':
-                      return (
-                        <FormItem className="hidden">
-                          <input
-                            type="hidden"
-                            {...field}
-                            value={field.value ?? formField.value}
-                          />
-                        </FormItem>
-                      );
+                case 'file':
+                  return (
+                    <FileInputField
+                      key={name as string}
+                      formField={formField}
+                      control={control}
+                    />
+                  );
 
-                    case 'checkbox':
-                      return (
-                        <FormItem
-                          className={cn(
-                            'col-span-full md:col-auto',
-                            'flex items-center space-x-3',
-                            formField.colspan
-                              ? `md:col-span-${formField.colspan}`
-                              : ''
-                          )}
-                        >
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel htmlFor={formField.name as string}>
-                              {formField.label}
-                            </FormLabel>
-                            {formField.description && (
-                              <FormDescription className="block">
-                                {formField.description}
-                              </FormDescription>
-                            )}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      );
+                case 'hidden':
+                  return (
+                    <HiddenField
+                      key={name as string}
+                      formField={formField}
+                      control={control}
+                    />
+                  );
 
-                    case 'file':
-                      return (
-                        <FormItem
-                          className={cn(
-                            'col-span-full md:col-auto',
-                            'flex items-center space-x-3',
-                            formField.colspan
-                              ? `md:col-span-${formField.colspan}`
-                              : ''
-                          )}
-                        >
-                          <FormControl>
-                            <FileUploader
-                              field={field}
-                              onUpload={formField.onUpload}
-                              acceptedFileTypes={formField.acceptedFileTypes}
-                              maxFileSize={formField.maxFileSize}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-
-                    default:
-                      return (
-                        <FormItem
-                          className={cn(
-                            'col-span-full md:col-auto',
-                            formField.colspan
-                              ? `md:col-span-${formField.colspan}`
-                              : ''
-                          )}
-                        >
-                          <FormLabel htmlFor={formField.name as string}>
-                            {formField.label}
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder={formField.placeholder}
-                              type={formField.type ?? 'text'}
-                              {...field}
-                              autoFocus={index === 0}
-                            />
-                          </FormControl>
-                          {formField.description && (
-                            <FormDescription>
-                              {formField.description}
-                            </FormDescription>
-                          )}
-                          <FormMessage />
-                        </FormItem>
-                      );
-                  }
-                }}
-              />
-            ))}
+                default:
+                  return (
+                    <InputField
+                      key={name as string}
+                      formField={formField}
+                      control={control}
+                      autoFocus={isAutoFocus}
+                    />
+                  );
+              }
+            })}
           </div>
           <div className={cn(`mt-6`, `col-span-${columns}`)}>
             <EnhancedButton
               type="submit"
-              variant="gooeyRight"
-              loading={isLoading}
+              variant="expandIcon"
+              Icon={Send}
+              disabled={!isDirty || isPending}
+              loading={isPending}
               className={buttonClassName}
             >
               {submitButtonLabel}

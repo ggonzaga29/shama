@@ -1,12 +1,13 @@
 import 'src/theme/globals.css';
 
+import { NextUIProvider } from '@nextui-org/system';
 import type { Metadata } from 'next';
-import NextTopLoader from 'nextjs-toploader';
 import { Figtree as FontSans } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
-import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
 import { ThemeProvider } from 'src/context/ThemeProvider';
+import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -63,9 +64,11 @@ export default function RootLayout({
           )}
         >
           <ThemeProvider attribute="class" disableTransitionOnChange>
-            <NextTopLoader showSpinner={false} />
-            {children}
-            <Toaster />
+            <NextUIProvider>
+              <NextTopLoader showSpinner={false} />
+              {children}
+              <Toaster richColors />
+            </NextUIProvider>
           </ThemeProvider>
         </body>
       </html>
