@@ -1,7 +1,6 @@
 'use client';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Info } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -20,11 +19,6 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
   const [loading, setLoading] = useState<boolean>(false);
-  const searchParams = useSearchParams();
-
-  if (searchParams.get('message')) {
-    toast.success(searchParams.get('message'));
-  }
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
     try {
