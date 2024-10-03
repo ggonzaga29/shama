@@ -20,6 +20,8 @@ import {
 import { Armchair, CirclePlus, Cog, Droplet, Fuel, Info } from 'lucide-react';
 import Image from 'next/image';
 import { FC } from 'react';
+import { toast } from 'sonner';
+import { Car, Table } from 'src/common/types';
 import { Database } from 'src/common/types/supabase';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Badge } from 'src/components/ui/Badge';
@@ -34,9 +36,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
+import { deleteCar } from 'src/modules/cars/actions';
 
 type CarGridCardProps = {
-  car: Partial<Database['public']['Tables']['vehicles']['Row']>;
+  car: Table<'vehicles'>;
 };
 
 const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
@@ -139,7 +142,21 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
                     </div>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <div className="flex items-center gap-2 text-sm">
+                    <div
+                      className="flex items-center gap-2 text-sm"
+                      onClick={() =>
+                        toast.promise(
+                          deleteCar({
+                            id: car.id,
+                          }),
+                          {
+                            loading: 'Deleting...',
+                            success: 'Car deleted successfully.',
+                            error: 'An error occurred while deleting the car.',
+                          }
+                        )
+                      }
+                    >
                       <TrashCan size={14} />
                       Delete
                     </div>

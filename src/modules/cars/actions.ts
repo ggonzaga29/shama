@@ -1,9 +1,12 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
+import { authActionClient } from 'src/common/lib/safeActions';
 import { createClient } from 'src/common/lib/supabase/server';
 import { FormState } from 'src/components/FormRenderer/types';
-import { carFormSchema } from 'src/modules/cars/schema';
+import { addCarSchema, carFormSchema } from 'src/modules/cars/schema';
+import { z } from 'zod';
 
 export async function getAllCars() {
   const supabase = createClient();
@@ -111,18 +114,63 @@ export async function submitCarForm(
   };
 }
 
-export async function deleteCar(vehicleId: string) {
-  const supabase = createClient();
-  const { error } = await supabase
-    .from('vehicles')
-    .delete()
-    .eq('id', vehicleId);
+export const addCar = authActionClient
+  .metadata({
+    actionName: 'addCar',
+    verboseLogging: true,
+  })
+  .schema(addCarSchema)
+  .action(async ({ parsedInput }) => {
+    const supabase = createClient();
+    const { image, ...rest } = parsedInput;
 
-  if (error) {
-    throw new Error(error.message);
-  }
+    const { data: insertedCar, error } = await supabase
+      .from('vehicles')
+      .insert(rest)
+      .select()
+      .maybeSingle();
 
-  revalidatePath('/cars');
+    if (error || !insertedCar) {
+      console.error(error);
+      return null;
+    }
 
-  return true;
-}
+    if (image && image instanceof File) {
+      uploadToBucket({
+        bucketName: 'cars',
+        file: image,
+        upsert: true,
+        onFileUploaded: async (file) => {
+          await supabase
+            .from('vehicles')
+            .update({ image_url: file.path })
+            .eq('id', insertedCar.id);
+        },
+      });
+    }
+
+    revalidatePath('/fleet/cars');
+    return {
+      success: true,
+    };
+  });
+
+export const deleteCar = authActionClient
+  .metadata({
+    actionName: 'deleteCar',
+  })
+  .schema(z.object({ id: z.string() }))
+  .action(async ({ parsedInput: { id } }) => {
+    const supabase = createClient();
+    const { error } = await supabase.from('vehicles').delete().eq('id', id);
+
+    if (error) {
+      console.error(error);
+      return null;
+    }
+
+    revalidatePath('/fleet/cars');
+    return {
+      success: true,
+    };
+  });
