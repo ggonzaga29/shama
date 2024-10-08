@@ -1,7 +1,7 @@
 'use server';
 
 import { actionClient } from 'src/common/lib/safeActions';
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
 import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
 import { FormState } from 'src/components/FormRenderer/types';
@@ -14,7 +14,7 @@ export async function submitClientForm(
   previousState: FormState,
   data: FormData
 ): Promise<FormState> {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const formData = Object.fromEntries(data);
   const parsedFormData = clientFormSchema.safeParse(formData);
   const metadata = await getUserRequestMetadata();
@@ -76,7 +76,7 @@ export async function submitClientForm(
 }
 
 export async function getClients() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const { data, error } = await supabase.from('clients').select();
 
   if (error) {
@@ -88,7 +88,7 @@ export async function getClients() {
 }
 
 export async function getPersonalClients() {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase.from('personal_clients').select();
 
@@ -101,7 +101,7 @@ export async function getPersonalClients() {
 }
 
 export async function getBusinessClients() {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase.from('business_clients').select();
 
@@ -114,7 +114,7 @@ export async function getBusinessClients() {
 }
 
 export async function getPersonalClientsCSV() {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('personal_clients')
@@ -130,7 +130,7 @@ export async function getPersonalClientsCSV() {
 }
 
 export async function getBusinessClientsCSV() {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   const { data, error } = await supabase
     .from('business_clients')
@@ -148,7 +148,7 @@ export async function getBusinessClientsCSV() {
 export const addPersonalClient = actionClient
   .schema(personalClientFormSchema)
   .action(async ({ parsedInput }) => {
-    const supabase = createClient();
+    const supabase = createServerClient();
 
     // Convert Date to ISO string format
     const formattedDateOfBirth =

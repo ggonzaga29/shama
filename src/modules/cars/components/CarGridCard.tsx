@@ -81,7 +81,7 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
           )}
         </div>
 
-        <div className="grid h-full grid-cols-1 p-2">
+        <div className="grid h-full grid-cols-1 p-4">
           <div className="flex h-full flex-col justify-between">
             <div className="flex items-center justify-between">
               <div>
@@ -101,7 +101,7 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-4 border-t px-2 py-4">
+        <div className="flex flex-wrap gap-4 border-t p-4">
           <span className="flex items-center gap-2 text-sm">
             <PassengerPlus size={16} />
             {car.seating_capacity}
@@ -116,7 +116,7 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
           </span>
         </div>
 
-        <div className="flex h-full gap-2 border-t p-2">
+        <div className="flex h-full gap-2 border-t p-4">
           <Button className="flex grow">
             <View className="mr-2 size-4" />
             View

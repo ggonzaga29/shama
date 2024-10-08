@@ -1,5 +1,11 @@
 import { Identification } from '@carbon/icons-react';
-import { notFound } from 'next/navigation';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { queryKeys } from 'src/common/lib/queryKeys';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -9,22 +15,25 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import { getDriverById } from 'src/modules/drivers/actions';
 import EditDriverForm from 'src/modules/drivers/components/EditDriverForm';
+import { getDriverById } from 'src/modules/drivers/data';
 
 export default async function EditDriverPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const { data } = (await getDriverById({ id: params.id })) || {};
+  const supabase = createServerClient();
+  const queryClient = new QueryClient();
+  const queryKey = queryKeys.drivers.byId(params.id);
 
-  if (!data) {
-    return notFound();
-  }
+  await queryClient.prefetchQuery({
+    queryKey,
+    queryFn: () => getDriverById(supabase, params.id),
+  });
 
   return (
-    <ContentLayout title={`Edit Driver ${data.id}`} Icon={<Identification />}>
+    <ContentLayout title={`Edit Driver`} Icon={<Identification />}>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -44,7 +53,9 @@ export default async function EditDriverPage({
       </Breadcrumb>
 
       <div className="border bg-background p-6">
-        <EditDriverForm defaultValues={data} />
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <EditDriverForm id={params.id} />
+        </HydrationBoundary>
       </div>
     </ContentLayout>
   );

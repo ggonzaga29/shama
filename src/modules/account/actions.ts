@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
 import { actionClient } from 'src/common/lib/safeActions';
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { OnUploadResponse, UploadedFile } from 'src/common/types';
 import { FormState } from 'src/components/FormRenderer/types';
 import {
@@ -15,7 +15,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const updateUserDetails = actionClient
   .schema(userDetailsSchema)
   .action(async ({ parsedInput }) => {
-    const supabase = createClient();
+    const supabase = createServerClient();
 
     const {
       data: { user },
@@ -39,7 +39,7 @@ export const updateUserDetails = actionClient
 export const uploadAvatar = async (
   formData: FormData
 ): Promise<OnUploadResponse> => {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const file = formData.get('file') as File;
 
   const { data, error } = await supabase.storage
@@ -72,7 +72,7 @@ export const submitAvatarForm = async (
 ): Promise<FormState> => {
   const formData = Object.fromEntries(data);
   console.log(formData);
-  const supabase = createClient();
+  const supabase = createServerClient();
   const parsedFormData = userAvatarSchema.safeParse(formData);
 
   if (!parsedFormData.success) {

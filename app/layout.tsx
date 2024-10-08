@@ -7,7 +7,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
 import { ThemeProvider } from 'src/context/ThemeProvider';
-import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
+import ReactQueryProvider from 'src/providers/ReactQueryProvider';
 
 const fontSans = FontSans({
   subsets: ['latin'],
@@ -43,35 +43,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReactQueryClientProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <link
-            href="/logoLight.ico"
-            rel="icon"
-            media="(prefers-color-scheme: light)"
-          />
-          <link
-            href="/logoDark.ico"
-            rel="icon"
-            media="(prefers-color-scheme: dark)"
-          />
-        </head>
-        <body
-          className={cn(
-            'bg-background font-sans antialiased',
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" disableTransitionOnChange>
-            <NextUIProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          href="/logoLight.ico"
+          rel="icon"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          href="/logoDark.ico"
+          rel="icon"
+          media="(prefers-color-scheme: dark)"
+        />
+      </head>
+      <body
+        className={cn('bg-background font-sans antialiased', fontSans.variable)}
+      >
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <NextUIProvider>
+            <ReactQueryProvider>
               <NextTopLoader showSpinner={false} />
               {children}
               <Toaster richColors />
-            </NextUIProvider>
-          </ThemeProvider>
-        </body>
-      </html>
-    </ReactQueryClientProvider>
+            </ReactQueryProvider>
+          </NextUIProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

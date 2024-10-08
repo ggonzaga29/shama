@@ -4,13 +4,15 @@
 import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { Infer } from 'next-safe-action/adapters/types';
 import { useAction } from 'next-safe-action/hooks';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import { Driver } from 'src/common/types';
+import { queryKeys } from 'src/common/lib/queryKeys';
+import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { cn } from 'src/common/utils/cvaUtils';
 import { mapInputToFormData } from 'src/common/utils/formUtils';
 import DateField from 'src/components/FIelds/DateField';
@@ -19,6 +21,7 @@ import TextField from 'src/components/FIelds/TextField';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import { Form, FormField, FormItem } from 'src/components/ui/Form';
 import { editDriver } from 'src/modules/drivers/actions';
+import { getDriverById } from 'src/modules/drivers/data';
 import { editDriverSchema } from 'src/modules/drivers/schema';
 
 const transformStringToDate = (date?: string | null) => {
@@ -29,10 +32,16 @@ const transformStringToDate = (date?: string | null) => {
 
 type FieldValues = Infer<typeof editDriverSchema>;
 
-const EditDriverForm = ({ defaultValues }: { defaultValues?: Driver }) => {
+const EditDriverForm = ({ id }: { id: string }) => {
   const action = useAction(editDriver);
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const supabase = createBrowserClient();
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.drivers.byId(id),
+    queryFn: () => getDriverById(supabase, id),
+  });
 
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
     typeof editDriverSchema
@@ -42,17 +51,17 @@ const EditDriverForm = ({ defaultValues }: { defaultValues?: Driver }) => {
     resolver: zodResolver(editDriverSchema),
     errors: hookFormValidationErrors,
     defaultValues: {
-      id: defaultValues?.id ?? undefined,
-      email: defaultValues?.email ?? undefined,
-      birth_date: transformStringToDate(defaultValues?.birth_date) ?? undefined,
-      first_name: defaultValues?.first_name ?? undefined,
-      middle_name: defaultValues?.middle_name ?? undefined,
-      last_name: defaultValues?.last_name ?? undefined,
-      license_number: defaultValues?.license_number ?? undefined,
+      id: data?.id ?? undefined,
+      email: data?.email ?? undefined,
+      birth_date: transformStringToDate(data?.birth_date) ?? undefined,
+      first_name: data?.first_name ?? undefined,
+      middle_name: data?.middle_name ?? undefined,
+      last_name: data?.last_name ?? undefined,
+      license_number: data?.license_number ?? undefined,
       license_expiry_date:
-        transformStringToDate(defaultValues?.license_expiry_date) ?? undefined,
-      employee_id: defaultValues?.employee_id ?? undefined,
-      address: defaultValues?.address ?? undefined,
+        transformStringToDate(data?.license_expiry_date) ?? undefined,
+      employee_id: data?.employee_id ?? undefined,
+      address: data?.address ?? undefined,
     },
   });
 
@@ -78,6 +87,10 @@ const EditDriverForm = ({ defaultValues }: { defaultValues?: Driver }) => {
       }
     });
   });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Form {...form}>

@@ -3,13 +3,13 @@
 import { revalidatePath } from 'next/cache';
 import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
 import { authActionClient } from 'src/common/lib/safeActions';
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { FormState } from 'src/components/FormRenderer/types';
 import { addCarSchema, carFormSchema } from 'src/modules/cars/schema';
 import { z } from 'zod';
 
 export async function getAllCars() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const { data, error } = await supabase.from('vehicles').select('*');
 
   if (error) {
@@ -20,7 +20,7 @@ export async function getAllCars() {
 }
 
 export async function getCarVariantList() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const { data, error } = await supabase.from('vehicle_variants').select(`  
     id, name, metadata_url, url,
     vehicle_variant_metadata(
@@ -39,7 +39,7 @@ export async function getCarVariantList() {
 }
 
 export async function getCarVariantMetadata(variantId: string) {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const { data, error } = await supabase
     .from('vehicle_variant_metadata')
     .select(
@@ -65,7 +65,7 @@ export async function submitCarForm(
 ): Promise<FormState> {
   const formData = Object.fromEntries(data);
   const parsedFormData = carFormSchema.safeParse(formData);
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   if (!parsedFormData.success) {
     const fields: Record<string, string> = {};
@@ -121,7 +121,7 @@ export const addCar = authActionClient
   })
   .schema(addCarSchema)
   .action(async ({ parsedInput }) => {
-    const supabase = createClient();
+    const supabase = createServerClient();
     const { image, ...rest } = parsedInput;
 
     const { data: insertedCar, error } = await supabase
@@ -161,7 +161,7 @@ export const deleteCar = authActionClient
   })
   .schema(z.object({ id: z.string() }))
   .action(async ({ parsedInput: { id } }) => {
-    const supabase = createClient();
+    const supabase = createServerClient();
     const { error } = await supabase.from('vehicles').delete().eq('id', id);
 
     if (error) {

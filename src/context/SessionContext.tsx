@@ -12,7 +12,7 @@
 import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { redirect } from 'next/navigation';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
-import { createClient } from 'src/common/lib/supabase/client';
+import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { Avatar, UserWithProfileAndAvatar } from 'src/common/types';
 
 type SessionContext = {
@@ -33,7 +33,7 @@ export const SessionProvider: FC<SessionProviderProps> = ({
   children,
   initialUser,
 }) => {
-  const supabase = createClient();
+  const supabase = createBrowserClient();
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<UserWithProfileAndAvatar | null>(
     initialUser

@@ -3,9 +3,8 @@
 import { Package } from '@carbon/icons-react';
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { useEffect, useState } from 'react';
-import { createClient } from 'src/common/lib/supabase/client';
+import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { PersonalClient } from 'src/common/types';
-import { openInNewTab } from 'src/common/utils/pathnameUtils';
 import { dateSortingFn } from 'src/common/utils/tableUtils';
 import { Button } from 'src/components/ui/Button';
 import { DataTable } from 'src/components/ui/DataTable/DataTable';
@@ -75,10 +74,9 @@ const Toolbar = () => {
           console.log(csvString);
 
           if (typeof csvString === 'string') {
-            const blob = new Blob([csvString], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-
-            openInNewTab(url);
+            // const blob = new Blob([csvString], { type: 'text/csv' });
+            // const url = URL.createObjectURL(blob);
+            // openInNewTab(url);
           }
         }}
       >
@@ -90,7 +88,7 @@ const Toolbar = () => {
 };
 
 export default function PersonalClientsTable() {
-  const supabase = createClient();
+  const supabase = createBrowserClient();
   const [data, setData] = useState<PersonalClient[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 

@@ -1,4 +1,4 @@
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
 import UserDetailsForm from 'src/modules/account/components/UserDetailsForm';
 
 export default async function UserDetailsFormWrapper() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

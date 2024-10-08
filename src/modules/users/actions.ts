@@ -1,10 +1,8 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import {
-  createAdminClient,
-  createClient,
-} from 'src/common/lib/supabase/server';
+import { createAdminClient } from 'src/common/lib/supabase/adminClient';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { TypedSupabaseClient } from 'src/common/types';
 
 // TODO: Implement Pagination since the listUsers method only returns 100 users
@@ -30,7 +28,7 @@ export async function getUser(uid: string) {
  * Returns the current user with their profile details
  */
 export async function getCurrentUser() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   const {
     data: { user },
     error,
@@ -86,7 +84,7 @@ export async function getCurrentUser() {
 export async function getUserWithProfile(uid: string) {
   try {
     const supabaseAdmin = createAdminClient();
-    const supabase = createClient();
+    const supabase = createServerClient();
 
     const {
       data: { user },

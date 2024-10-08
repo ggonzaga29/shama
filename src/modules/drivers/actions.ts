@@ -1,80 +1,13 @@
 'use server';
 
+import { QueryClient } from '@tanstack/react-query';
 import { revalidatePath } from 'next/cache';
 import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
+import { queryKeys } from 'src/common/lib/queryKeys';
 import { authActionClient } from 'src/common/lib/safeActions';
-import { createClient } from 'src/common/lib/supabase/server';
-import { Driver } from 'src/common/types';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { addDriverSchema, editDriverSchema } from 'src/modules/drivers/schema';
 import { z } from 'zod';
-
-export const getAllDrivers = authActionClient
-  .metadata({
-    actionName: 'getAllDrivers',
-  })
-  .outputSchema(z.array(z.custom<Driver>()))
-  .action(async () => {
-    const supabase = createClient();
-
-    const { data, error } = await supabase.from('drivers').select();
-
-    if (error || !data) {
-      console.log(error);
-      return [];
-    }
-
-    return data;
-  });
-
-export const getDriverList = authActionClient
-  .metadata({
-    actionName: 'getDriverList',
-  })
-  .action(async () => {
-    const supabase = createClient();
-
-    const { data, error } = await supabase
-      .from('drivers')
-      .select('first_name, last_name, id, avatar_url');
-
-    if (error || !data) {
-      console.log(error);
-      return [];
-    }
-
-    return data;
-  });
-
-export const getDriverById = authActionClient
-  .metadata({
-    actionName: 'getDriverById',
-  })
-  .schema(z.object({ id: z.string() }))
-  .action(async ({ parsedInput: { id } }) => {
-    const supabase = createClient();
-
-    const { data, error } = await supabase
-      .from('drivers')
-      .select(
-        `
-          *,
-          driver_files (
-            id,
-            file_name,
-            file_url
-          )
-        `
-      )
-      .eq('id', id)
-      .single();
-
-    if (error || !data) {
-      console.log(error);
-      return null;
-    }
-
-    return data;
-  });
 
 export const editDriver = authActionClient
   .metadata({
@@ -83,7 +16,8 @@ export const editDriver = authActionClient
   })
   .schema(editDriverSchema)
   .action(async ({ parsedInput }) => {
-    const supabase = createClient();
+    const queryClient = new QueryClient();
+    const supabase = createServerClient();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { avatar_file, files, id, ...rest } = parsedInput;
     console.log('File Upload', {
@@ -166,7 +100,10 @@ export const editDriver = authActionClient
       }
     }
 
-    revalidatePath('/fleet/drivers');
+    revalidatePath('/fleet/drivers', 'layout');
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.drivers.byId(id),
+    });
     return {
       success: true,
     };
@@ -182,7 +119,7 @@ export const addDriver = authActionClient
     z.object({ success: z.boolean(), id: z.string().nullable() }).nullable()
   )
   .action(async ({ parsedInput }) => {
-    const supabase = createClient();
+    const supabase = createServerClient();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { avatar_file, files, ...rest } = parsedInput;
     console.log('File Upload', {
@@ -277,7 +214,7 @@ export const deleteDriver = authActionClient
   })
   .schema(z.object({ id: z.string() }))
   .action(async ({ parsedInput: { id } }) => {
-    const supabase = createClient();
+    const supabase = createServerClient();
 
     const { error } = await supabase.from('drivers').delete().eq('id', id);
 

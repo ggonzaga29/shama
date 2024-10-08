@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { LoginSchema, loginSchema } from 'src/modules/auth/schema';
 
 export async function loginAction(data: LoginSchema) {
@@ -12,7 +12,7 @@ export async function loginAction(data: LoginSchema) {
     throw new Error('Invalid data');
   }
 
-  const supabase = createClient();
+  const supabase = createServerClient();
   const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
@@ -25,7 +25,7 @@ export async function loginAction(data: LoginSchema) {
 }
 
 export async function signup(formData: FormData) {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   const data = {
     email: formData.get('email') as string,
@@ -43,12 +43,12 @@ export async function signup(formData: FormData) {
 }
 
 export async function signout() {
-  const supabase = createClient();
+  const supabase = createServerClient();
   await supabase.auth.signOut();
 }
 
 export async function checkAuth() {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   const {
     data: { user },
