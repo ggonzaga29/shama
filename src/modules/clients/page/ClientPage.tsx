@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
+  BreadcrumbBackButtton,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -23,6 +24,7 @@ export default async function AddClientPage() {
     >
       <Breadcrumb>
         <BreadcrumbList>
+          <BreadcrumbBackButtton />
           <BreadcrumbItem>
             <BreadcrumbLink href={'/'}>Home</BreadcrumbLink>
           </BreadcrumbItem>

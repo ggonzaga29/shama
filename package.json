@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@carbon/icons-react": "^11.48.0",
+    "@carbon/pictograms-react": "^11.67.1",
     "@hookform/resolvers": "^3.9.0",
     "@next-safe-action/adapter-react-hook-form": "^1.0.13",
     "@nextui-org/button": "^2.0.38",
@@ -113,6 +114,7 @@
     "eslint-plugin-tailwindcss": "^3.17.0",
     "eslint-plugin-unused-imports": "^3.2.0",
     "husky": "^9.0.11",
+    "pictograms-react": "link:@types/@carbon/pictograms-react",
     "postcss": "^8",
     "prettier": "^3.3.0",
     "prettier-plugin-tailwindcss": "^0.6.1",

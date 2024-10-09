@@ -38,7 +38,7 @@ export const DriverDetail = ({ id }: { id: string }) => {
   });
 
   return (
-    <div className="relative flex max-h-[82vh] w-full flex-col gap-2">
+    <div className="relative flex max-h-[80vh] w-full flex-col gap-2">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>

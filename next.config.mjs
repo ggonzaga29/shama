@@ -24,6 +24,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    optimizePackageImports: ['@carbon/icons-react', '@carbon/pictograms-react'],
+  },
 };
 
 export default nextConfig;

@@ -9,6 +9,7 @@ import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
+  BreadcrumbBackButtton,
   BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -33,6 +34,7 @@ export default async function CarsPage() {
     <ContentLayout title="Vehicle Inventory" Icon={<Car className="size-6" />}>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
+          <BreadcrumbBackButtton />
           <BreadcrumbItem>
             <BreadcrumbLink href={'/'}>Home</BreadcrumbLink>
           </BreadcrumbItem>

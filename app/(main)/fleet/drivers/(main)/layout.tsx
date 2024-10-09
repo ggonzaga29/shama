@@ -2,6 +2,7 @@ import { Identification } from '@carbon/icons-react';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
+  BreadcrumbBackButtton,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -20,6 +21,7 @@ export default function DriversLayout({
     <ContentLayout title="Drivers" Icon={<Identification />}>
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
+          <BreadcrumbBackButtton />
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
@@ -32,7 +34,7 @@ export default function DriversLayout({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex size-full max-h-[82vh] border bg-background">
+      <div className="flex size-full max-h-[80vh] border bg-background">
         {list}
         {detail}
       </div>

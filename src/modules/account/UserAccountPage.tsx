@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
+  BreadcrumbBackButtton,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -26,6 +27,7 @@ export default async function AccountPage() {
     <ContentLayout title="Account" Icon={<User className="size-6" />}>
       <Breadcrumb>
         <BreadcrumbList>
+          <BreadcrumbBackButtton />
           <BreadcrumbItem>
             <BreadcrumbLink href={'/'}>Home</BreadcrumbLink>
           </BreadcrumbItem>
