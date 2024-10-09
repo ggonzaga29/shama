@@ -83,7 +83,7 @@ const EditDriverForm = ({ id }: { id: string }) => {
           keepDirtyValues: true,
         });
       } catch (e) {
-        console.error('Something went wrong with submitting the form.');
+        console.error('Something went wrong with submitting the form. ', e);
       }
     });
   });

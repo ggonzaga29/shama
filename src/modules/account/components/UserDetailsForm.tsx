@@ -78,7 +78,7 @@ const UserDetailsForm = ({
           keepDirtyValues: true,
         });
       } catch (e) {
-        console.error('Something went wrong with submitting the form.');
+        console.error('Something went wrong with submitting the form: ', e);
       }
     });
   });

@@ -146,6 +146,7 @@ export const submitAvatarForm = async (
       },
     });
   } catch (error) {
+    console.error('Error Submitting avatar: ', error);
     return {
       message: 'Failed to upload avatar',
     };

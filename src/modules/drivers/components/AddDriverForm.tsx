@@ -55,7 +55,7 @@ const AddDriverForm = () => {
           router.push(`/fleet/drivers/${result.data.id}`);
         }
       } catch (e) {
-        console.error('Something went wrong with submitting the form.');
+        console.error('Something went wrong with submitting the form. ', e);
       }
     });
   });

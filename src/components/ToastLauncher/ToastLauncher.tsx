@@ -15,7 +15,7 @@ const ToastLauncher = () => {
     return () => {
       toast.dismiss();
     };
-  }, []);
+  }, [message]);
 
   return null;
 };

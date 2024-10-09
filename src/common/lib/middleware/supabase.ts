@@ -13,6 +13,7 @@ export const updateSession: MiddlewareFactory = () => {
 
       return response;
     } catch (e) {
+      console.error('Error updating session:', e);
       return NextResponse.next({
         request: {
           headers: request.headers,

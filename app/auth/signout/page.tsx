@@ -8,7 +8,7 @@ export default function SignoutPage() {
     signout();
     redirectPath = `/auth`;
   } catch (error) {
-    /* empty */
+    console.error(error);
   } finally {
     if (redirectPath) redirect(redirectPath);
   }

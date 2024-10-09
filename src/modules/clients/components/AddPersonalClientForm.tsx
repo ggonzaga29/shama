@@ -71,7 +71,7 @@ const AddClientForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
           keepDirtyValues: true,
         });
       } catch (e) {
-        console.error('Something went wrong with submitting the form.');
+        console.error('Something went wrong with submitting the form. ', e);
       }
     });
   });
