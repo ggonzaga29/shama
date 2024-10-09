@@ -1,41 +1,18 @@
-import { Car } from '@carbon/icons-react';
-import ContentLayout from 'src/components/ContentLayout';
-import {
-  Breadcrumb,
-  BreadcrumbEllipsis,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from 'src/components/ui/Breadcrumb';
+'use client';
 
-export default async function CarDetailPage({
-  params,
-}: {
-  params: {
-    slug: string;
-  };
-}) {
-  return (
-    <ContentLayout title="Vehicle Inventory" Icon={<Car className="size-6" />}>
-      <Breadcrumb className="mb-4">
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href={'/'}>Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbEllipsis />
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Cars</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+import { useQuery } from '@tanstack/react-query';
+import { queryKeys } from 'src/common/lib/queryKeys';
+import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
+import { getCarById } from 'src/modules/cars/data';
 
-      {params.slug}
-    </ContentLayout>
-  );
-}
+const CarDetailPage = ({ id }: { id: string }) => {
+  const supabase = createBrowserClient();
+  const { data } = useQuery({
+    queryKey: queryKeys.cars.byId(id),
+    queryFn: () => getCarById(supabase, id),
+  });
+
+  return <div>{data?.name}</div>;
+};
+
+export default CarDetailPage;

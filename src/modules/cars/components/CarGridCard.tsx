@@ -19,6 +19,7 @@ import {
 } from '@carbon/icons-react';
 import { Armchair, CirclePlus, Cog, Droplet, Fuel, Info } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { Car, Table } from 'src/common/types';
@@ -117,10 +118,12 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
         </div>
 
         <div className="flex h-full gap-2 border-t p-4">
-          <Button className="flex grow">
-            <View className="mr-2 size-4" />
-            View
-          </Button>
+          <Link href={`/fleet/cars/${car.id}`} className="flex grow">
+            <Button className="w-full">
+              <View className="mr-2 size-4" />
+              View
+            </Button>
+          </Link>
           <div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

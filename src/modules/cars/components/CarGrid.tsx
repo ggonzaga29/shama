@@ -1,12 +1,22 @@
+'use client';
+
 import { Add } from '@carbon/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
+import { queryKeys } from 'src/common/lib/queryKeys';
+import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
-import { getAllCars } from 'src/modules/cars/actions';
 import CarGridCard from 'src/modules/cars/components/CarGridCard';
+import CarGridSkeleton from 'src/modules/cars/components/CarGridSkeleton';
+import { getAllCars } from 'src/modules/cars/data';
 
-export default async function CarGrid() {
-  const cars = await getAllCars();
+export default function CarGrid() {
+  const supabase = createBrowserClient();
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.cars.all,
+    queryFn: () => getAllCars(supabase),
+  });
 
   return (
     <div>
@@ -22,9 +32,13 @@ export default async function CarGrid() {
           </Button>
         </Link>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-        {cars?.map((car) => <CarGridCard key={car.id} car={car} />)}
-      </div>
+      {isLoading ? (
+        <CarGridSkeleton />
+      ) : (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          {data?.map((car) => <CarGridCard key={car.id} car={car} />)}
+        </div>
+      )}
     </div>
   );
 }

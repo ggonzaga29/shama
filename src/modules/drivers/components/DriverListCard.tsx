@@ -9,10 +9,11 @@ import { cn } from 'src/common/utils/cvaUtils';
 import { Avatar, AvatarFallback } from 'src/components/ui/Avatar';
 
 const DriverListCard = ({
-  driver: { id, first_name, last_name, avatar_url },
+  driver,
 }: {
   driver: Pick<Driver, 'id' | 'first_name' | 'last_name' | 'avatar_url'>;
 }) => {
+  const { id, first_name, last_name, avatar_url } = driver;
   const pathname = usePathname();
   const isActive = useMemo(() => pathname.includes(id), [pathname, id]);
   const initials = useMemo(

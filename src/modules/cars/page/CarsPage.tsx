@@ -1,5 +1,11 @@
 import { Car } from '@carbon/icons-react';
-import { Suspense } from 'react';
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query';
+import { queryKeys } from 'src/common/lib/queryKeys';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -11,9 +17,18 @@ import {
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
 import CarGrid from 'src/modules/cars/components/CarGrid';
-import CarGridSkeleton from 'src/modules/cars/components/CarGridSkeleton';
+import { getAllCars } from 'src/modules/cars/data';
 
 export default async function CarsPage() {
+  const supabase = createServerClient();
+  const queryClient = new QueryClient();
+  const queryKey = queryKeys.cars.all;
+
+  await queryClient.prefetchQuery({
+    queryKey,
+    queryFn: () => getAllCars(supabase),
+  });
+
   return (
     <ContentLayout title="Vehicle Inventory" Icon={<Car className="size-6" />}>
       <Breadcrumb className="mb-4">
@@ -32,9 +47,9 @@ export default async function CarsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Suspense fallback={<CarGridSkeleton />}>
+      <HydrationBoundary state={dehydrate(queryClient)}>
         <CarGrid />
-      </Suspense>
+      </HydrationBoundary>
     </ContentLayout>
   );
 }
