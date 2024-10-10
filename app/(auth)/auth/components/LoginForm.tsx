@@ -1,73 +1,70 @@
 'use client';
+import { Login } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginAction } from 'app/auth/actions';
 import { type LoginSchema, loginSchema } from 'app/auth/schema';
-import { Info } from 'lucide-react';
-import { useState } from 'react';
+import { useTransition } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { TextField } from 'src/components/Fields';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
-import { Input } from 'src/components/ui/Input';
-import { Label } from 'src/components/ui/Label';
+import { Form } from 'src/components/ui/Form';
 
 const LoginForm = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginSchema>({
+  const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
-  const [loading, setLoading] = useState<boolean>(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { isDirty },
+  } = form;
+  const [isPending, startTransition] = useTransition();
 
   const onSubmit: SubmitHandler<LoginSchema> = async (data) => {
-    try {
-      setLoading(true);
-      await loginAction(data);
-    } catch (error: any) {
-      toast.error(error);
-    }
-
-    setLoading(false);
+    startTransition(async () => {
+      try {
+        await loginAction(data);
+      } catch (error: any) {
+        if ('message' in error) {
+          toast.error(error.message);
+        } else {
+          toast.error('Error: the server responded with an unknown error');
+        }
+      }
+    });
   };
 
-  const inputProps = { register, disabled: loading };
-
   return (
-    <form className="grid gap-2" onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input
-          placeholder="example@example.com"
-          {...register('email', inputProps)}
+    <Form {...form}>
+      <form className="grid gap-2" onSubmit={handleSubmit(onSubmit)}>
+        <TextField
+          label="Email"
+          placeholder="me@shamacebu.com"
+          control={control}
+          name="email"
           autoFocus
         />
-        <span className="flex items-center gap-2 text-xs">
-          {errors.email && (
-            <>
-              <Info className="size-3 text-destructive" />
-              <span className="text-destructive">{errors.email.message}</span>
-            </>
-          )}
-        </span>
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="password">Password</Label>
-        <Input
+
+        <TextField
+          label="Password"
           type="password"
           placeholder="•••••••••"
-          {...register('password', inputProps)}
+          control={control}
+          name="password"
         />
-      </div>
 
-      <EnhancedButton
-        className="mt-2 w-full"
-        variant="gooeyRight"
-        loading={loading}
-      >
-        Sign in
-      </EnhancedButton>
-    </form>
+        <EnhancedButton
+          className="mt-2 w-full"
+          variant="expandIcon"
+          loading={isPending}
+          disabled={isPending || !isDirty}
+          Icon={Login}
+        >
+          Sign in
+        </EnhancedButton>
+      </form>
+    </Form>
   );
 };
 

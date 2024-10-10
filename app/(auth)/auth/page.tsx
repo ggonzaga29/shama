@@ -22,7 +22,7 @@ export default function AuthPage() {
           <Logo className="scale-[0.75]" />
         </div>
         <Card className="w-full border-none shadow-none">
-          <CardHeader>
+          <CardHeader className="pb-4">
             <CardTitle className="text-2xl text-heading-foreground">
               Login to Shama
             </CardTitle>
