@@ -1,4 +1,4 @@
-import FileDropzoneField from 'src/components/FIelds/FileDropzoneField';
+import FileDropzoneField from 'src/components/Fields/FileDropzoneField';
 import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';
 
 const BookingFiles = () => {

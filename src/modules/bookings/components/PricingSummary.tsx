@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import CheckboxField from 'src/components/FIelds/CheckboxField';
+import CheckboxField from 'src/components/Fields/CheckboxField';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
 import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';

@@ -10,7 +10,7 @@ import { queryKeys } from 'src/common/lib/queryKeys';
 import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { Car } from 'src/common/types';
 import { cn } from 'src/common/utils/cvaUtils';
-import TextField from 'src/components/FIelds/TextField';
+import TextField from 'src/components/Fields/TextField';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
 import {

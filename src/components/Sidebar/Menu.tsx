@@ -1,6 +1,7 @@
 'use client';
 
 import { Logout, Rule } from '@carbon/icons-react';
+import { signout } from 'app/auth/actions';
 import { Ellipsis } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,7 +18,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from 'src/components/ui/Tooltip';
-import { signout } from 'src/modules/auth/actions';
 
 interface MenuProps {
   isOpen: boolean | undefined;

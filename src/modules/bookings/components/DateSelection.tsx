@@ -1,7 +1,7 @@
 'use client';
 
-import DateTimeField from 'src/components/FIelds/DateTimeField';
-import TextField from 'src/components/FIelds/TextField';
+import DateTimeField from 'src/components/Fields/DateTimeField';
+import TextField from 'src/components/Fields/TextField';
 import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';
 
 const DateSelection = () => {
