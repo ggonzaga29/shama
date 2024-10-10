@@ -37,8 +37,8 @@ const BookingForm = () => {
                 <br />
                 - [ ] Only give the option to select a driver if the rental type
                 is 'with-driver'
-                <br />- [ ] When 'self-drive' is selected, the driver should be
-                the client itself (no need to select a driver)
+                <br />- [ ] When 'self-drive' is selected, add client to driver
+                select options
                 <br />
                 <p className="max-w-75ch">
                   - [ ] Calculate the total price of the booking based on the
