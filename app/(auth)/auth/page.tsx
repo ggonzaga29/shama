@@ -1,4 +1,5 @@
 /* eslint-disable tailwindcss/enforces-negative-arbitrary-values */
+import { LoginForm } from 'app/auth/components';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -11,7 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from 'src/components/ui/Card';
-import LoginForm from 'src/modules/auth/components/LoginForm';
 
 export default function AuthPage() {
   return (
