@@ -26,7 +26,7 @@ type TextFieldProps<TFieldValues extends FieldValues> = {
   className?: string;
   control: Control<TFieldValues>;
   placeholder?: string;
-  type?: 'text' | 'password' | 'email' | 'number';
+  type?: 'text' | 'password' | 'email' | 'number' | 'hidden';
   render?: (props: {
     field: ControllerRenderProps<TFieldValues, FieldPath<TFieldValues>>;
     fieldState: ControllerFieldState;
@@ -126,7 +126,6 @@ const TextField = <TFieldValues extends FieldValues>({
                 {...field}
                 id={name}
                 autoFocus={autoFocus}
-                value={field.value ?? ''} // Ensure controlled input
                 placeholder={placeholder}
               />
             </FormControl>

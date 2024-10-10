@@ -4,7 +4,7 @@ import { Control, FieldPath, FieldValues } from 'react-hook-form';
 import { cn } from 'src/common/utils/cvaUtils';
 import { FileUploaderProps } from 'src/components/FormRenderer/components/FileUploader/FileUploader';
 import { Button } from 'src/components/ui/Button';
-import { Calendar, CalendarProps } from 'src/components/ui/Calendar';
+import { Calendar, CalendarProps } from 'src/components/ui/CalendarV2';
 import {
   FormControl,
   FormDescription,
@@ -64,16 +64,19 @@ const DateField = <TFieldValues extends FieldValues>({
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
-                  disabled={(date) =>
-                    date > new Date() || date < new Date('1900-01-01')
-                  }
-                  initialFocus
-                  {...calendarProps}
                   mode="single"
+                  captionLayout="dropdown"
+                  initialFocus
                   selected={field.value}
-                  onSelect={(date) => {
-                    field.onChange(date);
+                  onSelect={(selectedDate) => {
+                    field.onChange(selectedDate);
                   }}
+                  toYear={new Date().getFullYear()}
+                  disabled={(date) =>
+                    Number(date) < Date.now() - 1000 * 60 * 60 * 24 ||
+                    Number(date) > Date.now() + 1000 * 60 * 60 * 24 * 30
+                  }
+                  {...calendarProps}
                 />
               </PopoverContent>
             </Popover>

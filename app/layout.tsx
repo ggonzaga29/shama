@@ -7,6 +7,7 @@ import NextTopLoader from 'nextjs-toploader';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
 import { ThemeProvider } from 'src/context/ThemeProvider';
+import ConfirmDialogProvider from 'src/providers/ConfirmDialogProvider';
 import ReactQueryProvider from 'src/providers/ReactQueryProvider';
 
 const fontSans = FontSans({
@@ -62,9 +63,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class" disableTransitionOnChange>
           <NextUIProvider>
             <ReactQueryProvider>
-              <NextTopLoader showSpinner={false} />
-              {children}
-              <Toaster richColors />
+              <ConfirmDialogProvider>
+                <NextTopLoader showSpinner={false} />
+                {children}
+                <Toaster richColors />
+              </ConfirmDialogProvider>
             </ReactQueryProvider>
           </NextUIProvider>
         </ThemeProvider>

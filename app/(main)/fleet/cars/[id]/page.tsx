@@ -37,7 +37,10 @@ export default async function Page({
   });
 
   return (
-    <ContentLayout title="Add a Driver" Icon={<InventoryManagement />}>
+    <ContentLayout
+      title={`Edit Car ${params.id}`}
+      Icon={<InventoryManagement />}
+    >
       <Breadcrumb className="mb-4">
         <BreadcrumbList>
           <BreadcrumbBackButtton />
@@ -57,7 +60,7 @@ export default async function Page({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="border bg-background p-6">
+      <div className="border bg-background">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <CarDetailPage id={params.id} />
         </HydrationBoundary>

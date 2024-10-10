@@ -13,7 +13,7 @@ import {
   FormMessage,
 } from 'src/components/ui/Form';
 
-type FileInputFieldProps<T extends FieldValues> = {
+type FileDropzoneFieldProps<T extends FieldValues> = {
   name: Path<T>;
   fileInputProps?: FileUploaderProps;
   autoFocus?: boolean;
@@ -24,7 +24,7 @@ type FileInputFieldProps<T extends FieldValues> = {
 };
 
 // TODO: Add support for default values
-const FileInputField = <T extends FieldValues>({
+const FileDropzoneField = <T extends FieldValues>({
   name,
   label,
   control,
@@ -32,7 +32,7 @@ const FileInputField = <T extends FieldValues>({
   fileInputProps,
   description,
   className,
-}: FileInputFieldProps<T>) => {
+}: FileDropzoneFieldProps<T>) => {
   return (
     <FormField
       name={name}
@@ -58,4 +58,4 @@ const FileInputField = <T extends FieldValues>({
   );
 };
 
-export default FileInputField;
+export default FileDropzoneField;

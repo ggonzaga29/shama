@@ -1,8 +1,12 @@
-import Link from 'next/link';
+'use client';
+
+import { useRouter } from 'next/navigation';
 import Logo from 'src/assets/LogoWithText';
 import { Button } from 'src/components/ui/Button';
 
-export default async function NotFound() {
+export default function NotFound() {
+  const router = useRouter();
+
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-background p-4">
       <div className="w-full max-w-md space-y-6 text-center">
@@ -18,11 +22,13 @@ export default async function NotFound() {
             moved.
           </p>
         </div>
-        <Link href="/">
-          <Button variant="outline" className="mt-4">
-            Go back
-          </Button>
-        </Link>
+        <Button
+          onClick={() => router.back()}
+          variant="outline"
+          className="mt-4"
+        >
+          Go back
+        </Button>
       </div>
     </div>
   );

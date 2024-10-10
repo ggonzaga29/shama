@@ -1,7 +1,21 @@
 import { TypedSupabaseClient } from 'src/common/types';
 
-export async function getAllCars(supabase: TypedSupabaseClient) {
-  const { data, error } = await supabase.from('vehicles').select('*');
+export async function getAllCars(
+  supabase: TypedSupabaseClient,
+  limit?: number,
+  searchField?: string,
+  searchValue?: string
+) {
+  let query = supabase
+    .from('vehicles')
+    .select('*')
+    .limit(limit || 100);
+
+  if (searchField && searchValue) {
+    query = query.ilike(searchField, `%${searchValue}%`);
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     throw new Error(error.message);

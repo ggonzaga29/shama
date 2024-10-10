@@ -40,7 +40,7 @@ export default function AuthPage() {
       <div className="relative flex size-full basis-full items-center justify-center md:basis-1/2">
         <ModeToggle className="absolute right-4 top-4" />
 
-        <div className="w-full max-w-sm">
+        <div className="w-full max-w-md md:max-w-sm">
           <div className="flex w-full items-center justify-center">
             <Logo className="scale-[0.75]" />
           </div>

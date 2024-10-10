@@ -11,6 +11,29 @@ export async function getAllDrivers(supabase: TypedSupabaseClient) {
   return data;
 }
 
+export async function getDriverBySearch(
+  supabase: TypedSupabaseClient,
+  columns: string[],
+  search: string,
+  limit?: number
+) {
+  const orQuery = columns
+    .map((column) => `${column}.ilike.%${search}%`)
+    .join(',');
+  const { data, error } = await supabase
+    .from('drivers')
+    .select('*')
+    .or(orQuery)
+    .limit(limit || 10);
+
+  if (error || !data) {
+    console.log(error);
+    return [];
+  }
+
+  return data;
+}
+
 export async function getDriverById(supabase: TypedSupabaseClient, id: string) {
   const { data, error } = await supabase
     .from('drivers')
