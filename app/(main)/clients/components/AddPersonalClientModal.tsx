@@ -1,6 +1,7 @@
 'use client';
 
 import { AddAlt } from '@carbon/icons-react';
+import AddPersonalClientForm from 'app/clients/components/AddPersonalClientForm';
 import { useState } from 'react';
 import { Button } from 'src/components/ui/Button';
 import {
@@ -10,7 +11,6 @@ import {
   DialogTrigger,
 } from 'src/components/ui/Dialog';
 import { ScrollArea } from 'src/components/ui/Scrollarea';
-import AddPersonalClientForm from 'src/modules/clients/components/AddPersonalClientForm';
 
 const AddClientModal = () => {
   const [open, setOpen] = useState(false);

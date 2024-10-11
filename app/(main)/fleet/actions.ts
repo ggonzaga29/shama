@@ -1,11 +1,11 @@
 'use server';
 
+import { addCarSchema, carFormSchema } from 'app/fleet/schema';
 import { revalidatePath } from 'next/cache';
 import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
 import { authActionClient } from 'src/common/lib/safeActions';
 import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { FormState } from 'src/components/FormRenderer/types';
-import { addCarSchema, carFormSchema } from 'src/modules/cars/schema';
 import { z } from 'zod';
 
 export async function getAllCars() {

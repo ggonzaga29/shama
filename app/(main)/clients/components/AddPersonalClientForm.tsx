@@ -4,6 +4,8 @@
 import { Calendar as CalendarIcon, Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
+import { addPersonalClient } from 'app/clients/actions';
+import { personalClientFormSchema } from 'app/clients/schema';
 import { format } from 'date-fns';
 import { Infer } from 'next-safe-action/adapters/types';
 import { useAction } from 'next-safe-action/hooks';
@@ -36,8 +38,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/Select';
-import { addPersonalClient } from 'src/modules/clients/actions';
-import { personalClientFormSchema } from 'src/modules/clients/schema';
 
 const AddClientForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
   const action = useAction(addPersonalClient);

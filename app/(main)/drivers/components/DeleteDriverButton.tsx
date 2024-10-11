@@ -1,10 +1,10 @@
 'use client';
 
 import { TrashCan } from '@carbon/icons-react';
+import { deleteDriver } from 'app/drivers/actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Button } from 'src/components/ui/Button';
-import { deleteDriver } from 'app/drivers/actions';
 
 const DeleteDriverButton = ({ id }: { id: string }) => {
   const router = useRouter();

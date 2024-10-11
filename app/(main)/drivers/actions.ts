@@ -1,12 +1,12 @@
 'use server';
 
 import { QueryClient } from '@tanstack/react-query';
+import { addDriverSchema, editDriverSchema } from 'app/drivers/schema';
 import { revalidatePath } from 'next/cache';
 import { uploadToBucket } from 'src/common/lib/actions/uploadToBucket';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { authActionClient } from 'src/common/lib/safeActions';
 import { createServerClient } from 'src/common/lib/supabase/serverClient';
-import { addDriverSchema, editDriverSchema } from 'app/drivers/schema';
 import { z } from 'zod';
 
 export const editDriver = authActionClient

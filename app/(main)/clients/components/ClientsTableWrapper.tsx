@@ -9,11 +9,11 @@ import {
 } from 'src/components/ui/Tabs';
 
 const PersonalClientsTable = dynamic(
-  () => import('src/modules/clients/components/PersonalClientsTable')
+  () => import('app/clients/components/PersonalClientsTable')
 );
 
 const BusinessClientsTable = dynamic(
-  () => import('src/modules/clients/components/BusinessClientsTable')
+  () => import('app/clients/components/BusinessClientsTable')
 );
 
 const ClientsTableWrapper = () => {

@@ -1,3 +1,5 @@
+'use client';
+
 import { useId } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 import { FileUploaderProps } from 'src/components/FormRenderer/components/FileUploader/FileUploader';

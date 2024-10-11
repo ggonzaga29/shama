@@ -2,6 +2,8 @@
 
 import { Package } from '@carbon/icons-react';
 import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { getPersonalClients, getPersonalClientsCSV } from 'app/clients/actions';
+import AddClientModal from 'app/clients/components/AddPersonalClientModal';
 import { useEffect, useState } from 'react';
 import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { PersonalClient } from 'src/common/types';
@@ -10,11 +12,6 @@ import { Button } from 'src/components/ui/Button';
 import { DataTable } from 'src/components/ui/DataTable/DataTable';
 import { RowSelectionColumn } from 'src/components/ui/DataTable/RowSelectionColumn';
 import SortingColumn from 'src/components/ui/DataTable/SortingColumn';
-import {
-  getPersonalClients,
-  getPersonalClientsCSV,
-} from 'src/modules/clients/actions';
-import AddClientModal from 'src/modules/clients/components/AddPersonalClientModal';
 
 const columnHelper = createColumnHelper<PersonalClient>();
 

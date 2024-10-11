@@ -1,14 +1,11 @@
 'use server';
 
+import { clientFormSchema, personalClientFormSchema } from 'app/clients/schema';
 import { actionClient } from 'src/common/lib/safeActions';
 import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { mapHookFormErrorsToZodIssues } from 'src/common/utils/formUtils';
 import { getUserRequestMetadata } from 'src/common/utils/serverActionUtils';
 import { FormState } from 'src/components/FormRenderer/types';
-import {
-  clientFormSchema,
-  personalClientFormSchema,
-} from 'src/modules/clients/schema';
 
 export async function submitClientForm(
   previousState: FormState,

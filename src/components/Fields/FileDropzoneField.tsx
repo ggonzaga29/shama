@@ -1,3 +1,5 @@
+'use client';
+
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { cn } from 'src/common/utils/cvaUtils';
 import {

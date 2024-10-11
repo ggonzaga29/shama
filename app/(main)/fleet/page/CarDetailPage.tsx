@@ -1,13 +1,13 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { getCarById } from 'app/fleet/data';
 import Image from 'next/image';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
-import { getCarById } from 'app/fleet/data';
 
 const CarDetail = ({
   className,

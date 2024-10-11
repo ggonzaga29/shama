@@ -13,7 +13,7 @@ import {
 } from 'src/components/ui/Breadcrumb';
 
 const ClientsTableWrapper = dynamic(
-  () => import('src/modules/clients/components/ClientsTableWrapper')
+  () => import('app/clients/components/ClientsTableWrapper')
 );
 
 export default async function AddClientPage() {
