@@ -1,5 +1,5 @@
 import RadioGroupField from 'src/components/Fields/RadioGroupField';
-import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 
 const radioOptions = [
   {

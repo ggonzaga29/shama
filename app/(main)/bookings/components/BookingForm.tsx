@@ -1,14 +1,14 @@
 /* eslint-disable react/no-unescaped-entities */
 'use client';
 
+import BookingFiles from 'app/bookings/components/BookingFiles';
+import ClientDetailsForm from 'app/bookings/components/ClientDetailsForm';
+import DateSelection from 'app/bookings/components/DateSelection';
+import PricingSummary from 'app/bookings/components/PricingSummary';
+import SelectVehicle from 'app/bookings/components/SelectVehicle';
+import VehicleList from 'app/bookings/components/VehicleList';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 import { Form } from 'src/components/ui/Form';
-import BookingFiles from 'src/modules/bookings/components/BookingFiles';
-import ClientDetailsForm from 'src/modules/bookings/components/ClientDetailsForm';
-import DateSelection from 'src/modules/bookings/components/DateSelection';
-import PricingSummary from 'src/modules/bookings/components/PricingSummary';
-import SelectVehicle from 'src/modules/bookings/components/SelectVehicle';
-import VehicleList from 'src/modules/bookings/components/VehicleList';
-import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';
 
 const BookingForm = () => {
   const { form, onSubmit } = useBookingForm();

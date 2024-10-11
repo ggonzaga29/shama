@@ -1,4 +1,6 @@
 import { DocumentMultiple_02 } from '@carbon/icons-react';
+import BookingForm from 'app/bookings/components/BookingForm';
+import { BookingFormProvider } from 'app/bookings/context/BookingFormContext';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -9,8 +11,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import BookingForm from 'src/modules/bookings/components/BookingForm';
-import { BookingFormProvider } from 'src/modules/bookings/context/BookingFormContext';
 
 export default async function AddBookingPage() {
   return (

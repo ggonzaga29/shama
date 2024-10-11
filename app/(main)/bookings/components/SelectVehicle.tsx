@@ -20,8 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/Select';
-import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';
-import { getAllCars } from 'src/modules/cars/data';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
+import { getAllCars } from 'app/fleet/data';
 
 export default function SelectVehicle() {
   const supabase = createBrowserClient();

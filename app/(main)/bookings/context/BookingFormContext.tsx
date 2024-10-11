@@ -1,6 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { bookingFormSchema } from 'app/bookings/schema';
 import { Infer } from 'next-safe-action/adapters/types';
 import React, {
   createContext,
@@ -13,7 +14,6 @@ import React, {
 import { useForm, UseFormReturn } from 'react-hook-form';
 import { Car, Driver } from 'src/common/types';
 import { mapInputToFormData } from 'src/common/utils/formUtils';
-import { bookingFormSchema } from 'src/modules/bookings/schema';
 
 type State = {
   selectedCars: Car[];

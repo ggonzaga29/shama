@@ -16,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/Select';
-import { useBookingForm } from 'src/modules/bookings/context/BookingFormContext';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 import { getDriverBySearch } from 'app/drivers/data';
 
 const SelectDriver = ({ car }: { car: Car }) => {
