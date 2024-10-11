@@ -15,6 +15,8 @@ import {
   TrashCan,
 } from '@carbon/icons-react';
 import { useQuery } from '@tanstack/react-query';
+import DeleteDriverButton from 'app/drivers/components/DeleteDriverButton';
+import { getDriverById } from 'app/drivers/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import { queryKeys } from 'src/common/lib/queryKeys';
@@ -27,8 +29,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from 'src/components/ui/Tooltip';
-import DeleteDriverButton from 'src/modules/drivers/components/DeleteDriverButton';
-import { getDriverById } from 'src/modules/drivers/data';
 
 export const DriverDetail = ({ id }: { id: string }) => {
   const supabase = createBrowserClient();

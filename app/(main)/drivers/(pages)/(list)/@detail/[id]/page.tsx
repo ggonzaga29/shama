@@ -3,10 +3,10 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { DriverDetail } from 'app/drivers/components/DriverDetail';
+import { getDriverById } from 'app/drivers/data';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { createServerClient } from 'src/common/lib/supabase/serverClient';
-import { DriverDetail } from 'src/modules/drivers/components/DriverDetail';
-import { getDriverById } from 'src/modules/drivers/data';
 
 export default async function DriverDetailPage({
   params,

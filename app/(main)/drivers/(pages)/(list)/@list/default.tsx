@@ -3,14 +3,12 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import { getAllDrivers } from 'app/drivers/data';
 import dynamic from 'next/dynamic';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { createServerClient } from 'src/common/lib/supabase/serverClient';
-import { getAllDrivers } from 'src/modules/drivers/data';
 
-const DriverList = dynamic(
-  () => import('src/modules/drivers/components/DriverList')
-);
+const DriverList = dynamic(() => import('app/drivers/components/DriverList'));
 
 export default async function DriverListPage() {
   const supabase = createServerClient();

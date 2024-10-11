@@ -1,12 +1,12 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import DriverListCard from 'app/drivers/components/DriverListCard';
+import { getAllDrivers } from 'app/drivers/data';
 import { useEffect } from 'react';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { Input } from 'src/components/ui/Input';
-import DriverListCard from 'app/drivers/components/DriverListCard';
-import { getAllDrivers } from 'app/drivers/data';
 
 const DriverList = () => {
   const supabase = createBrowserClient();

@@ -4,36 +4,65 @@
 import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
+import { useQuery } from '@tanstack/react-query';
+import { editDriver } from 'app/drivers/actions';
+import { getDriverById } from 'app/drivers/data';
+import { editDriverSchema } from 'app/drivers/schema';
 import { useRouter } from 'next/navigation';
 import { Infer } from 'next-safe-action/adapters/types';
 import { useAction } from 'next-safe-action/hooks';
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import { queryKeys } from 'src/common/lib/queryKeys';
+import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { cn } from 'src/common/utils/cvaUtils';
 import { mapInputToFormData } from 'src/common/utils/formUtils';
 import DateField from 'src/components/Fields/DateField';
 import FileDropzoneField from 'src/components/Fields/FileDropzoneField';
 import TextField from 'src/components/Fields/TextField';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
-import { Form } from 'src/components/ui/Form';
-import { addDriver } from 'src/modules/drivers/actions';
-import { addDriverSchema } from 'src/modules/drivers/schema';
+import { Form, FormField, FormItem } from 'src/components/ui/Form';
 
-type FieldValues = Infer<typeof addDriverSchema>;
+const transformStringToDate = (date?: string | null) => {
+  if (!date) return null;
 
-const AddDriverForm = () => {
+  return new Date(date);
+};
+
+type FieldValues = Infer<typeof editDriverSchema>;
+
+const EditDriverForm = ({ id }: { id: string }) => {
+  const action = useAction(editDriver);
   const router = useRouter();
-  const action = useAction(addDriver);
   const [isPending, startTransition] = useTransition();
 
+  const supabase = createBrowserClient();
+  const { data, isLoading } = useQuery({
+    queryKey: queryKeys.drivers.byId(id),
+    queryFn: () => getDriverById(supabase, id),
+  });
+
   const { hookFormValidationErrors } = useHookFormActionErrorMapper<
-    typeof addDriverSchema
+    typeof editDriverSchema
   >(action.result.validationErrors, { joinBy: '\n' });
 
   const form = useForm<FieldValues>({
-    resolver: zodResolver(addDriverSchema),
+    resolver: zodResolver(editDriverSchema),
     errors: hookFormValidationErrors,
+    defaultValues: {
+      id: data?.id ?? undefined,
+      email: data?.email ?? undefined,
+      birth_date: transformStringToDate(data?.birth_date) ?? undefined,
+      first_name: data?.first_name ?? undefined,
+      middle_name: data?.middle_name ?? undefined,
+      last_name: data?.last_name ?? undefined,
+      license_number: data?.license_number ?? undefined,
+      license_expiry_date:
+        transformStringToDate(data?.license_expiry_date) ?? undefined,
+      employee_id: data?.employee_id ?? undefined,
+      address: data?.address ?? undefined,
+    },
   });
 
   const {
@@ -47,18 +76,21 @@ const AddDriverForm = () => {
     startTransition(async () => {
       try {
         const formData = mapInputToFormData(input);
-        const result = await action.executeAsync(formData);
-        toast.success('Driver created successfully.');
-        reset();
-
-        if (result?.data?.id) {
-          router.push(`/fleet/drivers/${result.data.id}`);
-        }
+        await action.executeAsync(formData);
+        toast.success('Driver updated successfully. Redirecting...');
+        router.push(`/fleet/drivers/${input.id}`);
+        reset(input, {
+          keepDirtyValues: true,
+        });
       } catch (e) {
         console.error('Something went wrong with submitting the form. ', e);
       }
     });
   });
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <Form {...form}>
@@ -69,6 +101,18 @@ const AddDriverForm = () => {
         )}
         onSubmit={onSubmit}
       >
+        <FormField
+          name="id"
+          control={control}
+          render={({ field }) => {
+            return (
+              <FormItem className="hidden">
+                <input type="hidden" {...field} value={field.value} />
+              </FormItem>
+            );
+          }}
+        />
+
         <TextField
           name="email"
           control={control}
@@ -166,7 +210,7 @@ const AddDriverForm = () => {
             disabled={!isDirty || isPending}
             loading={isPending}
           >
-            Add Driver
+            Update Driver
           </EnhancedButton>
         </div>
       </form>
@@ -174,4 +218,4 @@ const AddDriverForm = () => {
   );
 };
 
-export default AddDriverForm;
+export default EditDriverForm;
