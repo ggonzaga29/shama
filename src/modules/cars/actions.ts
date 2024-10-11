@@ -106,7 +106,7 @@ export async function submitCarForm(
     };
   }
 
-  revalidatePath('/cars');
+  revalidatePath('/fleet');
 
   return {
     success: true,
@@ -149,7 +149,7 @@ export const addCar = authActionClient
       });
     }
 
-    revalidatePath('/fleet/cars');
+    revalidatePath('/fleet');
     return {
       success: true,
     };
@@ -169,7 +169,7 @@ export const deleteCar = authActionClient
       return null;
     }
 
-    revalidatePath('/fleet/cars');
+    revalidatePath('/fleet');
     return {
       success: true,
     };

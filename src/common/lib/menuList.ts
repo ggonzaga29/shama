@@ -119,45 +119,44 @@ export function getMenuList(pathname: string): Group[] {
       isAdminGroup: false,
       menus: [
         {
-          href: '/fleet/cars',
-          label: 'Vehicle Inventory',
-          active: pathname.includes('/fleet/cars'),
+          href: '/fleet/',
+          label: 'Fleet Inventory',
+          active: pathname.includes('/fleet'),
           icon: InventoryManagement,
           submenus: [
             {
-              href: '/fleet/cars',
+              href: '/fleet',
               label: 'All Vehicles',
-              active: pathname === '/fleet/cars',
+              active: pathname === '/fleet',
             },
             {
-              href: '/fleet/cars/add',
+              href: '/fleet/add',
               label: 'Add Vehicle',
-              active: pathname.includes('/fleet/cars/add'),
+              active: pathname.includes('/fleet/add'),
             },
             {
-              href: '/fleet/cars/maintenance',
+              href: '/fleet/maintenance',
               label: 'Maintenance',
-              active: pathname.includes('/fleet/cars/maintenance'),
+              active: pathname.includes('/fleet/maintenance'),
             },
           ],
         },
         {
-          href: '/fleet/drivers',
+          href: '/drivers',
           label: 'Drivers',
-          active: pathname.includes('/fleet/drivers'),
+          active: pathname.includes('/drivers'),
           icon: Identification,
           submenus: [
             {
-              href: '/fleet/drivers',
+              href: '/drivers',
               label: 'All Drivers',
               active:
-                pathname.includes('/fleet/drivers') &&
-                !pathname.includes('/add'),
+                pathname.includes('/drivers') && !pathname.includes('/add'),
             },
             {
-              href: '/fleet/drivers/add',
+              href: '/drivers/add',
               label: 'Add Driver',
-              active: pathname.includes('/fleet/drivers/add'),
+              active: pathname.includes('/drivers/add'),
             },
           ],
         },

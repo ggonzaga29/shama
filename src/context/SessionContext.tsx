@@ -10,6 +10,7 @@
 'use client';
 
 import { AuthChangeEvent, Session } from '@supabase/supabase-js';
+import { getCurrentUser } from 'app/users/data';
 import { redirect } from 'next/navigation';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
@@ -22,22 +23,30 @@ type SessionContext = {
 
 type SessionProviderProps = {
   children: React.ReactNode;
-  initialUser: UserWithProfileAndAvatar;
 };
 
 const SessionContext = createContext<SessionContext>({
   session: null,
 });
 
-export const SessionProvider: FC<SessionProviderProps> = ({
-  children,
-  initialUser,
-}) => {
+export const SessionProvider: FC<SessionProviderProps> = ({ children }) => {
   const supabase = createBrowserClient();
   const [session, setSession] = useState<Session | null>(null);
-  const [user, setUser] = useState<UserWithProfileAndAvatar | null>(
-    initialUser
-  );
+  const [user, setUser] = useState<UserWithProfileAndAvatar | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const user = await getCurrentUser(supabase);
+        setUser(user);
+      } catch (error) {
+        console.error(error);
+        redirect('/auth');
+      }
+    };
+
+    void fetchData();
+  }, [supabase]);
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange(

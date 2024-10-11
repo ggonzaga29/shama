@@ -3,21 +3,14 @@ import { SidebarProvider } from 'src/components/Sidebar/context/SidebarContext';
 import Sidebar from 'src/components/Sidebar/Sidebar';
 import ToastLauncher from 'src/components/ToastLauncher/ToastLauncher';
 import { SessionProvider } from 'src/context/SessionContext';
-import { getCurrentUser } from 'src/modules/users/actions';
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
 export default async function MainLayout({ children }: MainLayoutProps) {
-  const user = await getCurrentUser();
-
-  if (!user) {
-    return null;
-  }
-
   return (
-    <SessionProvider initialUser={user}>
+    <SessionProvider>
       <SidebarProvider>
         <div className="flex h-full flex-col overflow-hidden">
           {/* <TopNavigation /> */}
@@ -42,4 +35,4 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   );
 }
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';

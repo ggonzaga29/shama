@@ -1,9 +1,9 @@
+import { checkAuth } from 'app/auth/actions';
 import chalk from 'chalk';
 import {
   createSafeActionClient,
   DEFAULT_SERVER_ERROR_MESSAGE,
 } from 'next-safe-action';
-import { checkAuth } from 'src/modules/auth/actions';
 import { z } from 'zod';
 
 export const actionClient = createSafeActionClient({
