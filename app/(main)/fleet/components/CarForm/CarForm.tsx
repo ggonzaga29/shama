@@ -3,6 +3,8 @@
 import { Send } from '@carbon/icons-react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormActionErrorMapper } from '@next-safe-action/adapter-react-hook-form/hooks';
+import { addCar } from 'app/fleet/actions';
+import { addCarSchema } from 'app/fleet/schema';
 import { useRouter } from 'next/navigation';
 import { Infer } from 'next-safe-action/adapters/types';
 import { useAction } from 'next-safe-action/hooks';
@@ -15,8 +17,6 @@ import FileDropzoneField from 'src/components/Fields/FileDropzoneField';
 import TextField from 'src/components/Fields/TextField';
 import { EnhancedButton } from 'src/components/ui/EnhancedButton';
 import { Form } from 'src/components/ui/Form';
-import { addCar } from 'src/modules/cars/actions';
-import { addCarSchema } from 'src/modules/cars/schema';
 
 type FieldValues = Infer<typeof addCarSchema>;
 

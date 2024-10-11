@@ -1,5 +1,7 @@
 'use client';
 
+import { getCarVariantList } from 'app/fleet/actions';
+import { useAddCarContext } from 'app/fleet/context/AddCarContext';
 import { FC } from 'react';
 import { toast } from 'sonner';
 import { CarVariant, CarVariantMetadata } from 'src/common/types';
@@ -13,8 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/Select';
-import { getCarVariantList } from 'src/modules/cars/actions';
-import { useAddCarContext } from 'src/modules/cars/context/AddCarContext';
 
 type VariantList = Awaited<ReturnType<typeof getCarVariantList>>;
 

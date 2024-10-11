@@ -4,6 +4,8 @@ import {
   HydrationBoundary,
   QueryClient,
 } from '@tanstack/react-query';
+import CarGrid from 'app/fleet/components/CarGrid';
+import { getAllCars } from 'app/fleet/data';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import ContentLayout from 'src/components/ContentLayout';
@@ -17,8 +19,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import CarGrid from 'src/modules/cars/components/CarGrid';
-import { getAllCars } from 'src/modules/cars/data';
 
 export default async function CarsPage() {
   const supabase = createServerClient();

@@ -1,10 +1,10 @@
 'use client';
 
+import { submitCarForm } from 'app/fleet/actions';
+import { useAddCarContext } from 'app/fleet/context/AddCarContext';
+import { carFormSchema } from 'app/fleet/schema';
 import { createCarFormFields } from 'src/common/lib/forms';
 import FormRenderer from 'src/components/FormRenderer/FormRenderer';
-import { submitCarForm } from 'src/modules/cars/actions';
-import { useAddCarContext } from 'src/modules/cars/context/AddCarContext';
-import { carFormSchema } from 'src/modules/cars/schema';
 
 const CarForm = () => {
   const { selectedVehicle, selectedVariant } = useAddCarContext();

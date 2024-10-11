@@ -7,7 +7,7 @@ import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
-import { getCarById } from 'src/modules/cars/data';
+import { getCarById } from 'app/fleet/data';
 
 const CarDetail = ({
   className,

@@ -2,6 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
+import { getDriverBySearch } from 'app/drivers/data';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { queryKeys } from 'src/common/lib/queryKeys';
@@ -16,8 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/Select';
-import { useBookingForm } from 'app/bookings/context/BookingFormContext';
-import { getDriverBySearch } from 'app/drivers/data';
 
 const SelectDriver = ({ car }: { car: Car }) => {
   const supabase = createBrowserClient();

@@ -1,10 +1,10 @@
 'use client';
 
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 import { useState } from 'react';
 import CheckboxField from 'src/components/Fields/CheckboxField';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
-import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 
 const PricingSummary = () => {
   const [discount, setDiscount] = useState<number | null>(null);

@@ -1,6 +1,7 @@
 // import CarFormPage from 'src/modules/cars/page/CarFormPage';
 
 import { InventoryManagement } from '@carbon/icons-react';
+import AddCarForm from 'app/fleet/components/CarForm/CarForm';
 import ContentLayout from 'src/components/ContentLayout';
 import {
   Breadcrumb,
@@ -12,7 +13,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from 'src/components/ui/Breadcrumb';
-import AddCarForm from 'src/modules/cars/components/CarForm/CarForm';
 
 export async function generateMetadata() {
   return {

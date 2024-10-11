@@ -17,6 +17,7 @@ import {
   TrashCan,
   View,
 } from '@carbon/icons-react';
+import { deleteCar } from 'app/fleet/actions';
 import { Armchair, CirclePlus, Cog, Droplet, Fuel, Info } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -37,7 +38,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from 'src/components/ui/DropdownMenu';
-import { deleteCar } from 'src/modules/cars/actions';
 
 type CarGridCardProps = {
   car: Table<'vehicles'>;

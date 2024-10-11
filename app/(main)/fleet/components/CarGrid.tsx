@@ -2,14 +2,14 @@
 
 import { Add } from '@carbon/icons-react';
 import { useQuery } from '@tanstack/react-query';
+import CarGridCard from 'app/fleet/components/CarGridCard';
+import CarGridSkeleton from 'app/fleet/components/CarGridSkeleton';
+import { getAllCars } from 'app/fleet/data';
 import Link from 'next/link';
 import { queryKeys } from 'src/common/lib/queryKeys';
 import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
 import { Button } from 'src/components/ui/Button';
 import { Input } from 'src/components/ui/Input';
-import CarGridCard from 'src/modules/cars/components/CarGridCard';
-import CarGridSkeleton from 'src/modules/cars/components/CarGridSkeleton';
-import { getAllCars } from 'src/modules/cars/data';
 
 export default function CarGrid() {
   const supabase = createBrowserClient();

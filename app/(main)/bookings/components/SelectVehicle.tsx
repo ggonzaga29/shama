@@ -3,6 +3,8 @@
 import { Add } from '@carbon/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useDebounce } from '@uidotdev/usehooks';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
+import { getAllCars } from 'app/fleet/data';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
@@ -20,8 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from 'src/components/ui/Select';
-import { useBookingForm } from 'app/bookings/context/BookingFormContext';
-import { getAllCars } from 'app/fleet/data';
 
 export default function SelectVehicle() {
   const supabase = createBrowserClient();

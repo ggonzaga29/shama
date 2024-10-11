@@ -2,13 +2,13 @@
 
 import { TrashCan } from '@carbon/icons-react';
 import { useConfirm } from '@omit/react-confirm-dialog';
+import SelectDriver from 'app/bookings/components/SelectDriver';
+import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 import Image from 'next/image';
 import { Car } from 'src/common/types';
 import { Button } from 'src/components/ui/Button';
 import { Card, CardContent } from 'src/components/ui/Card';
 import { Input } from 'src/components/ui/Input';
-import SelectDriver from 'app/bookings/components/SelectDriver';
-import { useBookingForm } from 'app/bookings/context/BookingFormContext';
 
 const VehicleListItem = ({ car }: { car: Car }) => {
   const confirm = useConfirm();
