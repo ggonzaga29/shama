@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 
 export async function GET(request: NextRequest) {
-  const supabase = createClient();
+  const supabase = createServerClient();
   await supabase.auth.signOut();
 
   const url = request.nextUrl.clone();

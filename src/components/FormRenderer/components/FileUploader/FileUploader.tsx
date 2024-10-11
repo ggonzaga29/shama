@@ -14,7 +14,6 @@ import { cn } from 'src/common/utils/cvaUtils';
 import { formatBytes } from 'src/common/utils/formUtils';
 import { Button } from 'src/components/ui/Button';
 import { Progress } from 'src/components/ui/Progress';
-import { ScrollArea } from 'src/components/ui/Scrollarea';
 
 export interface FileUploaderProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -205,7 +204,7 @@ export function FileUploader(props: FileUploaderProps) {
             {...getRootProps()}
             className={cn(
               'group relative grid h-52 w-full cursor-pointer place-items-center rounded-lg border-2 border-dashed border-muted-foreground/25 px-5 py-2.5 text-center transition hover:bg-muted/25',
-              'ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+              'ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-0',
               isDragActive && 'border-muted-foreground/50',
               isDisabled && 'pointer-events-none opacity-60',
               isDisabled && hideOnDisabled && 'hidden',
@@ -252,7 +251,7 @@ export function FileUploader(props: FileUploaderProps) {
         )}
       </Dropzone>
       {files?.length ? (
-        <ScrollArea className="h-fit w-full px-3">
+        <div className="h-fit w-full overflow-y-auto">
           <div className="flex max-h-48 flex-col gap-4">
             {files?.map((file, index) => (
               <FileCard
@@ -263,7 +262,7 @@ export function FileUploader(props: FileUploaderProps) {
               />
             ))}
           </div>
-        </ScrollArea>
+        </div>
       ) : null}
     </div>
   );

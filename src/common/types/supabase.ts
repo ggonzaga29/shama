@@ -88,54 +88,125 @@ export type Database = {
           },
         ]
       }
+      booking_vehicles: {
+        Row: {
+          booking_id: string
+          created_at: string
+          custom_driver_jsonb: Json | null
+          driver_id: string | null
+          id: number
+          personal_client_driver_id: number | null
+          price: number
+          vehicle_id: string
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          custom_driver_jsonb?: Json | null
+          driver_id?: string | null
+          id?: number
+          personal_client_driver_id?: number | null
+          price: number
+          vehicle_id: string
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          custom_driver_jsonb?: Json | null
+          driver_id?: string | null
+          id?: number
+          personal_client_driver_id?: number | null
+          price?: number
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_vehicles_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: false
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_vehicles_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_vehicles_personal_client_driver_id_fkey"
+            columns: ["personal_client_driver_id"]
+            isOneToOne: false
+            referencedRelation: "personal_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_vehicles_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bookings: {
         Row: {
-          client_id: string
+          client_id: string | null
+          client_json: Json | null
           created_at: string | null
-          driver_id: string
-          drop_off_location: string | null
-          end_datetime: string
+          custom_user_json: Json | null
+          discount: number | null
+          driver_id: string | null
+          dropoff_datetime: string
+          dropoff_location: string | null
           id: string
           notes: string | null
-          pick_up_location: string | null
-          start_datetime: string
+          pickup_datetime: string
+          pickup_location: string | null
+          rental_type: Database["public"]["Enums"]["rental_type"] | null
           status: Database["public"]["Enums"]["booking_status"] | null
           type: Database["public"]["Enums"]["booking_type"] | null
           updated_at: string | null
           user_id: string
-          vehicle_id: string
         }
         Insert: {
-          client_id: string
+          client_id?: string | null
+          client_json?: Json | null
           created_at?: string | null
-          driver_id: string
-          drop_off_location?: string | null
-          end_datetime: string
+          custom_user_json?: Json | null
+          discount?: number | null
+          driver_id?: string | null
+          dropoff_datetime: string
+          dropoff_location?: string | null
           id?: string
           notes?: string | null
-          pick_up_location?: string | null
-          start_datetime: string
+          pickup_datetime: string
+          pickup_location?: string | null
+          rental_type?: Database["public"]["Enums"]["rental_type"] | null
           status?: Database["public"]["Enums"]["booking_status"] | null
           type?: Database["public"]["Enums"]["booking_type"] | null
           updated_at?: string | null
           user_id: string
-          vehicle_id: string
         }
         Update: {
-          client_id?: string
+          client_id?: string | null
+          client_json?: Json | null
           created_at?: string | null
-          driver_id?: string
-          drop_off_location?: string | null
-          end_datetime?: string
+          custom_user_json?: Json | null
+          discount?: number | null
+          driver_id?: string | null
+          dropoff_datetime?: string
+          dropoff_location?: string | null
           id?: string
           notes?: string | null
-          pick_up_location?: string | null
-          start_datetime?: string
+          pickup_datetime?: string
+          pickup_location?: string | null
+          rental_type?: Database["public"]["Enums"]["rental_type"] | null
           status?: Database["public"]["Enums"]["booking_status"] | null
           type?: Database["public"]["Enums"]["booking_type"] | null
           updated_at?: string | null
           user_id?: string
-          vehicle_id?: string
         }
         Relationships: [
           {
@@ -157,13 +228,6 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_vehicle"
-            columns: ["vehicle_id"]
-            isOneToOne: false
-            referencedRelation: "vehicles"
             referencedColumns: ["id"]
           },
         ]
@@ -525,6 +589,7 @@ export type Database = {
           middle_name: string | null
           phone: string | null
           updated_at: string | null
+          search_driver_name: string | null
         }
         Insert: {
           address?: string | null
@@ -1028,6 +1093,12 @@ export type Database = {
         }
         Returns: undefined
       }
+      search_driver_name: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
     }
     Enums: {
       availability_status: "available" | "under maintenance" | "rented"
@@ -1039,6 +1110,7 @@ export type Database = {
       maintenance_status: "scheduled" | "in_progress" | "completed"
       mode_of_payment: "cash" | "card" | "e-wallet" | "bank"
       notification_status: "unread" | "read"
+      rental_type: "self-drive" | "with-driver"
       status: "available" | "under maintenance" | "rented"
     }
     CompositeTypes: {

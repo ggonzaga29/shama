@@ -109,8 +109,6 @@ const FormRenderer = <T extends FieldValues>({
       return;
     }
 
-    console.log('Submitting form...');
-
     startTransition(async () => {
       try {
         await formStateAction(new FormData(formRef.current!));

@@ -2,13 +2,10 @@
 // Defined in this file so I can manage all forms in one place
 // NOTE: Some forms may be custom and not used in the FormRenderer
 
+import { UserAvatarSchema, UserDetailsSchema } from 'app/account/schema';
+import { ClientFormSchema } from 'app/clients/schema';
+import { CarFormSchema } from 'app/fleet/schema';
 import { FormFieldDefinitionArray } from 'src/components/FormRenderer/types';
-import {
-  UserAvatarSchema,
-  UserDetailsSchema,
-} from 'src/modules/account/schema';
-import { CarFormSchema } from 'src/modules/cars/schema';
-import { ClientFormSchema } from 'src/modules/clients/schema';
 
 // Client Create Form Fields
 export const createClientFormFields: FormFieldDefinitionArray<ClientFormSchema> =

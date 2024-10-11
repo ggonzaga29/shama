@@ -1,6 +1,6 @@
 import { NextFetchEvent, NextRequest, NextResponse } from 'next/server';
 import { MiddlewareFactory } from 'src/common/lib/middleware/stackMiddleware';
-import { createAdminClient } from 'src/common/lib/supabase/server';
+import { createAdminClient } from 'src/common/lib/supabase/adminClient';
 
 export const checkAuth: MiddlewareFactory = (next) => {
   return async function (request: NextRequest, _next: NextFetchEvent) {

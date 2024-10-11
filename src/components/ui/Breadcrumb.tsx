@@ -1,8 +1,13 @@
+'use client';
+
+import { ArrowLeft } from '@carbon/icons-react';
 import { Slot } from '@radix-ui/react-slot';
 import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { cn } from 'src/common/utils/cvaUtils';
+import { Button, ButtonProps } from 'src/components/ui/Button';
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
@@ -105,8 +110,30 @@ const BreadcrumbEllipsis = ({
 );
 BreadcrumbEllipsis.displayName = 'BreadcrumbElipssis';
 
+const BreadcrumbBackButtton = ({ className, ...props }: ButtonProps) => {
+  const router = useRouter();
+
+  return (
+    <BreadcrumbItem>
+      <Button
+        size="icon"
+        variant="outline"
+        className={className}
+        {...props}
+        onClick={() => router.back()}
+        title="Go back"
+      >
+        <ArrowLeft size={16} />
+      </Button>
+    </BreadcrumbItem>
+  );
+};
+
+BreadcrumbBackButtton.displayName = 'BreadcrumbBackButton';
+
 export {
   Breadcrumb,
+  BreadcrumbBackButtton,
   BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,

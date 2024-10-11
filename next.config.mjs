@@ -5,10 +5,6 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/r',
-        destination: '/refine',
-      },
-      {
         source: '/',
         destination: '/dashboard',
       },
@@ -23,6 +19,9 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  experimental: {
+    optimizePackageImports: ['@carbon/icons-react', '@carbon/pictograms-react'],
   },
 };
 

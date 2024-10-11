@@ -2,15 +2,16 @@ import 'src/theme/globals.css';
 
 import { NextUIProvider } from '@nextui-org/system';
 import type { Metadata } from 'next';
-import { Figtree as FontSans } from 'next/font/google';
+import localFont from 'next/font/local';
 import NextTopLoader from 'nextjs-toploader';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
 import { ThemeProvider } from 'src/context/ThemeProvider';
-import { ReactQueryClientProvider } from 'src/providers/ReactQueryClientProvider';
+import ConfirmDialogProvider from 'src/providers/ConfirmDialogProvider';
+import ReactQueryProvider from 'src/providers/ReactQueryProvider';
 
-const fontSans = FontSans({
-  subsets: ['latin'],
+const fontSans = localFont({
+  src: '/fonts/Mona-Sans.woff2',
   variable: '--font-sans',
 });
 
@@ -43,35 +44,34 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReactQueryClientProvider>
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <link
-            href="/logoLight.ico"
-            rel="icon"
-            media="(prefers-color-scheme: light)"
-          />
-          <link
-            href="/logoDark.ico"
-            rel="icon"
-            media="(prefers-color-scheme: dark)"
-          />
-        </head>
-        <body
-          className={cn(
-            'bg-background font-sans antialiased',
-            fontSans.variable
-          )}
-        >
-          <ThemeProvider attribute="class" disableTransitionOnChange>
-            <NextUIProvider>
-              <NextTopLoader showSpinner={false} />
-              {children}
-              <Toaster richColors />
-            </NextUIProvider>
-          </ThemeProvider>
-        </body>
-      </html>
-    </ReactQueryClientProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link
+          href="/logoLight.ico"
+          rel="icon"
+          media="(prefers-color-scheme: light)"
+        />
+        <link
+          href="/logoDark.ico"
+          rel="icon"
+          media="(prefers-color-scheme: dark)"
+        />
+      </head>
+      <body
+        className={cn('bg-background font-sans antialiased', fontSans.variable)}
+      >
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <NextUIProvider>
+            <ReactQueryProvider>
+              <ConfirmDialogProvider>
+                <NextTopLoader showSpinner={false} />
+                {children}
+                <Toaster richColors />
+              </ConfirmDialogProvider>
+            </ReactQueryProvider>
+          </NextUIProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

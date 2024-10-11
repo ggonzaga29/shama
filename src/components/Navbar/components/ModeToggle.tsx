@@ -5,7 +5,7 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Button } from 'src/components/ui/Button';
 
-const ModeToggle = () => {
+const ModeToggle = ({ className }: { className?: string }) => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -23,7 +23,12 @@ const ModeToggle = () => {
   };
 
   return (
-    <Button variant="ghost" size="icon" onClick={toggleTheme}>
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={toggleTheme}
+      className={className}
+    >
       <Asleep
         size={24}
         className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"

@@ -1,5 +1,5 @@
 import { FileInputAcceptType } from 'src/common/types';
-import z, { ZodError } from 'zod';
+import { z, ZodError } from 'zod';
 
 export const createSingleFileSchema = ({
   maxFileSize = 5 * 1024 * 1024, // 5MB

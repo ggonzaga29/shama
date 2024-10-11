@@ -3,12 +3,13 @@ import {
   Catalog,
   CustomerService,
   Dashboard,
+  DocumentMultiple_02,
   Events,
   Identification,
   InventoryManagement,
+  Money,
   ReportData,
   UserRole,
-  VehicleServices,
   Watsonx,
 } from '@carbon/icons-react';
 import { LucideIcon } from 'lucide-react';
@@ -64,13 +65,20 @@ export function getMenuList(pathname: string): Group[] {
     },
     {
       groupLabel: 'Analytics',
-      isAdminGroup: false,
+      isAdminGroup: true,
       menus: [
         {
           href: '/reports',
           label: 'Financial Reports',
           active: pathname.includes('/posts'),
           icon: ReportData,
+          submenus: [],
+        },
+        {
+          href: '/reports',
+          label: 'Transactions',
+          active: pathname.includes('/posts'),
+          icon: Money,
           submenus: [],
         },
         {
@@ -83,29 +91,74 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
+      groupLabel: 'Booking Management',
+      isAdminGroup: false,
+      menus: [
+        {
+          href: '/bookings',
+          label: 'Bookings',
+          active: pathname.includes('/bookings'),
+          icon: DocumentMultiple_02,
+          submenus: [
+            {
+              href: '/bookings',
+              label: 'All Bookings',
+              active: pathname === '/bookings',
+            },
+            {
+              href: '/bookings/add',
+              label: 'Add Booking',
+              active: pathname.includes('/bookings/add'),
+            },
+          ],
+        },
+      ],
+    },
+    {
       groupLabel: 'Fleet Management',
       isAdminGroup: false,
       menus: [
         {
-          href: '/fleet/cars',
-          label: 'Vehicle Inventory',
-          active: pathname.includes('/fleet/cars'),
+          href: '/fleet/',
+          label: 'Fleet Inventory',
+          active: pathname.includes('/fleet'),
           icon: InventoryManagement,
-          submenus: [],
+          submenus: [
+            {
+              href: '/fleet',
+              label: 'All Vehicles',
+              active: pathname === '/fleet',
+            },
+            {
+              href: '/fleet/add',
+              label: 'Add Vehicle',
+              active: pathname.includes('/fleet/add'),
+            },
+            {
+              href: '/fleet/maintenance',
+              label: 'Maintenance',
+              active: pathname.includes('/fleet/maintenance'),
+            },
+          ],
         },
         {
-          href: '/fleet/drivers',
-          label: 'Driver Management',
-          active: pathname.includes('/fleet/drivers'),
+          href: '/drivers',
+          label: 'Drivers',
+          active: pathname.includes('/drivers'),
           icon: Identification,
-          submenus: [],
-        },
-        {
-          href: '/fleet/maintenance',
-          label: 'Maintenance',
-          active: pathname.includes('/fleet/maintenance'),
-          icon: VehicleServices,
-          submenus: [],
+          submenus: [
+            {
+              href: '/drivers',
+              label: 'All Drivers',
+              active:
+                pathname.includes('/drivers') && !pathname.includes('/add'),
+            },
+            {
+              href: '/drivers/add',
+              label: 'Add Driver',
+              active: pathname.includes('/drivers/add'),
+            },
+          ],
         },
       ],
     },
@@ -115,14 +168,14 @@ export function getMenuList(pathname: string): Group[] {
       menus: [
         {
           href: '/users',
-          label: 'User Management',
+          label: 'Users',
           active: pathname.includes('/users'),
           icon: Events,
           submenus: [],
         },
         {
           href: '/roles',
-          label: 'Role Management',
+          label: 'Roles',
           active: pathname.includes('/roles'),
           icon: UserRole,
           submenus: [],

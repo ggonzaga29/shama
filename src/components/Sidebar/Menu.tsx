@@ -1,6 +1,7 @@
 'use client';
 
-import { Logout, UserSponsor } from '@carbon/icons-react';
+import { Logout, Rule } from '@carbon/icons-react';
+import { signout } from 'app/auth/actions';
 import { Ellipsis } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,7 +18,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from 'src/components/ui/Tooltip';
-import { signout } from 'src/modules/auth/actions';
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -30,7 +30,11 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
 
   return (
     <div className="flex h-full flex-col justify-between">
-      <ScrollArea className="[&>div>div[style]]:!block">
+      <ScrollArea
+        type="scroll"
+        scrollHideDelay={0}
+        className={cn('h-[85vh] [&>div>div[style]]:!block')}
+      >
         <nav className="mt-4 size-full">
           <ul className="flex flex-col items-start space-y-1 px-2">
             {menuList.map(({ groupLabel, isAdminGroup, menus }, index) => (
@@ -41,9 +45,7 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
                 {(isOpen && groupLabel) || isOpen === undefined ? (
                   <p className="flex max-w-[248px] items-center gap-2 truncate px-4 pb-2 text-sm font-medium text-muted-foreground">
                     {groupLabel}{' '}
-                    {isAdminGroup && (
-                      <UserSponsor className="text-destructive" />
-                    )}
+                    {isAdminGroup && <Rule className="text-destructive" />}
                   </p>
                 ) : !isOpen && isOpen !== undefined && groupLabel ? (
                   <TooltipProvider>
@@ -69,7 +71,7 @@ const Menu: FC<MenuProps> = ({ isOpen }) => {
                           <Tooltip delayDuration={100}>
                             <TooltipTrigger asChild>
                               <Button
-                                variant={active ? 'default' : 'ghost'}
+                                variant={active ? 'secondary' : 'ghost'}
                                 className="mb-1 h-10 w-full justify-start"
                                 asChild
                               >

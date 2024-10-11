@@ -1,6 +1,6 @@
 'use server';
 
-import { createClient } from 'src/common/lib/supabase/server';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { v4 as uuidv4 } from 'uuid';
 
 type UploadFileToBucketProps = {
@@ -102,7 +102,7 @@ export async function uploadToBucket({
   // randomizedNamePrefix,
   // prefixStyle = 'append',
 }: UploadFileToBucketProps): Promise<UploadFileToBucketResponse> {
-  const supabase = createClient();
+  const supabase = createServerClient();
 
   /**
    * Randomizes the filename with an optional prefix.

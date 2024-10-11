@@ -21,7 +21,10 @@
     "baseUrl": ".",
     "paths": {
       "src/*": ["./src/*"],
-      "public/*": ["./public/*"],
+      "public/*": ["./public/*"], 
+      "app/*": ["./app/(main)/*"],
+      // Route Groups
+      "app/auth/*": ["./app/(auth)/auth/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "tailwind.config.ts"],
