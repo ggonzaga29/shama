@@ -25,7 +25,13 @@ const UserNav = () => {
   const { user } = useSessionContext();
 
   if (!user) {
-    return null;
+    return (
+      <Button variant="outline" className="relative !ml-4 size-8 rounded-full">
+        <Avatar className="size-8">
+          <AvatarFallback className="bg-transparent"></AvatarFallback>
+        </Avatar>
+      </Button>
+    );
   }
 
   const { profile, avatar } = user;
