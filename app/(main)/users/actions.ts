@@ -1,7 +1,6 @@
 'use server';
 
 import { createAdminClient } from 'src/common/lib/supabase/adminClient';
-import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { TypedSupabaseClient } from 'src/common/types';
 
 // TODO: Implement Pagination since the listUsers method only returns 100 users
@@ -23,37 +22,31 @@ export async function getUser(uid: string) {
   return user;
 }
 
-/**
- * Gets a user with their profile details
- */
-export async function getUserWithProfile(uid: string) {
+export async function getCurrentUserWithProfile(supabase: TypedSupabaseClient) {
   try {
-    const supabaseAdmin = createAdminClient();
-    const supabase = createServerClient();
-
     const {
       data: { user },
       error: userError,
-    } = await supabaseAdmin.auth.admin.getUserById(uid);
+    } = await supabase.auth.getUser();
 
-    if (userError) {
-      throw new Error(userError.message);
+    if (!user || userError) {
+      return null;
     }
 
-    // TODO: find a better way to get the profile, maybe a fucking join?
-
-    const { data: profileData, error: profileError } = await supabase
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
-      .eq('id', uid)
+      .eq('id', user.id)
       .maybeSingle();
 
-    if (profileError) {
-      throw new Error(profileError.message);
+    if (!profile || profileError) {
+      return null;
     }
 
-    return { ...user, profile: profileData };
-  } catch (error: any) {
-    throw new Error(`Failed to get user with profile: ${error.message}`);
+    return { ...user, profile };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (e) {
+    console.error(e);
+    return null;
   }
 }

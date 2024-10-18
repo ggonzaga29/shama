@@ -1,3 +1,6 @@
+import { getCurrentUserWithProfile } from 'app/users/actions';
+import { permanentRedirect } from 'next/navigation';
+import { createServerClient } from 'src/common/lib/supabase/serverClient';
 import { cn } from 'src/common/utils/cvaUtils';
 import { SidebarProvider } from 'src/components/Sidebar/context/SidebarContext';
 import Sidebar from 'src/components/Sidebar/Sidebar';
@@ -9,8 +12,15 @@ interface MainLayoutProps {
 }
 
 export default async function MainLayout({ children }: MainLayoutProps) {
+  const supabase = createServerClient();
+  const user = await getCurrentUserWithProfile(supabase);
+
+  if (!user) {
+    permanentRedirect('/auth');
+  }
+
   return (
-    <SessionProvider>
+    <SessionProvider initialUser={user}>
       <SidebarProvider>
         <div className="flex h-full flex-col overflow-hidden">
           {/* <TopNavigation /> */}
