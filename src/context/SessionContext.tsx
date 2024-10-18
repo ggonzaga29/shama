@@ -23,6 +23,7 @@ type SessionContext = {
 
 type SessionProviderProps = {
   children: React.ReactNode;
+  initialUser: UserWithProfileAndAvatar;
 };
 
 const SessionContext = createContext<SessionContext>({

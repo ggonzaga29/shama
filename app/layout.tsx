@@ -2,7 +2,7 @@ import 'src/theme/globals.css';
 
 import { NextUIProvider } from '@nextui-org/system';
 import type { Metadata } from 'next';
-import localFont from 'next/font/local';
+import { Figtree } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import { cn } from 'src/common/utils/cvaUtils';
 import { Toaster } from 'src/components/ui/Toaster';
@@ -10,8 +10,8 @@ import { ThemeProvider } from 'src/context/ThemeProvider';
 import ConfirmDialogProvider from 'src/providers/ConfirmDialogProvider';
 import ReactQueryProvider from 'src/providers/ReactQueryProvider';
 
-const fontSans = localFont({
-  src: '/fonts/Mona-Sans.woff2',
+const fontSans = Figtree({
+  subsets: ['latin'],
   variable: '--font-sans',
 });
 

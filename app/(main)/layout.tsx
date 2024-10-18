@@ -12,6 +12,7 @@ interface MainLayoutProps {
 }
 
 export default async function MainLayout({ children }: MainLayoutProps) {
+  console.log('MainLayout');
   const supabase = createServerClient();
   const user = await getCurrentUserWithProfile(supabase);
 
