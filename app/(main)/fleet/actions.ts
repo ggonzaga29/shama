@@ -110,7 +110,7 @@ export async function submitCarForm(
 
   return {
     success: true,
-    successMessage: 'Successfully added vehicle',
+    successMessage: 'Successfully create vehicle',
   };
 }
 

@@ -2,6 +2,7 @@
 
 import { useId } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
+import { cn } from 'src/common/utils/cvaUtils';
 import {
   FormControl,
   FormDescription,
@@ -19,6 +20,7 @@ type RadioGroupFieldProps<TFieldValues extends FieldValues> = {
   className?: string;
   control: Control<TFieldValues>;
   options: { value: string; label: string }[];
+  layout?: 'horizontal' | 'vertical';
 };
 
 const RadioGroupField = <TFieldValues extends FieldValues>({
@@ -28,6 +30,7 @@ const RadioGroupField = <TFieldValues extends FieldValues>({
   description,
   className,
   options,
+  layout = 'vertical',
 }: RadioGroupFieldProps<TFieldValues>) => {
   const id = useId();
 
@@ -40,7 +43,13 @@ const RadioGroupField = <TFieldValues extends FieldValues>({
           <FormItem className={className}>
             <FormLabel htmlFor={name}>{label}</FormLabel>
             <FormControl>
-              <RadioGroup onValueChange={field.onChange} value={field.value}>
+              <RadioGroup
+                onValueChange={field.onChange}
+                value={field.value}
+                className={cn(
+                  layout === 'horizontal' ? 'flex gap-4' : 'grid gap-2'
+                )}
+              >
                 {options.map((option) => (
                   <FormItem
                     className="flex items-center space-x-3 space-y-0"

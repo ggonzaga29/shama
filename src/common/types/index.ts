@@ -2,6 +2,7 @@ import { SupabaseClient, User } from '@supabase/supabase-js';
 import { Database } from 'src/common/types/supabase';
 import { z } from 'zod';
 
+export type TypedSupabaseClient = SupabaseClient<Database>;
 export type Table<T extends keyof Database['public']['Tables']> =
   Database['public']['Tables'][T]['Row'];
 
@@ -19,20 +20,21 @@ export type FullCarVariant = CarVariant & {
 };
 export type Driver = Table<'drivers'>;
 export type DriverFiles = Table<'driver_files'>;
-export type UserProfile = Database['public']['Tables']['profiles']['Row'];
-export type Client = Database['public']['Tables']['clients']['Row'];
-export type PersonalClient =
-  Database['public']['Tables']['personal_clients']['Row'];
+export type UserProfile = Table<'profiles'>;
+export type Client = Table<'clients'>;
+export type PersonalClient = Table<'personal_clients'>;
 export type PersonalClientInsert = Omit<PersonalClient, 'id'>;
-
-export type Avatar = Database['public']['Tables']['profile_avatars']['Row'];
+export type BusinessClient = Table<'business_clients'>;
+export type Avatar = Table<'profile_avatars'>;
 
 export type UserWithProfileAndAvatar = User & {
-  profile: Database['public']['Tables']['profiles']['Row'] | null;
+  profile: UserProfile | null;
   avatar?: Avatar | null;
 };
 
-export type TypedSupabaseClient = SupabaseClient<Database>;
+// Enums
+export type Enum<T extends keyof Database['public']['Enums']> =
+  Database['public']['Enums'][T];
 
 // Upload types
 export const uploadedFile = z.object({

@@ -66,7 +66,7 @@ const AddClientForm = ({ setOpen }: { setOpen: (open: boolean) => void }) => {
       try {
         await action.executeAsync(input);
         setOpen(false);
-        toast.success('Successfully added a new client.');
+        toast.success('Successfully created a new client.');
         reset(input, {
           keepDirtyValues: true,
         });

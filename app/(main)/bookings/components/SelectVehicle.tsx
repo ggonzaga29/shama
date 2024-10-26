@@ -1,163 +1,132 @@
 'use client';
 
 import { Add } from '@carbon/icons-react';
-import { useQuery } from '@tanstack/react-query';
-import { useDebounce } from '@uidotdev/usehooks';
 import { useBookingForm } from 'app/bookings/context/BookingFormContext';
-import { getAllCars } from 'app/fleet/data';
-import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import CarGridCard from 'app/fleet/components/CarGridCard';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { queryKeys } from 'src/common/lib/queryKeys';
-import { createBrowserClient } from 'src/common/lib/supabase/browserClient';
-import { Car } from 'src/common/types';
-import { cn } from 'src/common/utils/cvaUtils';
 import TextField from 'src/components/Fields/TextField';
 import { Button } from 'src/components/ui/Button';
-import { Input } from 'src/components/ui/Input';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from 'src/components/ui/Select';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from 'src/components/ui/Dialog';
+import { Input } from 'src/components/ui/Input';
+import { ScrollArea } from 'src/components/ui/Scrollarea';
+import { useSearchSupabaseTable } from 'src/hooks/useSearchSupabaseTable';
 
 export default function SelectVehicle() {
-  const supabase = createBrowserClient();
   const {
+    form: { control, watch },
     state: { selectedCars },
     dispatch,
-    form: { control, setValue: setFormValue },
   } = useBookingForm();
-  const [value, setValue] = useState('');
-  const [search, setSearch] = useState('');
   const [isOpen, setIsOpen] = useState(false);
-  const debouncedSearch = useDebounce(search, 500);
-  const [currentVehicle, setCurrentVehicle] = useState<Car>();
-  const inputRef = useRef<HTMLInputElement>(null);
 
-  const { data, isLoading } = useQuery({
-    queryKey: [queryKeys.cars.all, debouncedSearch],
-    queryFn: async () => {
-      const data = await getAllCars(supabase, 5, 'name', debouncedSearch);
-      return data;
-    },
-    enabled: debouncedSearch !== '' && isOpen,
-    staleTime: 1000 * 60,
-    retry: 1,
+  const { data, isLoading, search, setSearch } = useSearchSupabaseTable({
+    table: 'vehicles',
+    columns: ['name', 'model', 'license_plate'],
+    initialSearch: '*',
   });
 
-  useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, [isOpen, data]);
+  const pickupDate = watch('pickup_datetime');
+  const dropoffDate = watch('dropoff_datetime');
+  const pickupLocation = watch('pickup_location');
+  const dropoffLocation = watch('dropoff_location');
 
-  useEffect(() => {
-    const json = selectedCars.length > 0 ? JSON.stringify(selectedCars) : '';
+  const handleContextAdd = (id: string) => {
+    const currentVehicle = data?.find((car) => car.id === id);
 
-    if (json) {
-      setFormValue('selected_cars_json', json);
-    }
-  }, [selectedCars, setFormValue]);
-
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (open) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 0);
-    }
-  };
-
-  const handleContextAdd = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
     if (!currentVehicle) {
       return;
     }
 
-    toast.info(`Added ${currentVehicle?.name} to booking.`);
+    toast.info(`Attached ${currentVehicle?.name} to booking.`);
     dispatch({ type: 'ADD_CAR', payload: currentVehicle });
-    setCurrentVehicle(undefined);
-    setValue('');
     setSearch('');
+    setIsOpen(false);
   };
 
-  const filteredData = useMemo(() => {
-    return data?.filter(
-      (car) => !selectedCars.some((selectedCar) => selectedCar.id === car.id)
-    );
-  }, [data, selectedCars]);
-
   return (
-    <div className="flex items-center gap-4 !px-0">
-      <Select
-        value={value}
-        onValueChange={(value) => {
-          setValue(value);
-          setCurrentVehicle(data?.find((car) => car.id === value));
-        }}
-        onOpenChange={handleOpenChange}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select a Vehicle" />
-        </SelectTrigger>
-        <SelectContent>
-          <div className="w-full border-b">
-            <Input
-              ref={inputRef}
-              placeholder="Search..."
-              value={search}
-              className="w-full border-0 focus-visible:ring-0"
-              onChange={(e) => setSearch(e.target.value)}
-              autoFocus
-            />
-          </div>
-          <div className={cn(filteredData?.length === 0 ? 'mt-6' : 'mt-2')}>
-            {isLoading ? (
-              <SelectItem value="loading" disabled>
-                Loading...
-              </SelectItem>
+    <div>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <div className="flex items-center gap-2">
+            {pickupDate && dropoffDate && pickupLocation && dropoffLocation ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Add size={16} />
+                Add
+              </Button>
             ) : (
-              filteredData?.map((car) => (
-                <SelectItem key={car.id} value={car.id} className="px-2">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src={`cars/${car.image_url}`}
-                      alt={car.name ?? ''}
-                      width={32}
-                      height={32}
-                      className="size-8 object-contain"
-                    />
-                    {car.name}{' '}
-                    <span className="text-muted-foreground">
-                      ({car.license_plate})
-                    </span>
-                  </div>
-                </SelectItem>
-              ))
+              <span className="text-sm text-muted-foreground">
+                Please select a pickup and dropoff date to view available
+                vehicles for booking.
+              </span>
             )}
           </div>
-          {filteredData?.length === 0 && (
-            <SelectItem value="no-results" disabled>
-              No results found
-            </SelectItem>
-          )}
-        </SelectContent>
-      </Select>
-      <Button
-        type="button"
-        variant="outline"
-        className="flex items-center gap-2"
-        onClick={handleContextAdd}
-        disabled={!currentVehicle}
-      >
-        <Add size={16} />
-        Add
-      </Button>
+        </DialogTrigger>
+        <DialogContent className="size-full max-h-[80vh] max-w-[100vh]">
+          <div>
+            <DialogHeader>
+              <DialogTitle>
+                Available Vehicles from{' '}
+                <span className="font-medium">
+                  {pickupDate && pickupDate.toDateString()}{' '}
+                </span>
+                to{' '}
+                <span className="font-medium">
+                  {dropoffDate && dropoffDate.toDateString()}
+                </span>
+              </DialogTitle>
+              <DialogDescription>
+                Click on a card to add it to the booking.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-4">
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search..."
+              />
 
-      <TextField control={control} type="hidden" name="selected_cars_json" />
+              <ScrollArea className="mt-6">
+                <div className="grid max-h-[60vh] grid-cols-3 gap-4">
+                  {!isLoading ? (
+                    data
+                      ?.filter(
+                        (car) =>
+                          !selectedCars.some(
+                            (selectedCar) => selectedCar.id === car.id
+                          )
+                      )
+                      .map((car) => (
+                        <CarGridCard
+                          key={car.id}
+                          car={car}
+                          showControls={false}
+                          className="cursor-pointer transition-[box-shadow,transform] hover:-translate-y-2 hover:shadow-md"
+                          onClick={() => handleContextAdd(car.id)}
+                        />
+                      ))
+                  ) : (
+                    <div>Loading...</div>
+                  )}
+                </div>
+              </ScrollArea>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <TextField control={control} type="text" name="selected_cars_json" />
     </div>
   );
 }

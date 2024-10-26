@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 import { cn } from 'src/common/utils/cvaUtils';
-import { CalendarProps } from 'src/components/ui/CalendarV2';
 import {
   FormControl,
   FormDescription,
@@ -27,7 +26,10 @@ type DateTimePickerProps<TFieldValues extends FieldValues> = {
   description?: React.ReactNode;
   className?: string;
   control: Control<TFieldValues>;
-  calendarProps?: Omit<CalendarProps, 'selected' | 'onSelect' | 'mode'>;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement> & {
+    type?: 'date';
+  };
+  timeSlots?: string[];
 };
 
 const DateTimeField = <TFieldValues extends FieldValues>({
@@ -36,19 +38,23 @@ const DateTimeField = <TFieldValues extends FieldValues>({
   control,
   description,
   className,
+  inputProps,
+  timeSlots,
 }: DateTimePickerProps<TFieldValues>) => {
   const [time, setTime] = useState<string | null>('09:30');
   const [date, setDate] = useState<Date | null>(null);
 
-  const timeSlots = useMemo(() => {
-    return Array.from({ length: 96 }).map((_, i) => {
-      const hour = Math.floor(i / 4)
-        .toString()
-        .padStart(2, '0');
-      const minute = ((i % 4) * 15).toString().padStart(2, '0');
-      return `${hour}:${minute}`;
-    });
-  }, []);
+  const t = useMemo(() => {
+    return timeSlots
+      ? timeSlots
+      : Array.from({ length: 96 }).map((_, i) => {
+          const hour = Math.floor(i / 4)
+            .toString()
+            .padStart(2, '0');
+          const minute = ((i % 4) * 15).toString().padStart(2, '0');
+          return `${hour}:${minute}`;
+        });
+  }, [timeSlots]);
 
   return (
     <FormField
@@ -68,6 +74,7 @@ const DateTimeField = <TFieldValues extends FieldValues>({
                   field.onChange(newDate);
                 }}
                 className="basis-3/4"
+                {...inputProps}
               />
               <Select
                 defaultValue={time!}
@@ -86,7 +93,7 @@ const DateTimeField = <TFieldValues extends FieldValues>({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {timeSlots.map((timeSlot, i) => (
+                  {t.map((timeSlot, i) => (
                     <SelectItem key={i} value={timeSlot}>
                       {timeSlot}
                     </SelectItem>

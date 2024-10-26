@@ -73,7 +73,7 @@ const PricingSummary = () => {
         name="send_email"
         className="mt-6"
         label="Send email receipt to client"
-        description="An email receipt will be sent to gian@giangonzaga.com once the booking is confirmed."
+        description="An email receipt will be sent to the client once the booking is confirmed."
       />
     </div>
   );

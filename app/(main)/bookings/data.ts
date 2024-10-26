@@ -41,3 +41,14 @@ export async function checkVehicleBookingOverlap(
 
   return (data?.length ?? 0) > 0;
 }
+
+export async function getInitialVehicles(supabase: TypedSupabaseClient) {
+  const { data, error } = await supabase.from('vehicles').select('*').limit(6);
+
+  if (error || !data) {
+    console.error('Error fetching vehicles:', error);
+    return [];
+  }
+
+  return data;
+}

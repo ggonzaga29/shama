@@ -108,7 +108,7 @@ const VehicleList = () => {
   }
 
   return (
-    <div className="mt-4 grid grid-cols-2 gap-2">
+    <div className="mt-4 grid grid-cols-1 gap-2">
       {selectedCars.map((car) => (
         <VehicleListItem key={car.id} car={car} />
       ))}

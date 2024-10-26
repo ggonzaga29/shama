@@ -94,6 +94,7 @@ export type Database = {
           created_at: string
           custom_driver_jsonb: Json | null
           driver_id: string | null
+          driver_type: Database["public"]["Enums"]["booking_driver_type"]
           id: number
           personal_client_driver_id: number | null
           price: number
@@ -104,6 +105,7 @@ export type Database = {
           created_at?: string
           custom_driver_jsonb?: Json | null
           driver_id?: string | null
+          driver_type: Database["public"]["Enums"]["booking_driver_type"]
           id?: number
           personal_client_driver_id?: number | null
           price: number
@@ -114,6 +116,7 @@ export type Database = {
           created_at?: string
           custom_driver_jsonb?: Json | null
           driver_id?: string | null
+          driver_type?: Database["public"]["Enums"]["booking_driver_type"]
           id?: number
           personal_client_driver_id?: number | null
           price?: number
@@ -154,6 +157,7 @@ export type Database = {
         Row: {
           client_id: string | null
           client_json: Json | null
+          client_type: Database["public"]["Enums"]["client_type"]
           created_at: string | null
           custom_user_json: Json | null
           discount: number | null
@@ -166,13 +170,13 @@ export type Database = {
           pickup_location: string | null
           rental_type: Database["public"]["Enums"]["rental_type"] | null
           status: Database["public"]["Enums"]["booking_status"] | null
-          type: Database["public"]["Enums"]["booking_type"] | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
           client_id?: string | null
           client_json?: Json | null
+          client_type?: Database["public"]["Enums"]["client_type"]
           created_at?: string | null
           custom_user_json?: Json | null
           discount?: number | null
@@ -185,13 +189,13 @@ export type Database = {
           pickup_location?: string | null
           rental_type?: Database["public"]["Enums"]["rental_type"] | null
           status?: Database["public"]["Enums"]["booking_status"] | null
-          type?: Database["public"]["Enums"]["booking_type"] | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
           client_id?: string | null
           client_json?: Json | null
+          client_type?: Database["public"]["Enums"]["client_type"]
           created_at?: string | null
           custom_user_json?: Json | null
           discount?: number | null
@@ -204,7 +208,6 @@ export type Database = {
           pickup_location?: string | null
           rental_type?: Database["public"]["Enums"]["rental_type"] | null
           status?: Database["public"]["Enums"]["booking_status"] | null
-          type?: Database["public"]["Enums"]["booking_type"] | null
           updated_at?: string | null
           user_id?: string
         }
@@ -461,15 +464,7 @@ export type Database = {
           timestamp?: string | null
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "crud_logs_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       driver_files: {
         Row: {
@@ -589,7 +584,6 @@ export type Database = {
           middle_name: string | null
           phone: string | null
           updated_at: string | null
-          search_driver_name: string | null
         }
         Insert: {
           address?: string | null
@@ -768,15 +762,7 @@ export type Database = {
           path?: string | null
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "profile_avatars_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -812,15 +798,7 @@ export type Database = {
           last_name?: string | null
           phone?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       vehicle_files: {
         Row: {
@@ -1093,17 +1071,24 @@ export type Database = {
         }
         Returns: undefined
       }
-      search_driver_name: {
+      search_similar_rows: {
         Args: {
-          "": unknown
+          table_name: string
+          search_value: string
         }
-        Returns: string
+        Returns: Record<string, unknown>[]
       }
     }
     Enums: {
       availability_status: "available" | "under maintenance" | "rented"
+      booking_driver_type:
+        | "personal_client"
+        | "business_client"
+        | "driver"
+        | "custom"
       booking_status: "booked" | "payment_pending" | "completed"
       booking_type: "self_drive" | "flexible_driving" | "pick_up_drop_off"
+      client_type: "personal" | "business" | "custom"
       crud_action: "CREATE" | "READ" | "UPDATE" | "DELETE"
       customer_type: "personal" | "hotel" | "travel_agency" | "other"
       invoice_status: "pending" | "paid"
@@ -1199,4 +1184,19 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never

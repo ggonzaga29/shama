@@ -21,7 +21,7 @@ import { deleteCar } from 'app/fleet/actions';
 import { Armchair, CirclePlus, Cog, Droplet, Fuel, Info } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FC } from 'react';
+import React, { FC } from 'react';
 import { toast } from 'sonner';
 import { Car, Table } from 'src/common/types';
 import { Database } from 'src/common/types/supabase';
@@ -41,11 +41,18 @@ import {
 
 type CarGridCardProps = {
   car: Table<'vehicles'>;
-};
+  showControls?: boolean;
+  className?: string;
+} & React.HTMLAttributes<HTMLDivElement>;
 
-const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
+const CarGridCard: FC<CarGridCardProps> = ({
+  car,
+  showControls,
+  className,
+  ...rest
+}) => {
   return (
-    <Card>
+    <Card className={className} {...rest}>
       <CardContent className="grid grid-cols-1 p-0">
         <div className="relative h-[200px] w-full border-b p-4">
           <Image
@@ -117,58 +124,61 @@ const CarGridCard: FC<CarGridCardProps> = ({ car }) => {
           </span>
         </div>
 
-        <div className="flex h-full gap-2 border-t p-4">
-          <Link href={`/fleet/cars/${car.id}`} className="flex grow">
-            <Button className="w-full">
-              <View className="mr-2 size-4" />
-              View
-            </Button>
-          </Link>
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="icon" variant="outline">
-                  <List size={16} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-24">
-                <DropdownMenuLabel className="">
-                  <div className="text-sm font-bold">Actions</div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator />
+        {showControls && (
+          <div className="flex h-full gap-2 border-t p-4">
+            <Link href={`/fleet/cars/${car.id}`} className="flex grow">
+              <Button className="w-full">
+                <View className="mr-2 size-4" />
+                View
+              </Button>
+            </Link>
+            <div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size="icon" variant="outline">
+                    <List size={16} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-24">
+                  <DropdownMenuLabel className="">
+                    <div className="text-sm font-bold">Actions</div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
 
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <div className="flex items-center gap-2 text-sm">
-                      <Edit size={14} />
-                      Edit
-                    </div>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <div
-                      className="flex items-center gap-2 text-sm"
-                      onClick={() =>
-                        toast.promise(
-                          deleteCar({
-                            id: car.id,
-                          }),
-                          {
-                            loading: 'Deleting...',
-                            success: 'Car deleted successfully.',
-                            error: 'An error occurred while deleting the car.',
-                          }
-                        )
-                      }
-                    >
-                      <TrashCan size={14} />
-                      Delete
-                    </div>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Edit size={14} />
+                        Edit
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <div
+                        className="flex items-center gap-2 text-sm"
+                        onClick={() =>
+                          toast.promise(
+                            deleteCar({
+                              id: car.id,
+                            }),
+                            {
+                              loading: 'Deleting...',
+                              success: 'Car deleted successfully.',
+                              error:
+                                'An error occurred while deleting the car.',
+                            }
+                          )
+                        }
+                      >
+                        <TrashCan size={14} />
+                        Delete
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-        </div>
+        )}
       </CardContent>
     </Card>
   );

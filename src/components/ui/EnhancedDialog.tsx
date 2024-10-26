@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import useMediaQuery from 'src/common/hooks/useMediaQuery';
+import useMediaQuery from 'src/hooks/useMediaQuery';
 import { cn } from 'src/common/utils/cvaUtils';
 import {
   Dialog,

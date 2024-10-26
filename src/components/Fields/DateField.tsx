@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
 import { cn } from 'src/common/utils/cvaUtils';
-import { FileUploaderProps } from 'src/components/FormRenderer/components/FileUploader/FileUploader';
 import { Button } from 'src/components/ui/Button';
 import { Calendar, CalendarProps } from 'src/components/ui/CalendarV2';
 import {
@@ -23,7 +22,6 @@ import {
 
 type DateFieldProps<TFieldValues extends FieldValues> = {
   name: FieldPath<TFieldValues>;
-  fileInputProps?: FileUploaderProps;
   label?: React.ReactNode;
   description?: React.ReactNode;
   className?: string;

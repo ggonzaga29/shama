@@ -9,11 +9,11 @@ import Dropzone, {
   type FileRejection,
 } from 'react-dropzone';
 import { toast } from 'sonner';
-import { useControllableState } from 'src/common/hooks/useControllableState';
 import { cn } from 'src/common/utils/cvaUtils';
 import { formatBytes } from 'src/common/utils/formUtils';
 import { Button } from 'src/components/ui/Button';
 import { Progress } from 'src/components/ui/Progress';
+import { useControllableState } from 'src/hooks/useControllableState';
 
 export interface FileUploaderProps
   extends React.HTMLAttributes<HTMLDivElement> {

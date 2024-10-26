@@ -7,12 +7,19 @@ import React, {
   createContext,
   ReactNode,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
   useTransition,
 } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
-import { Car, Driver } from 'src/common/types';
+import {
+  BusinessClient,
+  Car,
+  Driver,
+  Enum,
+  PersonalClient,
+} from 'src/common/types';
 import { mapInputToFormData } from 'src/common/utils/formUtils';
 
 type State = {
@@ -21,9 +28,11 @@ type State = {
     carId: string;
     driver: Driver;
   }[];
+  selectedClient: PersonalClient | BusinessClient | null;
 };
 
 const initialState: State = {
+  selectedClient: null,
   selectedCars: [],
   selectedDrivers: [],
 };
@@ -38,6 +47,21 @@ type Action =
   | {
       type: 'SET_DRIVER';
       payload: { carId: string; driver: Driver };
+    }
+  | {
+      type: 'SET_CLIENT';
+      payload: PersonalClient | BusinessClient;
+    }
+  | {
+      type: 'REMOVE_CLIENT';
+      payload: {
+        type: Omit<Enum<'client_type'>, 'custom'>;
+        id: string;
+      };
+    }
+  | {
+      type: 'CLEAR_CLIENT';
+      payload: null;
     };
 
 const reducer = (state: State, action: Action): State => {
@@ -75,6 +99,22 @@ const reducer = (state: State, action: Action): State => {
           { carId: action.payload.carId, driver: action.payload.driver },
         ],
       };
+    case 'SET_CLIENT':
+      return {
+        ...state,
+        selectedClient: action.payload,
+      };
+    case 'REMOVE_CLIENT':
+      return {
+        ...state,
+        selectedClient:
+          action.payload.type === 'personal' ? null : state.selectedClient,
+      };
+    case 'CLEAR_CLIENT':
+      return {
+        ...state,
+        selectedClient: null,
+      };
     default:
       return state;
   }
@@ -110,14 +150,29 @@ const BookingFormProvider: React.FC<{ children: ReactNode }> = ({
     resolver: zodResolver(bookingFormSchema),
     defaultValues: {
       rental_type: 'self-drive',
+      client_type: 'personal',
+      send_email: true,
     },
   });
 
-  const { handleSubmit } = form;
+  const { handleSubmit, watch, setValue } = form;
+
+  // Watch for changes in the rental type and client type
+  const clientType = watch('client_type');
+
+  useEffect(() => {
+    setValue('client_id', '');
+    dispatch({ type: 'CLEAR_CLIENT', payload: null });
+  }, [clientType, setValue]);
+
+  useEffect(() => {
+    setValue('selected_cars_json', JSON.stringify(state.selectedCars));
+  }, [setValue, state.selectedCars]);
 
   const onSubmit = handleSubmit((input) => {
     startTransition(async () => {
       try {
+        console.log('Submitting form', input);
         const formData = mapInputToFormData(input);
         console.log('Form data', formData);
       } catch (e) {

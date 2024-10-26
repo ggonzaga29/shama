@@ -37,7 +37,7 @@ const SelectDriver = ({ car }: { car: Car }) => {
 
   const { data: drivers, isLoading } = useQuery({
     queryKey: queryKeys.drivers.bySearch(
-      'first_name,last_name',
+      ['first_name', 'last_name'],
       debouncedSearchTerm
     ),
     queryFn: async () => {
@@ -83,7 +83,7 @@ const SelectDriver = ({ car }: { car: Car }) => {
 
   if (selectedDriver) {
     return (
-      <Card className="h-fit w-full max-w-sm">
+      <Card className="h-fit w-full max-w-sm text-sm">
         <CardContent className="p-4">
           <div className="flex items-center gap-2">
             <div className="size-6 rounded-[100%]">

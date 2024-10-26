@@ -2,7 +2,6 @@
 
 import { useId } from 'react';
 import { Control, FieldPath, FieldValues } from 'react-hook-form';
-import { FileUploaderProps } from 'src/components/FormRenderer/components/FileUploader/FileUploader';
 import { Checkbox } from 'src/components/ui/Checkbox';
 import {
   FormControl,
@@ -13,7 +12,6 @@ import {
 
 type CheckboxFieldProps<TFieldValues extends FieldValues> = {
   name: FieldPath<TFieldValues>;
-  fileInputProps?: FileUploaderProps;
   label?: React.ReactNode;
   description?: React.ReactNode;
   className?: string;

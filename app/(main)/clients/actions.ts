@@ -68,7 +68,7 @@ export async function submitClientForm(
 
   return {
     success: true,
-    successMessage: 'Successfully added client',
+    successMessage: 'Successfully created client',
   };
 }
 
