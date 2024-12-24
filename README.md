@@ -2,6 +2,5 @@
 
 TODO reconfigure or remove:
 
-- [ ] husky?
 - [ ] storybook?
 - [ ] github workflows?
