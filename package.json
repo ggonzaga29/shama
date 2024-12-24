@@ -11,7 +11,7 @@
     "format": "prettier --write . \"!**/{routeTree.gen.ts,pnpm-lock.yaml,drizzle}\"",
     "db": "drizzle-kit",
     "ui": "pnpm dlx shadcn@latest",
-    "update-types": "pnpm dlx supabase gen types --lang=typescript --project-id \"tgkzvkmhzlknpgnunivd\" > ./app/types/supabase.ts",
+    "update-types": "pnpm dlx supabase gen types --lang=typescript --project-id \"tgkzvkmhzlknpgnunivd\" > ./lib/types/supabase.ts",
     "prepare": "husky"
   },
   "dependencies": {

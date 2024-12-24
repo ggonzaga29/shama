@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
-import { Auth } from "~/components/Auth";
-import { loginFn } from "~/server/auth";
+import { Auth } from "~/lib/components/Auth";
+import { loginFn } from "~/lib/server/auth";
 
 export const Route = createFileRoute("/signin")({
   component: Login,

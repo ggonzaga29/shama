@@ -9,9 +9,9 @@ import {
 } from "@tanstack/react-router";
 import { Meta, Scripts } from "@tanstack/start";
 import { lazy, Suspense } from "react";
-import { getUser } from "~/server/auth";
+import { getUser } from "~/lib/server/auth";
 
-import appCss from "~/styles/app.css?url";
+import appCss from "~/lib/styles/app.css?url";
 
 const TanStackRouterDevtools =
   process.env.NODE_ENV === "production"
