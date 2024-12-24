@@ -1,0 +1,2 @@
+prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown !**/{routeTree.gen.ts,pnpm-lock.yaml,drizzle}
+git update-index --again
