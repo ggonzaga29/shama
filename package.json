@@ -8,7 +8,7 @@
     "start": "vinxi start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "format": "prettier --write . \"!**/{routeTree.gen.ts,pnpm-lock.yaml,drizzle}\"",
+    "format": "prettier --write .",
     "db": "drizzle-kit",
     "ui": "pnpm dlx shadcn@latest",
     "update-types": "pnpm dlx supabase gen types --lang=typescript --project-id \"tgkzvkmhzlknpgnunivd\" > ./lib/types/supabase.ts",
